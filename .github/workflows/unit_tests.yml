@@ -119,7 +119,7 @@ jobs:
             valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer &
       - name:  View valgrind xml file
         run: |
-           cat unit_tests_valgrind.xml
+           cat install/usr/unit_tests_valgrind.xml
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
