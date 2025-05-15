@@ -115,7 +115,7 @@ jobs:
             cd install/usr
             export PREFIX=$PWD
             export LD_LIBRARY_PATH=$PREFIX/lib
-            valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer
+            valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
