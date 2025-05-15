@@ -121,7 +121,7 @@ jobs:
         run: |
           killall -9 rtrouted
       - name: Upload Valgrind XML files
-        uses: actions/upload-artifacts@v2
+        uses: actions/upload-artifacts@v3
         with:
           name: valgrind-xml-files
           path: |
