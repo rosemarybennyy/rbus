@@ -115,8 +115,12 @@ jobs:
             cd install/usr
             export PREFIX=$PWD
             export LD_LIBRARY_PATH=$PREFIX/lib
-            valgrind --leak-check=full --xml=yes --xml-file=provider_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
-            valgrind --leak-check=full --xml=yes --xml-file=consumer_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer & 
+            valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
+            valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer & 
+      - name:  Valgrind Memory check
+        run: |
+          echo "Checking Valgrind xml ..." 
+          ./check-memory.sh
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
