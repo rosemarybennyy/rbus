@@ -107,6 +107,15 @@ jobs:
       #- name: Stop SessionManager
      #   run: |
       #    killall -9 rbus_session_mgr
+      - name: Build Tests
+        run: |
+          # add build script execution here
+      - name: Run Tests with Valgrind
+        run: |
+            cd install/usr
+            export PREFIX=$PWD
+            export LD_LIBRARY_PATH=$PREFIX/lib
+            valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
@@ -114,11 +123,6 @@ jobs:
         #run: |
             #rm -rf /tmp/rtrouted*
             #cd build/rbus
-      - name: Build Tests
-        run: |
-          # add build script execution here
-      - name: Run Tests with Valgrind
-        run: |
-                    valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer
+      
       
      
