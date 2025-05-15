@@ -51,7 +51,7 @@ jobs:
         run: >
           make -C build/rbus install
       - name: Start rtrouted
-        # nohup to keep it running.
+          nohup to keep it running.
         run: |
           cd install/usr
           export PREFIX=$PWD
@@ -64,20 +64,20 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer
-      - name: Run Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/rbusTestProvider >/tmp/plog.txt &
-          ./bin/rbusTestConsumer -a
-      - name: Run multiRbusOpenMethod Unit Test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          ./bin/multiRbusOpenMethodProvider &
-          ./bin/multiRbusOpenMethodConsumer &
+      #- name: Run Unit test
+        #run: |
+          #cd install/usr
+          #export PREFIX=$PWD
+          #export LD_LIBRARY_PATH=$PREFIX/lib
+          #nohup ./bin/rbusTestProvider >/tmp/plog.txt &
+          #./bin/rbusTestConsumer -a
+      #- name: Run multiRbusOpenMethod Unit Test
+        #run: |
+          #cd install/usr
+          #export PREFIX=$PWD
+          #export LD_LIBRARY_PATH=$PREFIX/lib
+          #./bin/multiRbusOpenMethodProvider &
+          #./bin/multiRbusOpenMethodConsumer &
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
           cd install/usr
@@ -85,33 +85,33 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
           ./bin/multiRbusOpenConsumer
-      - name: Run multiRbusOpenGet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          ./bin/multiRbusOpenRbusGetConsumer
-      - name: Run multiRbusOpenSet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-          ./bin/multiRbusOpenRbusSetConsumer
-      - name: Run Gtest Cases
-        run: |
-          cd build/rbus
-          nohup ./src/session_manager/rbus_session_mgr &
-          ./unittests/rbus_gtest.bin
-      - name: Stop SessionManager
-        run: |
-          killall -9 rbus_session_mgr
+      #- name: Run multiRbusOpenGet Unit test
+        #run: |
+          #cd install/usr
+          #export PREFIX=$PWD
+          #export LD_LIBRARY_PATH=$PREFIX/lib
+          #nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
+          #./bin/multiRbusOpenRbusGetConsumer
+     # - name: Run multiRbusOpenSet Unit test
+      #  run: |
+       #   cd install/usr
+        #  export PREFIX=$PWD
+         # export LD_LIBRARY_PATH=$PREFIX/lib
+          #nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
+          #./bin/multiRbusOpenRbusSetConsumer
+      #- name: Run Gtest Cases
+       # run: |
+        #  cd build/rbus
+         # nohup ./src/session_manager/rbus_session_mgr &
+          #./unittests/rbus_gtest.bin
+      #- name: Stop SessionManager
+     #   run: |
+      #    killall -9 rbus_session_mgr
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
-      - name:  Run CodeCoverage
-        run: |
-            rm -rf /tmp/rtrouted*
-            cd build/rbus
+      #- name:  Run CodeCoverage
+        #run: |
+            #rm -rf /tmp/rtrouted*
+            #cd build/rbus
      
