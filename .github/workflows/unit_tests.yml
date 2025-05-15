@@ -64,20 +64,20 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer
-      #- name: Run Unit test
-        #run: |
-          #cd install/usr
-          #export PREFIX=$PWD
-          #export LD_LIBRARY_PATH=$PREFIX/lib
-          #nohup ./bin/rbusTestProvider >/tmp/plog.txt &
-          #./bin/rbusTestConsumer -a
-      #- name: Run multiRbusOpenMethod Unit Test
-        #run: |
-          #cd install/usr
-          #export PREFIX=$PWD
-          #export LD_LIBRARY_PATH=$PREFIX/lib
-          #./bin/multiRbusOpenMethodProvider &
-          #./bin/multiRbusOpenMethodConsumer &
+      # - name: Run Unit test
+      #   run: |
+      #     cd install/usr
+      #     export PREFIX=$PWD
+      #     export LD_LIBRARY_PATH=$PREFIX/lib
+      #     nohup ./bin/rbusTestProvider >/tmp/plog.txt &
+      #     ./bin/rbusTestConsumer -a
+      # - name: Run multiRbusOpenMethod Unit Test
+      #   run: |
+      #     cd install/usr
+      #     export PREFIX=$PWD
+      #     export LD_LIBRARY_PATH=$PREFIX/lib
+      #     ./bin/multiRbusOpenMethodProvider &
+      #     ./bin/multiRbusOpenMethodConsumer &
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
           cd install/usr
@@ -85,28 +85,28 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
           ./bin/multiRbusOpenConsumer
-      #- name: Run multiRbusOpenGet Unit test
-        #run: |
-          #cd install/usr
-          #export PREFIX=$PWD
-          #export LD_LIBRARY_PATH=$PREFIX/lib
-          #nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          #./bin/multiRbusOpenRbusGetConsumer
-     # - name: Run multiRbusOpenSet Unit test
-      #  run: |
-       #   cd install/usr
-        #  export PREFIX=$PWD
-         # export LD_LIBRARY_PATH=$PREFIX/lib
-          #nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-          #./bin/multiRbusOpenRbusSetConsumer
-      #- name: Run Gtest Cases
-       # run: |
-        #  cd build/rbus
-         # nohup ./src/session_manager/rbus_session_mgr &
-          #./unittests/rbus_gtest.bin
-      #- name: Stop SessionManager
-     #   run: |
-      #    killall -9 rbus_session_mgr
+    #   - name: Run multiRbusOpenGet Unit test
+    #     run: |
+    #       cd install/usr
+    #       export PREFIX=$PWD
+    #       export LD_LIBRARY_PATH=$PREFIX/lib
+    #       nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
+    #       ./bin/multiRbusOpenRbusGetConsumer
+    #  - name: Run multiRbusOpenSet Unit test
+    #    run: |
+    #      cd install/usr
+    #      export PREFIX=$PWD
+    #      export LD_LIBRARY_PATH=$PREFIX/lib
+    #       nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
+    #       ./bin/multiRbusOpenRbusSetConsumer
+    #   - name: Run Gtest Cases
+    #    run: |
+    #      cd build/rbus
+    #      nohup ./src/session_manager/rbus_session_mgr &
+    #       ./unittests/rbus_gtest.bin
+    #   - name: Stop SessionManager
+    #    run: |
+    #      killall -9 rbus_session_mgr
       - name: Build Tests
         run: |
           # add build script execution here
@@ -115,26 +115,22 @@ jobs:
             cd install/usr
             export PREFIX=$PWD
             export LD_LIBRARY_PATH=$PREFIX/lib
-            valgrind --leak-check=full --xml=yes --xml-file=/tmp/unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
-            valgrind --leak-check=full --xml=yes --xml-file=/tmp/unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer &
-      - name:  View valgrind xml file
-        run: |
-           cat install/usr/unit_tests_valgrind.xml
-      - name: Move valgrind xml files
-        run: |
-           mv install/usr/unit_tests_valgrind.xml build/
-           ls -la
-      #- name: Upload the xml files 
-        #uses: actions/upload-artifacts@v4
-        #with: 
-          #name: valgrind-xml-files
-          #path: build/unit_tests_valgrind.xml
+            mkdir -p /tmp/valgrind_report
+            valgrind --leak-check=full --log-file="/tmp/valgrind_report/provider_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/provider_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesProvider &
+            valgrind --leak-check=full --log-file="/tmp/valgrind_report/consumer_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/consumer_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesConsumer &
+
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
 
-           
- 
+      - name: Upload the coverage report to Pull request using actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: valgrind-xml-files
+          path: /tmp/valgrind_report
+
+
+
       
       
      
