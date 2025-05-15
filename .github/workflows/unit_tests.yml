@@ -117,19 +117,16 @@ jobs:
             export LD_LIBRARY_PATH=$PREFIX/lib
             valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
             valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer & 
-      - name : Upload Valgring xml files
-        uses: actions/upload-artifact@v2
-        with:
-          name: valgrind-xml-files
-          path: |
-            unit_tests_valgrind.xml
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
-      #- name:  Run CodeCoverage
-        #run: |
-            #rm -rf /tmp/rtrouted*
-            #cd build/rbus
+      - name: Upload Valgrind XML files
+         uses: actions/upload-artifact@v2
+         with:
+           name: valgrind-xml-files
+           path: |
+             unit_tests_valgrind.xml
+ 
       
       
      
