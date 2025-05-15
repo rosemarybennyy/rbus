@@ -123,6 +123,7 @@ jobs:
       - name: Move valgrind xml files
         run: |
            mv install/usr/unit_tests_valgrind.xml build/
+           ls -la
       - name: Upload the xml files 
         uses: actions/upload-artifacts@v4
         with: 
