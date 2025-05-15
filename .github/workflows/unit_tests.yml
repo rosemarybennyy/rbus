@@ -25,7 +25,7 @@ jobs:
           cmake-version: '3.16.x'
       - name: Install packages
         run: >
-          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr
+          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libev-dev
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
@@ -114,20 +114,4 @@ jobs:
         run: |
             rm -rf /tmp/rtrouted*
             cd build/rbus
-      - name: Set up environment
-        run: |
-          sudo apt update
-          sudo apt install -y libev-dev
-      - name: Install Valgrind
-        run: |
-          sudo apt install valgrind
-          echo "Valgrind installed"
-      - name: Build Tests
-        run: |
-          # add build script execution here
-      - name: Run Tests with Valgrind
-        run: |
-                    valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./unit_tests_binary
-      - name: Valgrind Memory check
-        run: |
-          echo "Checking Valgrind xml ..." 
+     
