@@ -119,6 +119,6 @@ jobs:
           # add build script execution here
       - name: Run Tests with Valgrind
         run: |
-                    valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./unit_tests_binary
+                    valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer
       
      
