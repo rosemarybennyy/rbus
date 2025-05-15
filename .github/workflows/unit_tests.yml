@@ -116,8 +116,8 @@ jobs:
             export PREFIX=$PWD
             export LD_LIBRARY_PATH=$PREFIX/lib
             mkdir -p /tmp/valgrind_report
-            valgrind --leak-check=full --xml=yes --xml-file=/tmp/valgrind_report/provider_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
-            valgrind --leak-check=full --xml=yes --xml-file=/tmp/valgrind_report/ponsumer_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer &
+            valgrind --leak-check=full --log-file="/tmp/valgrind_report/provider_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/provider_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesProvider &
+            valgrind --leak-check=full --log-file="/tmp/valgrind_report/consumer_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/consumer_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesConsumer &
 
       - name: Upload the coverage report to Pull request using actions
         uses: actions/upload-artifact@v4
