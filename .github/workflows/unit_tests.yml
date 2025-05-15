@@ -114,4 +114,20 @@ jobs:
         run: |
             rm -rf /tmp/rtrouted*
             cd build/rbus
-            make rbusCodeCoverageUI 
+      - name: Set up environment
+        run: |
+          sudo apt update
+          sudo apt install -y libev-dev
+      - name: Install Valgrind
+        run: |
+          sudo apt install valgrind
+          echo "Valgrind installed"
+      - name: Build Tests
+        run: |
+          # add build script execution here
+      - name: Run Tests with Valgrind
+        run: |
+                    valgrind --leak-check=full -gen-suppressions=yes --xml=yes --xml-file=unit_tests_valgrind.xml ./unit_tests_binary
+      - name: Valgrind Memory check
+        run: |
+          echo "Checking Valgrind xml ..." 
