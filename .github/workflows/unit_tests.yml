@@ -120,6 +120,14 @@ jobs:
       - name:  View valgrind xml file
         run: |
            cat install/usr/unit_tests_valgrind.xml
+      - name: Move valgrind xml files
+        run: |
+           mv install/usr/unit_tests_valgrind.xml build/
+      - name: Upload the xml files 
+        uses: actions/upload-artifacts@v3
+        with: 
+          name: valgrind-xml-files
+          path: build/unit_tests_valgrind.xml
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
