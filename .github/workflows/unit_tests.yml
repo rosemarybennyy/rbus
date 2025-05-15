@@ -115,8 +115,8 @@ jobs:
             cd install/usr
             export PREFIX=$PWD
             export LD_LIBRARY_PATH=$PREFIX/lib
-            valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
-            valgrind --leak-check=full --xml=yes --xml-file=unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer &
+            valgrind --leak-check=full --xml=yes --xml-file=/tmp/unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesProvider &
+            valgrind --leak-check=full --xml=yes --xml-file=/tmp/unit_tests_valgrind.xml ./bin/rbusTestTimeoutValuesConsumer &
       - name:  View valgrind xml file
         run: |
            cat install/usr/unit_tests_valgrind.xml
@@ -124,11 +124,11 @@ jobs:
         run: |
            mv install/usr/unit_tests_valgrind.xml build/
            ls -la
-      - name: Upload the xml files 
-        uses: actions/upload-artifacts@v4
-        with: 
-          name: valgrind-xml-files
-          path: build/unit_tests_valgrind.xml
+      #- name: Upload the xml files 
+        #uses: actions/upload-artifacts@v4
+        #with: 
+          #name: valgrind-xml-files
+          #path: build/unit_tests_valgrind.xml
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
