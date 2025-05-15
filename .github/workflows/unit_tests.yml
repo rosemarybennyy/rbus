@@ -119,15 +119,16 @@ jobs:
             valgrind --leak-check=full --log-file="/tmp/valgrind_report/provider_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/provider_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesProvider &
             valgrind --leak-check=full --log-file="/tmp/valgrind_report/consumer_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/consumer_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesConsumer &
 
+      - name: Stop rtrouted
+        run: |
+          killall -9 rtrouted
+
       - name: Upload the coverage report to Pull request using actions
         uses: actions/upload-artifact@v4
         with:
           name: valgrind-xml-files
           path: /tmp/valgrind_report
 
-      - name: Stop rtrouted
-        run: |
-          killall -9 rtrouted
 
 
       
