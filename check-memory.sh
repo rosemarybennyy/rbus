@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to the Valgrind XML file
-VALGRIND_XML="unit_tests_valgrind.xml"
+VALGRIND_XML="/tmp/valgrind_report/provider_valgrind_procinfo.xml"
 
 # Check if the Valgrind XML file exists
 if [ ! -f "$VALGRIND_XML" ]; then
