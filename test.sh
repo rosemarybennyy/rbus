@@ -59,7 +59,7 @@ parse_valgrind_reports() {
     error=""
     kind="error"
 
-    [ "${INPUT_TREAT_ERROR_AS_WARNING}" = "true" ] && kind="warning"
+    #[ "${INPUT_TREAT_ERROR_AS_WARNING}" = "true" ] && kind="warning"
     while IFS= read -r line; do
         if [ "${error}" != "" ]; then
             if [ "$(echo "${line}" | grep '^==.*== $')" ] && [ "$(skip_criterion_pipe_leaks "${error}")" = "1" ]; then
