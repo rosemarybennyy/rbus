@@ -132,7 +132,9 @@ jobs:
         run: |
             cd ${{github.workspace}}/rbus
             chmod a+x check-memory.sh
+            cat check-memory.sh
             ./check-memory.sh > commit_message.txt || echo "Memory check failed" > commit_message.txt
+            cat commit_message.txt
       - name: Post Memory Check Result to PR
         uses: actions/github-script@v6
         with:
