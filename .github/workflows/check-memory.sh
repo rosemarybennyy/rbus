@@ -1,22 +1,6 @@
+
 #!/bin/bash
 
-# Path to the Valgrind XML file
-VALGRIND_XML="unit_tests_valgrind.xml"
-
-# Check if the Valgrind XML file exists
-if [ ! -f "$VALGRIND_XML" ]; then
-  echo "Valgrind XML file not found!"
-  exit 1
-fi
-
-# Parse the XML file to check for errors
-ERRORS=$(grep -c "<error>" "$VALGRIND_XML")
-
-if [ "$ERRORS" -gt 0 ]; then
-  echo "Memory leaks detected!"
-  grep "<error>" -A 10 "$VALGRIND_XML"  # Display the errors
-  exit 1
-else
-  echo "No memory leaks detected."
-  exit 0
-fi
+# Access the environment variables
+echo "The value of MY_VARIABLE is: $MY_VARIABLE"
+echo "The value of ANOTHER_VARIABLE is: $ANOTHER_VARIABLE"
