@@ -89,9 +89,9 @@ jobs:
         run: |
           echo $PWD
           ls -lt $PWD
-          chmod a+x test.sh
+          chmod a+x rbus/test.sh
           echo "ROSE"
-          cat test.sh
+          cat rbus/test.sh
       - name: Set Environment variables
         run:  |
          echo "MY_VARIABLE=${{github.workspace}}/install/usr/bin/" >$GITHUB_ENV
