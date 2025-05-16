@@ -17,7 +17,7 @@ jobs:
           cat test.sh
       - name: Set Environment variables
         run:  |
-         echo "MY_VARIABLE=HELLOWORLD" >$GITHUB_ENV
+         echo "MY_VARIABLE=install/usr/bin/multiRbusOpenRbusGetProvider" >$GITHUB_ENV
       - name: Run shell script
         run:  |
          ./test.sh
