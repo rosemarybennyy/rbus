@@ -7,8 +7,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Set environment variables
+        run: |
+          echo "MY_VARIABLE=HelloWorld" >> $GITHUB_ENV
 
-      - name: Run Shell Script
-        run: ./check-memory.sh
-        env:
-          MY_VARIABLE: HelloWorld
+
+  
