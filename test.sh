@@ -63,7 +63,7 @@ parse_valgrind_reports() {
     while IFS= read -r line; do
         if [ "${error}" != "" ]; then
             if [ "$(echo "${line}" | grep '^==.*== $')" ] && [ "$(skip_criterion_pipe_leaks "${error}")" = "1" ]; then
-                echo "::${kind} title=Valgrind Report '${INPUT_BINARY_PATH}' (${report_id})::${error}"
+                echo "::${kind} title=Valgrind Report '$MY_VARIABLE/multiRbusOpenProvider' (${report_id})::${error}"
                 report_id=$(( report_id + 1 ))
                 error=""
                 status=1
@@ -86,10 +86,7 @@ main() {
     VALGRIND_REPORTS="valgrind-reports.log"
     VALGRIND_FLAGS=$(prepare_valgrind_flags)
 
-    if [ "${INPUT_LD_LIBRARY_PATH}" = "" ]; then
-        export LD_LIBRARY_PATH="${INPUT_LD_LIBRARY_PATH}"
-    fi
-    set +e
+     set +e
     timeout ${INPUT_TIMEOUT} valgrind $VALGRIND_FLAGS "$MY_VARIABLE/multiRbusOpenProvider"  2>"${VALGRIND_REPORTS}"
     set -e
     parse_valgrind_reports "${VALGRIND_REPORTS}"
