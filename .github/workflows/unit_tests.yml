@@ -99,7 +99,7 @@ jobs:
          ls -lt $MY_VARIABLE
       - name: Run shell script
         run:  |
-         ./test.sh
+         ./rbus/test.sh
         env:
           MY_VARIABLE: ${{env.MY_VARIABLE}} 
     #   - name: Run multiRbusOpenGet Unit test
