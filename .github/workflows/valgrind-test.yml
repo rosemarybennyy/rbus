@@ -10,7 +10,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+      - name: Enable permission to script 
+        run: chmod a+x check-memory.sh
       - name: Run Shell Script
         run: ./check-memory.sh
         env:
