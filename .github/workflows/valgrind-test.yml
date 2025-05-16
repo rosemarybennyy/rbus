@@ -12,11 +12,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Enable permission to script 
         run: |
-          chmod a+x check-memory.sh
+          chmod a+x test.sh
           echo "ROSE"
-          cat check-memory.sh
+          cat test.sh
+          
       #- name: Run Shell Script
-        #run: ./check-memory.sh
+        #run: ./test.sh
         #env:
           #MY_VARIABLE: HelloWorld
 
