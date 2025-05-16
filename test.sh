@@ -23,10 +23,10 @@ prepare_valgrind_flags() {
     #echo "--redzone-size=${INPUT_REDZONE_SIZE}"
     #[ "${INPUT_TRACK_FILE_DESCRIPTORS}" = "true" ] && echo "--track-fds=yes"
     #[ "${INPUT_VERBOSE}" = "true" ] && echo "--verbose"
-    if [ "${INPUT_VALGRIND_SUPPRESSIONS}" != "" ]; then
-        echo "${INPUT_VALGRIND_SUPPRESSIONS}" > "${SUPPRESSIONS_FILE}"
-        echo "--suppressions=${SUPPRESSIONS_FILE}"
-    fi
+    #if [ "${INPUT_VALGRIND_SUPPRESSIONS}" != "" ]; then
+        #echo "${INPUT_VALGRIND_SUPPRESSIONS}" > "${SUPPRESSIONS_FILE}"
+        #echo "--suppressions=${SUPPRESSIONS_FILE}"
+    #fi
 }
 
 skip_criterion_pipe_leaks() {
