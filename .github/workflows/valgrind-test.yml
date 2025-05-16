@@ -15,6 +15,16 @@ jobs:
           chmod a+x test.sh
           echo "ROSE"
           cat test.sh
+      - name: Set Environment variables
+        run:  |
+         echo "MY_VARIABLE=HELLOWORLD" >$GITHUB_ENV
+      - name: Run shell script
+        run:  |
+         ./test.sh
+        env:
+          MY_VARIABLE: ${{env.MY_VARIABLE}} 
+         
+         
           
       #- name: Run Shell Script
         #run: ./test.sh
