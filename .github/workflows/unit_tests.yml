@@ -139,7 +139,7 @@ jobs:
          github-token: ${{ secrets.GITHUB_TOKEN }}
          script: |
            const fs = require('fs');
-           const leakMessage = fs.readFileSync('memory_check_result.txt', 'utf8');
+           const leakMessage = fs.readFileSync('commit_message.txt', 'utf8');
            github.rest.issues.createComment({
              issue_number: context.payload.pull_request.number,
              owner: context.repo.owner,
