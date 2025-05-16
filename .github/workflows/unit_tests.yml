@@ -85,6 +85,22 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
           ./bin/multiRbusOpenConsumer
+      - name: Enable permission to script 
+        run: |
+          echo $PWD
+          chmod a+x test.sh
+          echo "ROSE"
+          cat test.sh
+      - name: Set Environment variables
+        run:  |
+         echo "MY_VARIABLE=${{github.workspace}}/install/usr/bin/" >$GITHUB_ENV
+         ls -lt ${{github.workspace}}/install/usr/bin/
+         ls -lt $MY_VARIABLE
+      - name: Run shell script
+        run:  |
+         ./test.sh
+        env:
+          MY_VARIABLE: ${{env.MY_VARIABLE}} 
     #   - name: Run multiRbusOpenGet Unit test
     #     run: |
     #       cd install/usr
