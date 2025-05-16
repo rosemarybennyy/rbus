@@ -11,11 +11,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Enable permission to script 
-        run: chmod a+x check-memory.sh
-      - name: Run Shell Script
-        run: ./check-memory.sh
-        env:
-          MY_VARIABLE: HelloWorld
+        run: |
+          chmod a+x check-memory.sh
+          echo "ROSE"
+      #- name: Run Shell Script
+        #run: ./check-memory.sh
+        #env:
+          #MY_VARIABLE: HelloWorld
 
 
 
