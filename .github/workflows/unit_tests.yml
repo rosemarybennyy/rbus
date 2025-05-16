@@ -128,6 +128,25 @@ jobs:
         with:
           name: valgrind-xml-files
           path: /tmp/valgrind_report
+      - name: Run Memory check
+        run: |
+            cd ${{github.workspace}}/rbus
+            chmod a+x check-memory.sh
+            ./check-memory.sh > commit_message.txt || echo "Memory check failed" > commit_message.txt
+      - name: Post Memory Check Result to PR
+        uses: actions/github-script@v6
+        with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         script: |
+           const fs = require('fs');
+           const leakMessage = fs.readFileSync('memory_check_result.txt', 'utf8');
+           github.rest.issues.createComment({
+             issue_number: context.payload.pull_request.number,
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             body: `🚨 **Memory Leak Check Result**:\n\n${leakMessage}`
+           });
+
 
 
 
