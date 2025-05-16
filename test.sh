@@ -87,7 +87,7 @@ main() {
     VALGRIND_FLAGS=$(prepare_valgrind_flags)
 
      set +e
-    timeout ${INPUT_TIMEOUT} valgrind $VALGRIND_FLAGS "$MY_VARIABLE/multiRbusOpenProvider"  2>"${VALGRIND_REPORTS}"
+    valgrind $VALGRIND_FLAGS "$MY_VARIABLE/multiRbusOpenProvider"  2>"${VALGRIND_REPORTS}"
     set -e
     parse_valgrind_reports "${VALGRIND_REPORTS}"
 }
