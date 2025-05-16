@@ -4,4 +4,4 @@
 echo "The value of MY_VARIABLE is: $MY_VARIABLE"
 echo "The value of ANOTHER_VARIABLE is: $ANOTHER_VARIABLE"
 
-valgrind --leak-check=full --show-leak-kinds=all $MY_VARIABLE
+valgrind --leak-check=full --show-leak-kinds=all $MY_VARIABLE/multiRbusOpenProvider
