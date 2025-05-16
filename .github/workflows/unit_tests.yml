@@ -133,8 +133,8 @@ jobs:
             cd ${{github.workspace}}/rbus
             chmod a+x check-memory.sh
             cat check-memory.sh
-            cd /tmp/valgrind_report
-            ./${{github.workspace}}/rbus/check-memory.sh
+            cp /tmp/valgrind_report ${{github.workspace}}/rbus/
+            ./check-memory.sh
             cat commit_message.txt
       - name: Post Memory Check Result to PR
         uses: actions/github-script@v6
