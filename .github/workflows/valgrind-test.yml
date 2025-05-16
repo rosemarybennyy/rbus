@@ -9,6 +9,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Shell Script
-        run: $PWD
+        run: ./check-memory.sh
         env:
           MY_VARIABLE: HelloWorld
