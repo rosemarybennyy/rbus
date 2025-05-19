@@ -4,6 +4,7 @@ on:
      branches: [ main, 'rbus-**' ,rbus-codecoverage ]
   pull_request:
      branches: [ main, 'rbus-**', rbus-codecoverage ]
+     types: [opened,synchronize]
 jobs:
   all:
     runs-on: ubuntu-22.04
