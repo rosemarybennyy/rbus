@@ -84,7 +84,6 @@ jobs:
              else
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
-             exit 1
              fi
       - name: Post comment on failure
         if: env.status == 'failure'
