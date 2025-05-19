@@ -69,7 +69,7 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          continue-on-error: true
+          #continue-on-error: true
           valgrind --leak-check=full ./bin/rbusMethodProvider >/tmp/plog.txt & 
           valgrind --leak-check=full ./bin/rbusMethodConsumer -a
           #continue-on-error: true
