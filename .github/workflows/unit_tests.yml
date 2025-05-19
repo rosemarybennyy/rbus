@@ -69,8 +69,8 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestProvider >/tmp/plog.txt &
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestConsumer -a
+          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodProvider >/tmp/plog.txt &
+          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodConsumer -a
       # - name: Run Unit test
       #   run: |
       #     cd install/usr
