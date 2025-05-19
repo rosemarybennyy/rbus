@@ -1,4 +1,4 @@
-name: unit_tests_valgrind
+name: valgrind-test2
 on:
   workflow_run:
     workflows: ["unit_tests"]
