@@ -79,7 +79,7 @@ jobs:
         id: valgrind_check
         run: |
              if grep -q "ERROR SUMMARY: 0 errors" /tmp/plog.txt; then
-             echo "No memory leaks found
+             echo "No memory leaks found"
              echo "::set-output name=status::sucess"
              else
              echo "Memory leaks detected"
