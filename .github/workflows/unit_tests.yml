@@ -71,7 +71,7 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodProvider >/tmp/plog.txt &
           valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodConsumer -a
-          ls -ltrh
+          ls -lt
           cat /tmp/plog.txt
       # - name: Run Unit test
       #   run: |
