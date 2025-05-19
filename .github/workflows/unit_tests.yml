@@ -87,10 +87,12 @@ jobs:
              fi
       - name: Post comment on failure
         uses: thollander/actions-comment-pull-request@v1
-        if: env.status == 'failure'
+        if: ${{env.status == 'failure'}}
         with:
          message: 'Memory leak detected'
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
        
 
       
