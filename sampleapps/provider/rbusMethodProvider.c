@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
 
     int rc = RBUS_ERROR_SUCCESS;
     int *data = malloc(sizeof(int));
+    *data = 10;
 
     char componentName[] = "MethodProvider";
 
