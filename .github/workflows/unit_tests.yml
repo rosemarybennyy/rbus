@@ -90,7 +90,7 @@ jobs:
         uses: actions/github-script@v6
         with:
          script: |
-             github.rest.issues.createComment({issue_number: context.issue.number , body: "valgrind memory leak observed" })
+             github.rest.issues.createComment({owner: RoseMary_Benny@comcast.com,repo:rbus-codecoverage,issue_number: context.issue.number , body: "valgrind memory leak observed" })
 
 
       
