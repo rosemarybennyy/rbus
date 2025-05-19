@@ -74,7 +74,7 @@ jobs:
           ls -lt
           cat /tmp/plog.txt
       - name: Check Valgrind output
-        id: valgrind check
+        id: valgrind_check
         run: |
              if grep -q "ERROR SUMMARY: 0 ERRORS" /tmp/plog.txt: then
              echo "No memory leaks found
