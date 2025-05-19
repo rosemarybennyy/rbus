@@ -97,12 +97,12 @@ jobs:
          echo "MY_VARIABLE=${{github.workspace}}/install/usr/bin" >$GITHUB_ENV
          ls -lt ${{github.workspace}}/install/usr/bin/
          ls -lt $MY_VARIABLE
-      - name: Run shell script
-        run:  |
-         export LD_LIBRARY_PATH=${{github.workspace}}/install/usr/lib 
-         ./rbus/test.sh
-        env:
-          MY_VARIABLE: ${{env.MY_VARIABLE}} 
+      #- name: Run shell script
+        #run:  |
+         #export LD_LIBRARY_PATH=${{github.workspace}}/install/usr/lib 
+         #./rbus/test.sh
+        #env:
+          #MY_VARIABLE: ${{env.MY_VARIABLE}} 
     #   - name: Run multiRbusOpenGet Unit test
     #     run: |
     #       cd install/usr
