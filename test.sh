@@ -63,7 +63,7 @@ parse_valgrind_reports() {
     while IFS= read -r line; do
         if [ "${error}" != "" ]; then
             if [ "$(echo "${line}" | grep '^==.*== $')" ] && [ "$(skip_criterion_pipe_leaks "${error}")" = "1" ]; then
-                echo "::${kind} title=Valgrind Report '$MY_VARIABLE/multiRbusOpenProvider' (${report_id})::${error}"
+                echo "::${kind} title=Valgrind Report '$MY_VARIABLE/rbusMethodProvider' (${report_id})::${error}"
                 report_id=$(( report_id + 1 ))
                 error=""
                 status=1
@@ -87,7 +87,7 @@ main() {
     VALGRIND_FLAGS=$(prepare_valgrind_flags)
 
      set +e
-    valgrind $VALGRIND_FLAGS "$MY_VARIABLE/multiRbusOpenProvider"  2>"${VALGRIND_REPORTS}"
+    valgrind $VALGRIND_FLAGS "$MY_VARIABLE/rbusMethodProvider"  2>"${VALGRIND_REPORTS}"
     set -e
     parse_valgrind_reports "${VALGRIND_REPORTS}"
 }
