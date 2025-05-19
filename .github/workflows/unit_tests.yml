@@ -86,12 +86,12 @@ jobs:
              echo "status=failure" >> $GITHUB_ENV
              fi
       - name: Post comment on failure
+        uses: thollander/actions-comment-pull-request@v1
         if: env.status == 'failure'
-        uses: actions/github-script@v6
         with:
-         script: |
-             github.rest.issues.createComment({owner: "rosemarybennyy",repo:"rbus",issue_number: context.issue.number , body: "valgrind memory leak observed" })
-
+         message: 'Memory leak detected'
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       
 
       
 
