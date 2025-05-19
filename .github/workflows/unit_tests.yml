@@ -73,6 +73,27 @@ jobs:
           valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodConsumer -a
           ls -lt
           cat /tmp/plog.txt
+      - name: Check Valgrind output
+        id:  valgrind check
+        run: |
+             if grep -q "ERROR SUMMARY: 0 ERRORS" /tmp/plog.txt: then
+             echo "No memory leaks found
+             echo "::set-output name=status::sucess"
+             else
+             echo "Memory leaks detected"
+             echo "::set-output name=status::failure"
+             exit 1
+             fi
+      - name: Post comment on failure
+        if: steps.valgrind_check.outputs.status == 'failure'
+        uses: actions/github-script@v6
+        with:
+         script: |
+             github.rest.issues.createComment({issue_number: context.issue.number , body: "valgrind memory leak observed"; })
+
+
+      
+
       # - name: Run Unit test
       #   run: |
       #     cd install/usr
