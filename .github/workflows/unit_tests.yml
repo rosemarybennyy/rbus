@@ -70,10 +70,9 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           continue-on-error: true
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodProvider >/tmp/plog.txt & 
-          continue-on-error: true
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusMethodConsumer -a
-          continue-on-error: true
+          valgrind --leak-check=full ./bin/rbusMethodProvider >/tmp/plog.txt & 
+          valgrind --leak-check=full ./bin/rbusMethodConsumer -a
+          #continue-on-error: true
           ls -lt
           cat /tmp/plog.txt
       - name: Check Valgrind output
