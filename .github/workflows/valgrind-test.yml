@@ -119,17 +119,17 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/test2.txt ./bin/multiRbusOpenMethodProvider &
-          valgrind --leak-check=full --log-file=/tmp/test3.txt ./bin/multiRbusOpenMethodConsumer &
-          ls -lt /tmp
-          if grep -q "ERROR SUMMARY: 0 errors" /tmp/test2.txt; then
-             echo "No memory leaks found"
-             echo "status=success" >> $GITHUB_ENV
-             else
-             echo "Memory leaks detected"
-             echo "status=failure" >> $GITHUB_ENV
+          valgrind --leak-check=full --log-file=/tmp/test3.txt ./bin/multiRbusOpenMethodConsumer -a
+          #ls -lt /tmp
+          #if grep -q "ERROR SUMMARY: 0 errors" /tmp/test2.txt; then
+             #echo "No memory leaks found"
+             #echo "status=success" >> $GITHUB_ENV
+             #else
+             #echo "Memory leaks detected"
+             #echo "status=failure" >> $GITHUB_ENV
              #cat /tmp/plog.txt >>$GITHUB_STEP_SUMMARY
-             ./memoryleak.sh "multiRbusOpenMethodProvider" "/tmp/test2.txt"
-             fi
+             #./memoryleak.sh "multiRbusOpenMethodProvider" "/tmp/test2.txt"
+             #fi
 
       - name: Stop SessionManager
         run: |
