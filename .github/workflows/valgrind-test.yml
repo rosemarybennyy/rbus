@@ -90,5 +90,5 @@ jobs:
             fi
             done
             EOF
-            chmod a+x memory.sh
+            chmod a+x memoryleak.sh
            
