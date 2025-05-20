@@ -86,12 +86,12 @@ jobs:
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
              fi
-      - name: Post comment on failure
-        uses: thollander/actions-comment-pull-request@v1
-        if: ${{env.status == 'failure'}}
-        with:
-         message: 'Memory leak detected'
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Post comment on failure
+        #uses: thollander/actions-comment-pull-request@v1
+        #if: ${{env.status == 'failure'}}
+        #with:
+         #message: 'Memory leak detected'
+         #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
        
