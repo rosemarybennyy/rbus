@@ -62,6 +62,26 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full ./bin/rbusMethodProvider >/tmp/plog.txt & 
+          valgrind --leak-check=full ./bin/rbusMethodConsumer -a
+          ls -lt
+          cat /tmp/plog.txt
+      - name: Check Valgrind output
+        id: valgrind_check
+        run: |
+             if grep -q "ERROR SUMMARY: 0 errors" /tmp/plog.txt; then
+             echo "No memory leaks found"
+             echo "status=success" >> $GITHUB_ENV
+             else
+             echo "Memory leaks detected"
+             echo "status=failure" >> $GITHUB_ENV
+             echo /tmp/plog.txt >>$GITHUB_STEP_SUMMARY
+             fi
+      - name: Run Unit test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestProvider >/tmp/plog.txt &
           valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestConsumer -a
       - name: Run multiRbusOpenMethod Unit Test with Valgrind
