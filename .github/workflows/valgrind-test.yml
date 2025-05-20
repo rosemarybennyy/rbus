@@ -68,8 +68,19 @@ jobs:
             echo "Running log file: \$LOG_FILE"
             if [ -f $LOG_FILE ]; then
             echo "Log file exists and is readable."
-            echo "Errors found in binary $BINARY_PATH. Appending to" >>$GITHUB_STEP_SUMMARY
-            cat $LOG_FILE >>$GITHUB_STEP_SUMMARY
+            echo "######Errors found in binary $BINARY_PATH" >>$GITHUB_STEP_SUMMARY
+            #EXTRACT THE RELEVANT INFO
+            LEAK_SUMMARY= $(grep -A 10 "LEAK SUMMARY:" $LOG_FILE)
+            ERROR_SUMMARY= $(grep -A 10 "ERROR SUMMARY:" $LOG_FILE)
+            if [-n "$LEAK_SUMMARY" ];then
+            echo "### LEAK Summary" >>$GITHUB_STEP_SUMMARY
+            echo "$LEAK_SUMMARY"  >>$GITHUB_STEP_SUMMARY
+            fi
+            if [-n "$ERROR_SUMMARY" ];then
+            echo "### ERROR Summary" >>$GITHUB_STEP_SUMMARY
+            echo "$ERROR_SUMMARY"  >>$GITHUB_STEP_SUMMARY
+            fi
+            #cat $LOG_FILE >>$GITHUB_STEP_SUMMARY
             else
             echo "Log file does not exist"
             fi
