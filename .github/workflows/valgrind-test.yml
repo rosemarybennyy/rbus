@@ -72,6 +72,7 @@ jobs:
             #EXTRACT THE RELEVANT INFO
             LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
             ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+            HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
               if [ -n "$LEAK_SUMMARY" ];then
               echo "### LEAK Summary" >>$GITHUB_STEP_SUMMARY
               echo "$LEAK_SUMMARY"  >>$GITHUB_STEP_SUMMARY
@@ -80,6 +81,9 @@ jobs:
               echo "### ERROR Summary" >>$GITHUB_STEP_SUMMARY
               echo "$ERROR_SUMMARY"  >>$GITHUB_STEP_SUMMARY
               fi
+              if [ -n "$HEAP_SUMMARY" ]; then
+              echo "HEAP SUMMARY" >>$GITHUB_STEP_SUMMARY
+              echo "$HEAP_SUMMARY" >>$GITHUB_STEP_SUMMARY
             #cat $LOG_FILE >>$GITHUB_STEP_SUMMARY
             else
             echo "Log file does not exist"
