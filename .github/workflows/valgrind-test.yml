@@ -68,17 +68,17 @@ jobs:
             echo "Running log file: \$LOG_FILE"
             if [ -f $LOG_FILE ]; then
             echo "Log file exists and is readable."
-            echo "######Errors found in binary $BINARY_PATH" >>$GITHUB_STEP_SUMMARY
+            echo "Errors found in binary $BINARY_PATH" >>$GITHUB_STEP_SUMMARY
             #EXTRACT THE RELEVANT INFO
             LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
             ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
             HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
               if [ -n "$LEAK_SUMMARY" ];then
-              echo "### LEAK Summary" >>$GITHUB_STEP_SUMMARY
+              echo "LEAK Summary" >>$GITHUB_STEP_SUMMARY
               echo "$LEAK_SUMMARY"  >>$GITHUB_STEP_SUMMARY
               fi
               if [ -n "$ERROR_SUMMARY" ];then
-              echo "### ERROR Summary" >>$GITHUB_STEP_SUMMARY
+              echo "ERROR Summary" >>$GITHUB_STEP_SUMMARY
               echo "$ERROR_SUMMARY"  >>$GITHUB_STEP_SUMMARY
               fi
               if [ -n "$HEAP_SUMMARY" ]; then
@@ -120,6 +120,7 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/test2.txt ./bin/multiRbusOpenMethodProvider &
           valgrind --leak-check=full --log-file=/tmp/test3.txt ./bin/multiRbusOpenMethodConsumer &
+          ls -lt /tmp
           if grep -q "ERROR SUMMARY: 0 errors" /tmp/test2.txt; then
              echo "No memory leaks found"
              echo "status=success" >> $GITHUB_ENV
