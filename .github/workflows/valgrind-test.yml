@@ -68,8 +68,8 @@ jobs:
              # Initialize the table
              SUMMARY_FILE="github_step_summary.md"
              echo "###### Errors found in log files" > $SUMMARY_FILE
-             echo "| API Name | Error Count | Heap Error | Error | Leak Summary |" >> $SUMMARY_FILE
-             echo "|----------|-------------|------------|-------|--------------|" >> $SUMMARY_FILE
+             echo "| Heap Error              | Error      | Leak Summary       |" >> $SUMMARY_FILE
+             echo "|------------- -----------|------------|--------------------|" >> $SUMMARY_FILE
 
              # Variable to track if any memory-related issues are found
              MEMORY_ISSUE_FOUND=false
