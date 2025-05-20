@@ -99,9 +99,7 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/plog.txt ./bin/rbusMethodProvider & 
           valgrind --leak-check=full  --log-file=/tmp/plog2.txt ./bin/rbusMethodConsumer -a      
-      - name: Excute the summmary
-        run: |
-            ./mem1.sh /tmp
+
       - name: Check Valgrind output
         id: valgrind_check
         run: |
