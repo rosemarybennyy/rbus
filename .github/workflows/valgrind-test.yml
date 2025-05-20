@@ -84,6 +84,7 @@ jobs:
               if [ -n "$HEAP_SUMMARY" ]; then
               echo "HEAP SUMMARY" >>$GITHUB_STEP_SUMMARY
               echo "$HEAP_SUMMARY" >>$GITHUB_STEP_SUMMARY
+              fi
             #cat $LOG_FILE >>$GITHUB_STEP_SUMMARY
             else
             echo "Log file does not exist"
