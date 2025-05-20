@@ -75,7 +75,7 @@ jobs:
              else
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
-             echo "/tmp/plog.txt" >>$GITHUB_STEP_SUMMARY
+             echo /tmp/plog.txt >>$GITHUB_STEP_SUMMARY
              fi
 
       - name: Stop SessionManager
