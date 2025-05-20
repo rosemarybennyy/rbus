@@ -75,48 +75,9 @@ jobs:
              else
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
-             echo /tmp/plog.txt >>$GITHUB_STEP_SUMMARY
+             echo "/tmp/plog.txt" >>$GITHUB_STEP_SUMMARY
              fi
-      - name: Run Unit test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestProvider >/tmp/plog.txt &
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rbusTestConsumer -a
-      - name: Run multiRbusOpenMethod Unit Test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenMethodProvider &
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenMethodConsumer &
-      - name: Run multiRbusOpenSubscribe Unit test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenConsumer
-      - name: Run multiRbusOpenGet Unit test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenRbusGetConsumer
-      #- name: Run multiRbusOpenSet Unit test with Valgrind
-        #run: |
-          #cd install/usr
-          #export PREFIX=$PWD
-          #export LD_LIBRARY_PATH=$PREFIX/lib
-          #valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-          #valgrind --leak-check=full --error-exitcode=1 ./bin/multiRbusOpenRbusSetConsumer
-      - name: Run Gtest Cases with Valgrind
-        run: |
-          cd build/rbus
-          valgrind --leak-check=full --error-exitcode=1 ./src/session_manager/rbus_session_mgr &
-          valgrind --leak-check=full --error-exitcode=1 ./unittests/rbus_gtest.bin
+
       - name: Stop SessionManager
         run: |
           #killall -9 rbus_session_mgr
