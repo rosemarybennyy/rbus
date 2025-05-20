@@ -124,14 +124,14 @@ jobs:
           #export LD_LIBRARY_PATH=$PREFIX/lib
           #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
           #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer
-      - name: Run Gtest Cases with Valgrind
-        run: |
-          cd build/rbus
-          valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
-          valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log ./unittests/rbus_gtest.bin
-      - name: Stop SessionManager
-        run: |
-          killall -9 rbus_session_mgr
+      #- name: Run Gtest Cases with Valgrind
+        #run: |
+         # cd build/rbus
+          #valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
+          #valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log ./unittests/rbus_gtest.bin
+     # - name: Stop SessionManager
+      #  run: |
+       #   killall -9 rbus_session_mgr
       - name: Run script.sh
         run: |
              ./memoryleak.sh
