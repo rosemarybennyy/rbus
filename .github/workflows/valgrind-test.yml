@@ -89,8 +89,10 @@ jobs:
                LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
                ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
                HEAP_SUMMARY=${HEAP_SUMMARY:-"No heap summary found"}
-               echo "| $BINARY_PATH  | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
-             else
+               if [ "$LEAK_SUMMARY" != "No leaks found" ]; then
+                echo "| $BINARY_PATH  | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
+               fi
+            else
                echo "logfile not exist"
              fi
             done
@@ -103,6 +105,49 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/rbusMethodProvider.log ./bin/rbusMethodProvider & 
           valgrind --leak-check=full  --log-file=/tmp/rbusMethodConsumert.log ./bin/rbusMethodConsumer -a 
+      - name: Run Unit test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/rbusTestProvider.log ./bin/rbusTestProvider  &
+          valgrind --leak-check=full --log-file=/tmp/rbusTestConsume.log ./bin/rbusTestConsumer -a
+      - name: Run multiRbusOpenMethod Unit Test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenMethodProvider.log ./bin/multiRbusOpenMethodProvider &
+          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenMethodConsumer.log ./bin/multiRbusOpenMethodConsumer &
+      - name: Run multiRbusOpenSubscribe Unit test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenProvider.log ./bin/multiRbusOpenProvider  &
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenConsumer.log ./bin/multiRbusOpenConsumer
+      #- name: Run multiRbusOpenGet Unit test with Valgrind
+        #run: |
+          #cd install/usr
+          #export PREFIX=$PWD
+          #export LD_LIBRARY_PATH=$PREFIX/lib
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer
+      #- name: Run multiRbusOpenSet Unit test with Valgrind
+        #run: |
+          #cd install/usr
+          #export PREFIX=$PWD
+          #export LD_LIBRARY_PATH=$PREFIX/lib
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer
+      - name: Run Gtest Cases with Valgrind
+        run: |
+          cd build/rbus
+          valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
+          valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log ./unittests/rbus_gtest.bin
+      - name: Stop SessionManager
+        run: |
+          killall -9 rbus_session_mgr
       - name: Run script.sh
         run: |
              ./memoryleak.sh
