@@ -77,9 +77,9 @@ jobs:
 
               if [ -f $LOG_FILE ]; then
                echo "log file readable"
-               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
-               ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
-               HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE | sed 's/$/<br>/')
+               ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE | sed 's/$/<br>/')
+               HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE | sed 's/$/<br>/')
 
                LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
                ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
