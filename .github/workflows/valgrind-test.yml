@@ -70,10 +70,10 @@ jobs:
             echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
             
             for LOG_FILE in $LOG_FOLDER/*.log; do
-            echo "Running logfile : $LOG_FILE
+            echo "Running logfile : $LOG_FILE"
             BINARY_PATH=$(basename $LOG_FILE .log)
-            echo "Running binary: $BINARY_PATH"
-            echo "Running log file: $LOG_FILE"
+            echo "Running bin : $BINARY_PATH"
+
 
             if[ -f $LOG_FILE ]; then
             echo "log file readable"
