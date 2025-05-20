@@ -56,14 +56,14 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --error-exitcode=1 ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
+          valgrind --leak-check=full --error-exitcode=1  ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
       
       - name: Run Unit test with Valgrind
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full ./bin/rbusMethodProvider >/tmp/plog.txt & 
+          valgrind --leak-check=full --log-file=/tmp/plog.txt ./bin/rbusMethodProvider & 
           valgrind --leak-check=full ./bin/rbusMethodConsumer -a
           ls -lt
           cat /tmp/plog.txt
