@@ -66,8 +66,8 @@ jobs:
             LOG_FOLDER="/tmp"
             SUMMARY_FILE=$GITHUB_STEP_SUMMARY
 
-            echo "| File | LEAK Summary | ERROR Summary | HEAP Summary |" > $SUMMARY_FILE
-            echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
+            #echo "| File | LEAK Summary | ERROR Summary | HEAP Summary |" > $SUMMARY_FILE
+            #echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
             
             for LOG_FILE in $LOG_FOLDER/*.log; do
              echo "Running logfile : $LOG_FILE"
@@ -77,7 +77,7 @@ jobs:
 
               if [ -f $LOG_FILE ]; then
                echo "log file readable"
-               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE | sed 's/$/<br>/')
+               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE | awk '{print $0 "<br>"}' )
                echo $LEAK_SUMMARY
                ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE | sed 's/$/<br>/')
                echo $ERROR_SUMMARY
@@ -86,7 +86,7 @@ jobs:
                LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
                ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
                HEAP_SUMMARY=${HEAP_SUMMARY:-"No heap summary found"}
-               echo "| $BINARY_PATH | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
+               echo "| $BINARY_PATH  | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
              else
                echo "logfile not exist"
              fi
