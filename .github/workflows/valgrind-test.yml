@@ -70,24 +70,24 @@ jobs:
             echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
             
             for LOG_FILE in $LOG_FOLDER/*.log; do
-            echo "Running logfile : $LOG_FILE"
-            BINARY_PATH=$(basename $LOG_FILE .log)
-            echo "Running bin : $BINARY_PATH"
+             echo "Running logfile : $LOG_FILE"
+             BINARY_PATH=$(basename $LOG_FILE .log)
+             echo "Running bin : $BINARY_PATH"
 
 
-            if[ -f $LOG_FILE ]; then
-            echo "log file readable"
-            LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
-            ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
-            HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+              if [ -f $LOG_FILE ]; then
+               echo "log file readable"
+               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
+               ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+               HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
 
-            LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
-            ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
-            HEAP_SUMMARY=${HEAP_SUMMARY:-"No heap summary found"}
-            echo "| $BINARY_PATH | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
-            else
-            echo "logfile not exist"
-            fi
+               LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
+               ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
+               HEAP_SUMMARY=${HEAP_SUMMARY:-"No heap summary found"}
+               echo "| $BINARY_PATH | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
+             else
+               echo "logfile not exist"
+             fi
             done
             EOF
             chmod a+x memoryleak.sh
