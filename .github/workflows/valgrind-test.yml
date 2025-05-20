@@ -150,4 +150,5 @@ jobs:
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
              exit 1
+             fi
            
