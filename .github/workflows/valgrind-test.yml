@@ -121,10 +121,10 @@ jobs:
              echo "status=failure" >> $GITHUB_ENV
              #exit 1
              fi
-      - name: Post comment on failure
-        uses: thollander/actions-comment-pull-request@v1
-        if: ${{env.status == 'failure'}}
-        with:
-         message: 'Engineer is looking into it'
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     # - name: Post comment on failure
+      #  uses: thollander/actions-comment-pull-request@v1
+       # if: ${{env.status == 'failure'}}
+        #with:
+         #message: 'Engineer is looking into it'
+         #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            
