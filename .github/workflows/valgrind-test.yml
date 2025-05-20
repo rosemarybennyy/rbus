@@ -91,4 +91,14 @@ jobs:
             done
             EOF
             chmod a+x memoryleak.sh
+      - name: Run test with rbusmethod provider
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/rbusMethodProvider.log ./bin/rbusMethodProvider & 
+          valgrind --leak-check=full  --log-file=/tmp/rbusMethodConsumert.log ./bin/rbusMethodConsumer -a 
+      - name: Run script.sh
+        run: |
+             ./memoryleak.sh
            
