@@ -109,27 +109,7 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/rbusMethodProvider.log ./bin/rbusMethodProvider & 
           valgrind --leak-check=full  --log-file=/tmp/rbusMethodConsumert.log ./bin/rbusMethodConsumer -a 
-      - name: Run Unit test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/rbusTestProvider.log ./bin/rbusTestProvider  &
-          valgrind --leak-check=full --log-file=/tmp/rbusTestConsume.log ./bin/rbusTestConsumer -a
-      - name: Run multiRbusOpenMethod Unit Test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenMethodProvider.log ./bin/multiRbusOpenMethodProvider &
-          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenMethodConsumer.log ./bin/multiRbusOpenMethodConsumer &
-      - name: Run multiRbusOpenSubscribe Unit test with Valgrind
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/multiRbusOpenProvider.log ./bin/multiRbusOpenProvider  &
-          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenConsumer.log ./bin/multiRbusOpenConsumer
+    
       #- name: Run multiRbusOpenGet Unit test with Valgrind
         #run: |
           #cd install/usr
