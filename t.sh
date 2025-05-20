@@ -1,15 +1,15 @@
-
 #!/bin/bash
 
 # Run Valgrind and save the output to a log file
 valgrind --leak-check=full --log-file=valgrind.log ./your_program
 
 # Parse the log file and convert to CSV
-echo "Type,Bytes,Blocks" > valgrind_table.csv
-grep -E "definitely lost|indirectly lost" valgrind.log | while read -r line; do
-    type=$(echo $line | awk '{print $1}')
-    bytes=$(echo $line | awk '{print $4}')
-    blocks=$(echo $line | awk '{print $6}')
-    echo "$type,$bytes,$blocks" >> valgrind_table.csv
-done
+echo "Heap Summary,Error Summary,Leak Summary" > valgrind_table.csv
+
+heap_summary=$(grep -A 5 "HEAP SUMMARY:" valgrind.log | tail -n 5 | tr '\n' ' ')
+error_summary=$(grep "ERROR SUMMARY:" valgrind.log)
+leak_summary=$(grep -A 4 "LEAK SUMMARY:" valgrind.log | tail -n 4 | tr '\n' ' ')
+
+echo "$heap_summary,$error_summary,$leak_summary" >> valgrind_table.csv
+
 echo "Conversion complete. Check valgrind_table.csv for the results."
