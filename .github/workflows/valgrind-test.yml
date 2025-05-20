@@ -57,6 +57,64 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --error-exitcode=1  ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
+      - name: TRIAL SCRIPT
+        run: |
+             echo creaing trial script
+             cat << 'EOF' >mem1.sh
+             #!/bin/sh
+             LOG_DIR="/temp"
+             echo "Processing log files in directory: $LOG_DIR"
+
+             # Initialize the table
+             SUMMARY_FILE="github_step_summary.md"
+             echo "###### Errors found in log files" > $SUMMARY_FILE
+             echo "| API Name | Error Count | Heap Error | Error | Leak Summary |" >> $SUMMARY_FILE
+             echo "|----------|-------------|------------|-------|--------------|" >> $SUMMARY_FILE
+
+             # Variable to track if any memory-related issues are found
+             MEMORY_ISSUE_FOUND=false
+             # Function to extract and format information from a log file
+             process_log_file() {
+             local LOG_FILE=$1
+             if [ -f $LOG_FILE ]; then
+             echo "Log file $LOG_FILE exists and is readable."
+              # Parse the Valgrind XML output
+               API_ERRORS=$(xmllint --xpath '//error' $LOG_FILE | grep -oP '(?<=<what>).*?(?=</what>)' | sort | uniq -c)
+               HEAP_ERRORS=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+               LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
+               ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+
+             # Check if there are any memory-related issues
+              if [ -n "$LEAK_SUMMARY" ] || [ -n "$HEAP_ERRORS" ] || [ -n "$ERROR_SUMMARY" ]; then
+              MEMORY_ISSUE_FOUND=true
+              # Format the extracted information into the table
+              echo "$API_ERRORS" | while read -r line; do
+                COUNT=$(echo $line | awk '{print $1}')
+                API_NAME=$(echo $line | awk '{print substr($0, index($0,$2))}')
+                HEAP_ERROR=$(echo "$HEAP_ERRORS" | grep "$API_NAME")
+                ERROR=$(echo "$ERROR_SUMMARY" | grep "$API_NAME")
+                LEAK=$(echo "$LEAK_SUMMARY" | grep "$API_NAME")
+                
+                echo "| $API_NAME | $COUNT | $HEAP_ERROR | $ERROR | $LEAK |" >> $SUMMARY_FILE
+              done
+              fi
+              else
+              echo "Log file $LOG_FILE does not exist"
+              fi
+             }
+             for LOG_FILE in $LOG_DIR/*.txt; do
+               process_log_file $LOG_FILE
+             done
+             # Check if any memory-related issues were found and append the summary
+             if [ "$MEMORY_ISSUE_FOUND" = true ]; then
+             cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
+             else
+             echo "No memory-related issues detected in any log files."
+             fi
+             EOF
+             chmod a+x mem1.sh
+
+
       - name: Setup script
         run: |
             echo "creating check memory log script"
@@ -101,6 +159,9 @@ jobs:
           valgrind --leak-check=full ./bin/rbusMethodConsumer -a
           ls -lt
           cat /tmp/plog.txt
+      - name: Excute the summmary
+        run: |
+            ./mem1.sh /tmp
       - name: Check Valgrind output
         id: valgrind_check
         run: |
