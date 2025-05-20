@@ -1,29 +1,15 @@
-#!/bin/sh
 
-LOG_FOLDER="/tmp"
-SUMMARY_FILE="summary.txt"
+#!/bin/bash
 
-echo "| Application | LEAK Summary | ERROR Summary | HEAP Summary |" > $SUMMARY_FILE
-echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
+# Run Valgrind and save the output to a log file
+valgrind --leak-check=full --log-file=valgrind.log ./your_program
 
-for LOG_FILE in $LOG_FOLDER/*.log; do
-  echo "Running logfile : $LOG_FILE"
-  APP_NAME=$(basename $LOG_FILE .log)
-  echo "Running app : $APP_NAME"
-
-  if [ -f $LOG_FILE ]; then
-    echo "Log file readable"
-    LEAK_SUMMARY=$(awk '/LEAK SUMMARY:/, /^$/' $LOG_FILE | awk '{print $0 "<br>"}' | tr '\n' ' ')
-    ERROR_SUMMARY=$(awk '/ERROR SUMMARY:/, /^$/' $LOG_FILE | awk '{print $0 "<br>"}' | tr '\n' ' ')
-    HEAP_SUMMARY=$(awk '/HEAP SUMMARY:/, /^$/' $LOG_FILE | awk '{print $0 "<br>"}' | tr '\n' ' ')
-
-    LEAK_SUMMARY=${LEAK_SUMMARY:-"No leaks found"}
-    ERROR_SUMMARY=${ERROR_SUMMARY:-"No errors found"}
-    HEAP_SUMMARY=${HEAP_SUMMARY:-"No heap summary found"}
-    echo "| $APP_NAME | $LEAK_SUMMARY | $ERROR_SUMMARY | $HEAP_SUMMARY |" >> $SUMMARY_FILE
-  else
-    echo "Log file does not exist"
-  fi
+# Parse the log file and convert to CSV
+echo "Type,Bytes,Blocks" > valgrind_table.csv
+grep -E "definitely lost|indirectly lost" valgrind.log | while read -r line; do
+    type=$(echo $line | awk '{print $1}')
+    bytes=$(echo $line | awk '{print $4}')
+    blocks=$(echo $line | awk '{print $6}')
+    echo "$type,$bytes,$blocks" >> valgrind_table.csv
 done
-
-cat $SUMMARY_FILE
+echo "Conversion complete. Check valgrind_table.csv for the results."
