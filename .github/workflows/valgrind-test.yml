@@ -68,7 +68,7 @@ jobs:
             echo "Running log file: \$LOG_FILE"
             if [ -f $LOG_FILE ]; then
             echo "Log file exists and is readable."
-            echo "Errors found in binary $BINARY_PATH. Appending to \$GITHUB_STEP_SUMMARY."
+            echo "Errors found in binary $BINARY_PATH. Appending to" >>$GITHUB_STEP_SUMMARY
             cat $LOG_FILE >>$GITHUB_STEP_SUMMARY
             else
             echo "Log file does not exist"
