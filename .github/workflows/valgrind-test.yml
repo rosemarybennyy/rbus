@@ -62,7 +62,7 @@ jobs:
              echo creaing trial script
              cat << 'EOF' >mem1.sh
              #!/bin/sh
-             LOG_DIR="/temp"
+             LOG_DIR="/tmp"
              echo "Processing log files in directory: $LOG_DIR"
 
              # Initialize the table
