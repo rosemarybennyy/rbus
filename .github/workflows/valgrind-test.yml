@@ -69,15 +69,20 @@ jobs:
             for LOG_FILE in $LOG_FOLDER/*.log; do
              if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              echo "No memory leaks found" 
+             echo "status=success" >> $GITHUB_ENV
+             cat $GITHUB_ENV
              else
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
              cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
+             echo "status=failure" >> $GITHUB_ENV
+             cat $GITHUB_ENV
              fi
             done
             EOF
+            cat $GITHUB_ENV
             chmod a+x memoryleak.sh
             
       - name: Run test with rbusmethod provider
@@ -115,15 +120,14 @@ jobs:
              ./memoryleak.sh
       - name: Valgrind verification
         run: |
-             cat $SUMMARY_FILE
-             if grep -q "ERROR SUMMARY: 0 errors" $SUMMARY_FILE; then
-             echo "No memory leaks found"
-             echo "status=success" >> $GITHUB_ENV
-             else
-             echo "Memory leaks detected"
-             echo "status=failure" >> $GITHUB_ENV
-             rm -rf $GITHUB_STEP_SUMMARY
-             exit 1
-             fi
+              cat $GITHUB_ENV
+              if [[ "$(cat $GITHUB_ENV | grep 'status=failure')" ]]; then
+              echo "Leaks found"
+              exit 1
+              else
+              echo "No leaks found"
+              fi
+      
+
 
            
