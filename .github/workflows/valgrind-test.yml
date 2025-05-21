@@ -69,7 +69,7 @@ jobs:
             LEAKS_FOUND=false
             for LOG_FILE in $LOG_FOLDER/*.log; do
              cat $LOG_FILE 
-             if ! grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
+             if ( grep -q "ERROR SUMMARY" $LOG_FILE  && ! grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE ); then
              LEAKS_FOUND=true
              echo "leak found set to  $LEAK_FOUND"
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
