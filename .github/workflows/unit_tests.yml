@@ -1,10 +1,10 @@
+
 name: unit_tests
 on:
   push:
-     branches: [ main, 'rbus-**' ,rbus-codecoverage ]
+     branches: [ main, 'rbus-**' ]
   pull_request:
-     branches: [ main, 'rbus-**', rbus-codecoverage ]
-     types: [opened,synchronize]
+     branches: [ main, 'rbus-**' ]
 jobs:
   all:
     runs-on: ubuntu-22.04
@@ -26,7 +26,7 @@ jobs:
           cmake-version: '3.16.x'
       - name: Install packages
         run: >
-          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libev-dev valgrind
+          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
         run: >
           make -C build/rbus install
       - name: Start rtrouted
-          nohup to keep it running.
+        # nohup to keep it running.
         run: |
           cd install/usr
           export PREFIX=$PWD
@@ -65,53 +65,20 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer
-      - name: Run Unit test with Valgrind
+      - name: Run Unit test
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          #continue-on-error: true
-          valgrind --leak-check=full ./bin/rbusMethodProvider >/tmp/plog.txt & 
-          valgrind --leak-check=full ./bin/rbusMethodConsumer -a
-          #continue-on-error: true
-          ls -lt
-          cat /tmp/plog.txt
-      - name: Check Valgrind output
-        id: valgrind_check
+          nohup ./bin/rbusTestProvider >/tmp/plog.txt &
+          ./bin/rbusTestConsumer -a
+      - name: Run multiRbusOpenMethod Unit Test
         run: |
-             if grep -q "ERROR SUMMARY: 0 errors" /tmp/plog.txt; then
-             echo "No memory leaks found"
-             echo "status=success" >> $GITHUB_ENV
-             else
-             echo "Memory leaks detected"
-             echo "status=failure" >> $GITHUB_ENV
-             fi
-      #- name: Post comment on failure
-        #uses: thollander/actions-comment-pull-request@v1
-        #if: ${{env.status == 'failure'}}
-        #with:
-         #message: 'Memory leak detected'
-         #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-       
-
-      
-
-      # - name: Run Unit test
-      #   run: |
-      #     cd install/usr
-      #     export PREFIX=$PWD
-      #     export LD_LIBRARY_PATH=$PREFIX/lib
-      #     nohup ./bin/rbusTestProvider >/tmp/plog.txt &
-      #     ./bin/rbusTestConsumer -a
-      # - name: Run multiRbusOpenMethod Unit Test
-      #   run: |
-      #     cd install/usr
-      #     export PREFIX=$PWD
-      #     export LD_LIBRARY_PATH=$PREFIX/lib
-      #     ./bin/multiRbusOpenMethodProvider &
-      #     ./bin/multiRbusOpenMethodConsumer &
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          ./bin/multiRbusOpenMethodProvider &
+          ./bin/multiRbusOpenMethodConsumer &
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
           cd install/usr
@@ -119,94 +86,33 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
           ./bin/multiRbusOpenConsumer
-      - name: Enable permission to script 
+      - name: Run multiRbusOpenGet Unit test
         run: |
-          echo $PWD
-          ls -lt $PWD
-          chmod a+x rbus/test.sh
-          echo "ROSE"
-          cat rbus/test.sh
-      - name: Set Environment variables
-        run:  |
-         echo "MY_VARIABLE=${{github.workspace}}/install/usr/bin" >$GITHUB_ENV
-         ls -lt ${{github.workspace}}/install/usr/bin/
-         ls -lt $MY_VARIABLE
-      - name: Run shell script
-        run:  |
-         export LD_LIBRARY_PATH=${{github.workspace}}/install/usr/lib 
-         ./rbus/test.sh
-        env:
-          MY_VARIABLE: ${{env.MY_VARIABLE}} 
-    #   - name: Run multiRbusOpenGet Unit test
-    #     run: |
-    #       cd install/usr
-    #       export PREFIX=$PWD
-    #       export LD_LIBRARY_PATH=$PREFIX/lib
-    #       nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-    #       ./bin/multiRbusOpenRbusGetConsumer
-    #  - name: Run multiRbusOpenSet Unit test
-    #    run: |
-    #      cd install/usr
-    #      export PREFIX=$PWD
-    #      export LD_LIBRARY_PATH=$PREFIX/lib
-    #       nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-    #       ./bin/multiRbusOpenRbusSetConsumer
-    #   - name: Run Gtest Cases
-    #    run: |
-    #      cd build/rbus
-    #      nohup ./src/session_manager/rbus_session_mgr &
-    #       ./unittests/rbus_gtest.bin
-    #   - name: Stop SessionManager
-    #    run: |
-    #      killall -9 rbus_session_mgr
-      - name: Build Tests
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
+          ./bin/multiRbusOpenRbusGetConsumer
+      - name: Run multiRbusOpenSet Unit test
         run: |
-          # add build script execution here
-      - name: Run Tests with Valgrind
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
+          ./bin/multiRbusOpenRbusSetConsumer
+      - name: Run Gtest Cases
         run: |
-            cd install/usr
-            export PREFIX=$PWD
-            export LD_LIBRARY_PATH=$PREFIX/lib
-            mkdir -p /tmp/valgrind_report
-            valgrind --leak-check=full --log-file="/tmp/valgrind_report/provider_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/provider_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesProvider &
-            valgrind --leak-check=full --log-file="/tmp/valgrind_report/consumer_valgrind_report.txt" --xml=yes --xml-file=/tmp/valgrind_report/consumer_valgrind_procinfo.xml ./bin/rbusTestTimeoutValuesConsumer &
-
+          cd build/rbus
+          nohup ./src/session_manager/rbus_session_mgr &
+          ./unittests/rbus_gtest.bin
+      - name: Stop SessionManager
+        run: |
+          killall -9 rbus_session_mgr
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
-
-      - name: Upload the coverage report to Pull request using actions
-        uses: actions/upload-artifact@v4
-        with:
-          name: valgrind-xml-files
-          path: /tmp/valgrind_report
-      - name: Run Memory check
-        run: |
-            cd ${{github.workspace}}/rbus
-            chmod a+x check-memory.sh
-            cat check-memory.sh
-            cp  /tmp/valgrind_report/provider_valgrind_procinfo.xml ${{github.workspace}}/rbus/
-            ls -lt ${{github.workspace}}/rbus/provider_valgrind_procinfo.xml
-            ./check-memory.sh
-            cat commit_message.txt
-            #cp ${{github.workspace}}/rbus/commit_message.txt ${{github.workspace}}/.github/workflows/commit_message.txt
-     # - name: Post Memory Check Result to PR
-       # uses: actions/github-script@v6
-        #with:
-         #github-token: ${{ secrets.GITHUB_TOKEN }}
-         #script: |
-          # const fs = require('fs');
-           #const leakMessage = fs.readFileSync('${{github.workspace}}/rbus/commit_message.txt', 'utf8');
-            # github.rest.issues.createComment({
-             #issue_number: context.payload.pull_request.number,
-             #owner: context.repo.owner,
-             #repo: context.repo.repo,
-             #body: `🚨 **Memory Leak Check Result**:\n\n${leakMessage}`
-           #});
-
-
-
-
-      
-      
-     
+      #- name:  Run CodeCoverage
+        #run: |
+            #rm -rf /tmp/rtrouted*
+            #cd build/rbus
+            #make rbusCodeCoverageUI 
