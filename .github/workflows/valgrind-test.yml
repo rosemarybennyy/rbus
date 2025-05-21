@@ -108,8 +108,10 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/multiRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
-          valgrind --leak-check=full --log-file=/tmp/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer &
+          valgrind --leak-check=full --log-file=/tmp/multiRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  & SERVER_PID=$!
+          valgrind --leak-check=full --log-file=/tmp/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer & CLIENT_PID=$!
+          wait SERVER_PID
+          wait CLIENT_PID
       #- name: Run multiRbusOpenSet Unit test with Valgrind
         #run: |
           #cd install/usr
