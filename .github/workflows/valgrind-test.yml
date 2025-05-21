@@ -72,7 +72,7 @@ jobs:
              echo "No memory leaks found $LOG_FILE"
              else
              LEAKS_FOUND=true
-             echo "leak found set to  $LEAK_FOUND"
+             #echo "leak found set to  $LEAK_FOUND"
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
@@ -80,12 +80,14 @@ jobs:
              echo "*************************" >>$SUMMARY_FILE
              fi
             done
-            echo "leak found set to  $LEAKS_FOUND"
+            echo "leak found set to  $LEAKS_FOUND outside for"
             if [ "$LEAKS_FOUND" = true ]; then
+              echo "inside leak found $GITHUB_ENV"
               echo "status=failure" >> $GITHUB_ENV
             else
               echo "status=success" >>$GITHUB_ENV
               echo "No leaks found, Ready for PR">>$SUMMARY_FILE
+              cat $GITHUB_ENV
             fi
             EOF
             chmod a+x memoryleak.sh
