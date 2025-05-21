@@ -67,12 +67,15 @@ jobs:
             LOG_FOLDER="/tmp"
             SUMMARY_FILE=$GITHUB_STEP_SUMMARY   
             for LOG_FILE in $LOG_FOLDER/*.log; do
+             if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
+             echo "No memory leaks found" 
+             else
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
              cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
-             rm -rf $LOG_FILE
+             fi
             done
             EOF
             chmod a+x memoryleak.sh
