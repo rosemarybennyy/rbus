@@ -69,9 +69,7 @@ jobs:
             LEAKS_FOUND=false
             for LOG_FILE in $LOG_FOLDER/*.log; do
              cat $LOG_FILE 
-             if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
-             echo "No memory leaks found $LOG_FILE"
-             else
+             if ! grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              LEAKS_FOUND=true
              #echo "leak found set to  $LEAK_FOUND"
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
@@ -79,6 +77,8 @@ jobs:
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
              cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
+             else
+              echo "No memory leaks found $LOG_FILE"
              fi
             done
             echo "leak found set to  $LEAKS_FOUND outside for"
