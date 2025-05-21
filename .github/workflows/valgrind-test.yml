@@ -71,7 +71,8 @@ jobs:
              if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              echo "No memory leaks found $LOG_FILE"
              else
-             LEAK_FOUND=true
+             LEAKS_FOUND=true
+             echo "leak found set to  $LEAK_FOUND"
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
@@ -79,7 +80,8 @@ jobs:
              echo "*************************" >>$SUMMARY_FILE
              fi
             done
-            if [ "$LEAK_FOUND" = true ]; then
+            echo "leak found set to  $LEAKS_FOUND"
+            if [ "$LEAKS_FOUND" = true ]; then
               echo "status=failure" >> $GITHUB_ENV
             else
               echo "status=success" >>$GITHUB_ENV
