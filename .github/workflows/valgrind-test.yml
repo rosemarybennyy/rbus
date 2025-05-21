@@ -71,7 +71,7 @@ jobs:
              cat $LOG_FILE 
              if ! grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              LEAKS_FOUND=true
-             #echo "leak found set to  $LEAK_FOUND"
+             echo "leak found set to  $LEAK_FOUND"
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
@@ -109,14 +109,14 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/multiRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
-          valgrind --leak-check=full --log-file=/tmp/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer
+          valgrind --leak-check=full --log-file=/tmp/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer -a
       #- name: Run multiRbusOpenSet Unit test with Valgrind
         #run: |
           #cd install/usr
           #export PREFIX=$PWD
           #export LD_LIBRARY_PATH=$PREFIX/lib
           #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
-          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer
+          #valgrind --leak-check=full --log-file=/tmp/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer 
       #- name: Run Gtest Cases with Valgrind
         #run: |
          # cd build/rbus
