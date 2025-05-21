@@ -121,6 +121,15 @@ jobs:
              echo "status=failure" >> $GITHUB_ENV
              #exit 1
              fi
+      - name: Publish message on PR if failure
+        if: env.status == 'failure'
+        uses: actions/github-script@v6
+        with:
+         script: |
+           const { context, github } = require('@actions/github');
+           const issue_number = context.payload.pull_request.number;
+           const message = "Memory leak observed. Engineer needs to look into this.";
+           github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo,issue_number: issue_number, body: message });
      # - name: Post comment on failure
       #  uses: thollander/actions-comment-pull-request@v1
        # if: ${{env.status == 'failure'}}
