@@ -79,7 +79,23 @@ jobs:
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
-             cat $LOG_FILE >>$SUMMARY_FILE
+              #EXTRACT THE RELEVANT INFO
+             LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
+             ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+             HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+              if [ -n "$LEAK_SUMMARY" ];then
+              echo "### LEAK Summary" >>$GITHUB_STEP_SUMMARY
+              echo "$LEAK_SUMMARY"  >>$GITHUB_STEP_SUMMARY
+              fi
+              if [ -n "$ERROR_SUMMARY" ];then
+              echo "### ERROR Summary" >>$GITHUB_STEP_SUMMARY
+              echo "$ERROR_SUMMARY"  >>$GITHUB_STEP_SUMMARY
+              fi
+              if [ -n "$HEAP_SUMMARY" ]; then
+              echo "HEAP SUMMARY" >>$GITHUB_STEP_SUMMARY
+              echo "$HEAP_SUMMARY" >>$GITHUB_STEP_SUMMARY
+              fi
+             #cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
              else
               echo "No memory leaks found $LOG_FILE"
