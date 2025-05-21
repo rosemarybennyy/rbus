@@ -92,7 +92,7 @@ jobs:
             fi
             EOF
             chmod a+x memoryleak.sh
-            cat $GITHUB_ENV
+            #cat $GITHUB_ENV
             
       - name: Run test with rbusmethod provider
         run: |
