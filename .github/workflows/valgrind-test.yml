@@ -126,9 +126,9 @@ jobs:
           cd build/rbus
           valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
           valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log ./unittests/rbus_gtest.bin &
-      - name: Stop SessionManager
-        run: |
-          killall -9 rbus_session_mgr
+      #- name: Stop SessionManager
+        #run: |
+          #killall -9 rbus_session_mgr
       - name: Run script.sh
         run: |
              ./memoryleak.sh
