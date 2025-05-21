@@ -84,11 +84,11 @@ jobs:
              ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
              HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
               if [ -n "$LEAK_SUMMARY" ];then
-              echo "### LEAK Summary" >>$GITHUB_STEP_SUMMARY
+              echo "LEAK Summary" >>$GITHUB_STEP_SUMMARY
               echo "$LEAK_SUMMARY"  >>$GITHUB_STEP_SUMMARY
               fi
               if [ -n "$ERROR_SUMMARY" ];then
-              echo "### ERROR Summary" >>$GITHUB_STEP_SUMMARY
+              echo "ERROR Summary" >>$GITHUB_STEP_SUMMARY
               echo "$ERROR_SUMMARY"  >>$GITHUB_STEP_SUMMARY
               fi
               if [ -n "$HEAP_SUMMARY" ]; then
