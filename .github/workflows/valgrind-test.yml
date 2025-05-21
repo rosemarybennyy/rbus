@@ -71,6 +71,7 @@ jobs:
              echo "No memory leaks found" 
              echo "status=success" >> $GITHUB_ENV
              cat $GITHUB_ENV
+             echo "No leaks found" >>$SUMMARY_FILE 
              else
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
