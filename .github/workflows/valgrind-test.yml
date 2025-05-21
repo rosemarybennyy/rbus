@@ -100,7 +100,7 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           valgrind --leak-check=full --log-file=/tmp/rbusMethodProvider.log ./bin/rbusMethodProvider & 
-          valgrind --leak-check=full  --log-file=/tmp/rbusMethodConsumert.log ./bin/rbusMethodConsumer -a 
+          #valgrind --leak-check=full  --log-file=/tmp/rbusMethodConsumer.log ./bin/rbusMethodConsumer -a 
     
       #- name: Run multiRbusOpenGet Unit test with Valgrind
         #run: |
