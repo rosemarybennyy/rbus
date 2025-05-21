@@ -76,6 +76,7 @@ jobs:
             done
             EOF
             chmod a+x memoryleak.sh
+            
       - name: Run test with rbusmethod provider
         run: |
           cd install/usr
@@ -111,8 +112,8 @@ jobs:
              ./memoryleak.sh
       - name: Valgrind verification
         run: |
-             cat $GITHUB_STEP_SUMMARY
-             if grep -q "ERROR SUMMARY: 0 errors" $GITHUB_STEP_SUMMARY; then
+             cat $SUMMARY_FILE
+             if grep -q "ERROR SUMMARY: 0 errors" $SUMMARY_FILE; then
              echo "No memory leaks found"
              echo "status=success" >> $GITHUB_ENV
              else
