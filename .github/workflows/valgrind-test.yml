@@ -111,8 +111,8 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/rbusTestProvider.log ./bin/rbusTestProviderr & 
-          valgrind --leak-check=full  --log-file=/tmp/rbusTestConsumer.log ./bin/rbusTestConsumer-a    
+          valgrind --leak-check=full --log-file=/tmp/rbusTestProvider.log ./bin/rbusTestProvider & 
+          valgrind --leak-check=full  --log-file=/tmp/rbusTestConsumer.log ./bin/rbusTestConsumer -a    
             
       - name: Run test with rbusmethod provider
         run: |
