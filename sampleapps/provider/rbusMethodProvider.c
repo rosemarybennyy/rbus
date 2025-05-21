@@ -140,6 +140,8 @@ int main(int argc, char *argv[])
     int rc = RBUS_ERROR_SUCCESS;
 
     char componentName[] = "MethodProvider";
+    int *test = malloc(sizeof(int));
+    *test = 5;
 
     rbusDataElement_t dataElements[3] = {
         {"Device.Methods.SimpleMethod()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, methodHandler}},
