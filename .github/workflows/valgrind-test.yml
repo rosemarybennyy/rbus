@@ -72,6 +72,7 @@ jobs:
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
              cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
+             rm -rf $LOG_FILE
             done
             EOF
             chmod a+x memoryleak.sh
@@ -110,12 +111,14 @@ jobs:
              ./memoryleak.sh
       - name: Valgrind verification
         run: |
+             cat $GITHUB_STEP_SUMMARY
              if grep -q "ERROR SUMMARY: 0 errors" $GITHUB_STEP_SUMMARY; then
              echo "No memory leaks found"
              echo "status=success" >> $GITHUB_ENV
              else
              echo "Memory leaks detected"
              echo "status=failure" >> $GITHUB_ENV
+             rm -rf $GITHUB_STEP_SUMMARY
              exit 1
              fi
 
