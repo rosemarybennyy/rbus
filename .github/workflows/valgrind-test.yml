@@ -128,8 +128,8 @@ jobs:
         with:
          script: |
           
-              **const context = require('@actions/github').context;**
-              **const github = require('@actions/github').getOctokit(process.env.GITHUB_TOKEN);**
+              const context = require('@actions/github').context;
+              const github = require('@actions/github').getOctokit(process.env.GITHUB_TOKEN);
               const issue_number = context.payload.pull_request.number;
               const message = "Memory leak observed. Engineer needs to look into this.";
 
