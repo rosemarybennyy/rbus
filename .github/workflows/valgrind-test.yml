@@ -66,7 +66,7 @@ jobs:
             
             LOG_FOLDER="/tmp"
             SUMMARY_FILE=$GITHUB_STEP_SUMMARY  
-            LEAKS_FOUND = false
+            LEAKS_FOUND=false
             for LOG_FILE in $LOG_FOLDER/*.log; do
              if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              echo "No memory leaks found $LOG_FILE"
@@ -82,8 +82,9 @@ jobs:
             done
             echo "leak found set to  $LEAKS_FOUND outside for"
             if [ "$LEAKS_FOUND" = true ]; then
-              echo "inside leak found $GITHUB_ENV"
+              echo "inside leak found"
               echo "status=failure" >> $GITHUB_ENV
+              cat $GITHUB_ENV
             else
               echo "status=success" >>$GITHUB_ENV
               echo "No leaks found, Ready for PR">>$SUMMARY_FILE
