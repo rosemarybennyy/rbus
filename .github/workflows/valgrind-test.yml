@@ -65,25 +65,27 @@ jobs:
             #!/bin/sh
             
             LOG_FOLDER="/tmp"
-            SUMMARY_FILE=$GITHUB_STEP_SUMMARY   
+            SUMMARY_FILE=$GITHUB_STEP_SUMMARY  
+            LEAKS_FOUND = false
             for LOG_FILE in $LOG_FOLDER/*.log; do
              if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
-             echo "No memory leaks found" 
-             echo "status=success" >> $GITHUB_ENV
-             cat $GITHUB_ENV
-             echo "No leaks found" >>$SUMMARY_FILE 
+             echo "No memory leaks found $LOG_FILE"
              else
+             LEAK_FOUND=true
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
              cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
-             echo "status=failure" >> $GITHUB_ENV
-             cat $GITHUB_ENV
              fi
             done
+            if [ "$LEAK_FOUND" = true ]; then
+              echo "status=failure" >> $GITHUB_ENV
+            else
+              echo "status=success" >>$GITHUB_ENV
+              echo "No leaks found, Ready for PR">>$SUMMARY_FILE
+            fi
             EOF
-            cat $GITHUB_ENV
             chmod a+x memoryleak.sh
             
       - name: Run test with rbusmethod provider
