@@ -65,11 +65,7 @@ jobs:
             #!/bin/sh
             
             LOG_FOLDER="/tmp"
-            SUMMARY_FILE=$GITHUB_STEP_SUMMARY
-
-            #echo "| File | LEAK Summary | ERROR Summary | HEAP Summary |" > $SUMMARY_FILE
-            #echo "| --- | --- | --- | --- |" >> $SUMMARY_FILE
-            
+            SUMMARY_FILE=$GITHUB_STEP_SUMMARY   
             for LOG_FILE in $LOG_FOLDER/*.log; do
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
