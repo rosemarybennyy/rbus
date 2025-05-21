@@ -68,6 +68,7 @@ jobs:
             SUMMARY_FILE=$GITHUB_STEP_SUMMARY  
             LEAKS_FOUND=false
             for LOG_FILE in $LOG_FOLDER/*.log; do
+             cat $LOG_FILE 
              if grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE; then
              echo "No memory leaks found $LOG_FILE"
              else
