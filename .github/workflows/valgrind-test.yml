@@ -141,7 +141,7 @@ jobs:
         run: |
           cd build/rbus
           valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
-          valgrind --leak-check=full --exit-code=1 ./unittests/rbus_gtest.bin
+          valgrind --leak-check=full --error-exitcode=1 ./unittests/rbus_gtest.bin
 
       #- name: Stop SessionManager
         #run: |
