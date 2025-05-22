@@ -140,8 +140,8 @@ jobs:
       - name: Run Gtest Cases with Valgrind
         run: |
           cd build/rbus
-          valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
-          valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log --track-origins=yes --verbose ./unittests/rbus_gtest.bin
+          valgrind --leak-check=full --log-file=/tmp/rbus_session_manager.log ./bin/rbus_session_manager &
+          valgrind --leak-check=full --log-file=/tmp/rbus_gtest.log --track-origins=yes --verbose ./bin/rbus_gtest.bin
           cat /tmp/rbus_gtest.log
       #- name: Stop SessionManager
         #run: |
