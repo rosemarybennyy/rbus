@@ -58,6 +58,7 @@ jobs:
           make -C build/rbus install
       - name: Start rtrouted
         run: |
+          mkdir -p /tmp/valgrind
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
