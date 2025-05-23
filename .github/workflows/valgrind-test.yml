@@ -51,10 +51,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: >
           make -C build/rbus install
-      - name: Folder for valgrind logs
-        run: |
-           mkdir -p /tmp/valgrind 
-           ls -lt /tmp/valgrind
+      #- name: Folder for valgrind logs
+        #run: |
+           #mkdir -p /tmp/valgrind 
+           #ls -lt /tmp/valgrind
  
       - name: Setup script
         run: |
