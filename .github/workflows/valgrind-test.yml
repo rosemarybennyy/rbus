@@ -114,6 +114,7 @@ jobs:
             fi
             EOF
             chmod a+x memoryleak.sh
+            ls -lt
             #cat $GITHUB_ENV
       - name: Run RbusTestTimeoutValues Unit test with valgrind
         run: |
