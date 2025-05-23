@@ -79,8 +79,23 @@ jobs:
              echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
              BINARY_PATH=$(basename $LOG_FILE .log)
              echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
-
-             cat $LOG_FILE >>$SUMMARY_FILE
+             #EXTRACT THE RELEVANT INFO
+             LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
+             ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+             HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+              if [ -n "$LEAK_SUMMARY" ];then
+              echo " LEAK Summary" >>$SUMMARY_FILE
+              echo "$LEAK_SUMMARY"  >>$SUMMARY_FILE
+              fi
+              if [ -n "$ERROR_SUMMARY" ];then
+              echo "ERROR Summary" >>$SUMMARY_FILE
+              echo "$ERROR_SUMMARY"  >>$SUMMARY_FILE
+              fi
+              if [ -n "$HEAP_SUMMARY" ]; then
+              echo "HEAP SUMMARY" >>$SUMMARY_FILE
+              echo "$HEAP_SUMMARY" >>$SUMMARY_FILE
+              fi
+              #cat $LOG_FILE >>$SUMMARY_FILE
              echo "*************************" >>$SUMMARY_FILE
              else
               echo "No memory leaks found $LOG_FILE"
