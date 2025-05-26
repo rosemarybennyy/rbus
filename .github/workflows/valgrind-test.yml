@@ -56,7 +56,6 @@ jobs:
       - name: Folder generation
         run: |
             mkdir -p /tmp/valgrind
-            exit 1
       - name: Setup script
         run: |
             cat << 'EOF' >memoryleak.sh
@@ -136,9 +135,9 @@ jobs:
           valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer &
           cd ${{github.workspace}} && ./memoryleak.sh
       - name: Log custome message on failure
-        if: failure()
+        if: success()
         run: |
-          echo "Memory leaks found in the pull request, Engineer will look into it: ${{ github.event.pull_request.body }}"  
+          echo "No memory leaks found ${{ github.event.pull_request.body }}"  
       #- name: Run Gtest Cases with Valgrind
         #run: |
           #cd install/usr
