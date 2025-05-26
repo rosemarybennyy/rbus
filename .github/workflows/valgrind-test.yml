@@ -137,7 +137,8 @@ jobs:
           cd ${{github.workspace}} && ./memoryleak.sh
       - name: Log custome message on failure
         if: failure()
-        run: echo "Memory leaks found in the pull request, Engineer will look into it: ${{ github.event.pull_request.body }}"  
+        run: |
+          echo "Memory leaks found in the pull request, Engineer will look into it: ${{ github.event.pull_request.body }}"  
       #- name: Run Gtest Cases with Valgrind
         #run: |
           #cd install/usr
