@@ -136,10 +136,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Debug failure condition
-        run: |
-          echo "Job status: ${{ job.status }}"
-          echo "Failure condition: ${{ failure() }}"
+
 
       - name: Comment PR
         if: failure()
