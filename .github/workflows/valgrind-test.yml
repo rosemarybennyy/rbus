@@ -134,7 +134,7 @@ jobs:
           valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusOpenRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
           valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer &
           cd ${{github.workspace}} && ./memoryleak.sh
-      - name: Log custome message on failure
+      - name: Log customer message on failure
         if: failure()
         run: |
           echo "memory leaks found ${{ github.event.pull_request.body }}"  
