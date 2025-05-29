@@ -1,0 +1,149 @@
+name: unit_tests_valgrind2
+on:
+  push:
+     branches: [ main, 'rbus-**' ]
+  pull_request:
+     branches: [ main, 'rbus-**' ]
+     types: [opened, synchronize]
+
+jobs:
+  all:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            build
+            install
+          key: ${{ runner.os }}-${{ github.sha }}
+     
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.16.x'
+      - name: Install packages
+        run: >
+          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libev-dev valgrind libxml2-utils gh
+      - name: Checkout rbus
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v3
+        with:
+          path: rbus
+      - name: Configure Rbus
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: >
+          cmake 
+          -S "${{github.workspace}}/rbus"
+          -B build/rbus
+          -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/install/usr"
+          -DBUILD_FOR_DESKTOP=ON
+          -DENABLE_UNIT_TESTING=ON
+          -DENABLE_CODE_COVERAGE=ON
+          -DCMAKE_BUILD_TYPE=Debug
+      - name: Build Rbus
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: >
+          make -C build/rbus
+      - name: Install rbus
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: >
+          make -C build/rbus install
+
+      - name: Folder generation
+        run: |
+            mkdir -p /tmp/valgrind
+      - name: Setup script
+        run: |
+            cat << 'EOF' >memoryleak.sh
+            #!/bin/sh
+            LOG_FOLDER="/tmp/valgrind"
+            SUMMARY_FILE=$GITHUB_STEP_SUMMARY 
+            LEAKS_FOUND=false
+            for LOG_FILE in $LOG_FOLDER/*.log; do
+             if ( grep -q "ERROR SUMMARY" $LOG_FILE  && ! grep -q "ERROR SUMMARY: 0 errors" $LOG_FILE ); then
+             LEAKS_FOUND=true
+             echo "Running logfile : $LOG_FILE" >>$SUMMARY_FILE
+             BINARY_PATH=$(basename $LOG_FILE .log)
+             echo "Running bin : $BINARY_PATH" >>$SUMMARY_FILE
+             LEAK_SUMMARY=$(grep -A 5 "LEAK SUMMARY:" $LOG_FILE)
+             ERROR_SUMMARY=$(grep -A 1 "ERROR SUMMARY:" $LOG_FILE)
+             HEAP_SUMMARY=$(grep -A 5 "HEAP SUMMARY:" $LOG_FILE)
+              if [ -n "$LEAK_SUMMARY" ];then
+              echo " LEAK Summary" >>$SUMMARY_FILE
+              echo "$LEAK_SUMMARY"  >>$SUMMARY_FILE
+              fi
+              if [ -n "$ERROR_SUMMARY" ];then
+              echo "ERROR Summary" >>$SUMMARY_FILE
+              echo "$ERROR_SUMMARY"  >>$SUMMARY_FILE
+              fi
+              if [ -n "$HEAP_SUMMARY" ]; then
+              echo "HEAP SUMMARY" >>$SUMMARY_FILE
+              echo "$HEAP_SUMMARY" >>$SUMMARY_FILE
+              fi
+             echo "*************************" >>$SUMMARY_FILE
+            fi
+            done
+            if [ "$LEAKS_FOUND" = true ]; then
+              cd /tmp/valgrind
+              rm -rf *.log
+              exit 1
+            fi
+            EOF
+            cd ${{github.workspace}}
+            chmod a+x memoryleak.sh
+      - name: Start rtrouted
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full   ./bin/rtrouted -f -l DEBUG  &
+     
+      - name: Run test with rbusmethod provider
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/valgrind/rbusMethodProvider.log ./bin/rbusMethodProvider & 
+          valgrind --leak-check=full  --log-file=/tmp/valgrind/rbusMethodConsumer.log ./bin/rbusMethodConsumer -a 
+          cd ${{github.workspace}} && ./memoryleak.sh  
+      - name: Run multiRbusOpenGet Unit test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  & 
+          valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusGetConsumer.log ./bin/multiRbusOpenRbusGetConsumer &
+          cd ${{github.workspace}} && ./memoryleak.sh
+      - name: Run multiRbusOpenSet Unit test with Valgrind
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusOpenRbusGetProvider.log ./bin/multiRbusOpenRbusGetProvider  &
+          valgrind --leak-check=full --log-file=/tmp/valgrind/multiRbusOpenRbusSetConsumer.log ./bin/multiRbusOpenRbusSetConsumer &
+          cd ${{github.workspace}} && ./memoryleak.sh
+      - name: Log customer message on failure
+        if: failure()
+        run: |
+          echo "memory leaks found ${{ github.event.pull_request.body }}"  
+
+  post-comment:
+    needs: all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Debug failure condition
+        run: |
+          echo "Job status: ${{ job.status }}"
+          echo "Failure condition: ${{ failure() }}"
+
+      - name: Comment PR
+        if: failure()
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: 'Memory leaks found during testing. Please check the logs.'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
