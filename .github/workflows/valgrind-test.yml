@@ -23,6 +23,13 @@ jobs:
         run: |
           echo "memory leaks found"
           exit 1  # Simulate a failure
+      
+      - name: Add Debug
+        run: |
+           echo "Repository: ${{ github.repository }}"
+           echo "Pull Request Number: ${{ github.event.pull_request.number }}"
+    
+
 
       - name: Post comment on failure
         if: failure()
