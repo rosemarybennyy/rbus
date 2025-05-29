@@ -19,6 +19,15 @@ jobs:
             build
             install
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Run tests
+        run: |
+          echo "memory leaks found"
+          exit 1  # Simulate a failure
+
+      - name: Post comment on failure
+        if: failure()
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments -d '{"body": "memory leaks found\n\n${{ github.event.pull_request.body }}"}'
 
       - name: Set up CMake
         # 3.16.x To support flow control commands to be overridden.
