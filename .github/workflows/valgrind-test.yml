@@ -68,8 +68,8 @@ jobs:
              curl -sS -f -I -H "Authorization: $(cat token.txt)" https://api.github.com | grep -i x-oauth-scopes
 
              # Post comment using hardcoded pull request number
-             curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/issues/123/comments -d '{"body": "memory leaks found\n\n${{ github.event.pull_request.body }}"}'
-    
+             RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/issues/123/comments -d '{"body": "memory leaks found\n\n${{ github.event.pull_request.body }}"}')
+             echo "api response : $RESPONSE"
              gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
              gh issue comment 123 --body "memory leaks found\n\n${{ github.event.pull_request.body }}"
 
