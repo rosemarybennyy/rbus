@@ -62,7 +62,7 @@ jobs:
         if: failure()
         run: |
              echo "Repository: ${{ github.repository }}"
-             echo "Pull Request Number: 123"  # Hardcoded pull request number
+             echo "Pull Request Number: 4"  # Hardcoded pull request number
              echo "${{ secrets.GITHUB_TOKEN }}" > token.txt
     
              curl -sS -f -I -H "Authorization: $(cat token.txt)" https://api.github.com | grep -i x-oauth-scopes
