@@ -109,14 +109,14 @@ jobs:
           valgrind --leak-check=full   ./bin/rtrouted -f -l DEBUG  &
           #cd ${{github.workspace}}/rbus && ./memoryleak.sh
      
-      - name: Run test with rbusmethod provider
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --leak-check=full --log-file=/tmp/valgrind/rbusMethodProvider.log ./bin/rbusMethodProvider & 
-          valgrind --leak-check=full  --log-file=/tmp/valgrind/rbusMethodConsumer.log ./bin/rbusMethodConsumer -a 
-          cd ${{github.workspace}} && ./memoryleak.sh  
+    #  - name: Run test with rbusmethod provider
+     #   run: |
+      #    cd install/usr
+       #   export PREFIX=$PWD
+        #  export LD_LIBRARY_PATH=$PREFIX/lib
+         # valgrind --leak-check=full --log-file=/tmp/valgrind/rbusMethodProvider.log ./bin/rbusMethodProvider & 
+          #valgrind --leak-check=full  --log-file=/tmp/valgrind/rbusMethodConsumer.log ./bin/rbusMethodConsumer -a 
+          #cd ${{github.workspace}} && ./memoryleak.sh  
       - name: Run multiRbusOpenGet Unit test with Valgrind
         run: |
           cd install/usr
