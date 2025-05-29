@@ -1,9 +1,9 @@
 name: Add comment to PR example
 on:
+  push:
+     branches: [ main, 'rbus-**' ]
   pull_request:
-    branches:
-      - main
- 
+     branches: [ main, 'rbus-**' ]
 jobs:
   add-comment-to-pr:
     runs-on: ubuntu-latest
