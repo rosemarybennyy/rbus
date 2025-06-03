@@ -61,6 +61,33 @@ jobs:
         run: | 
           cd rbuscli_source
           make clean && make
+      - name: Script for rbuscli
+        run: |
+           #mkdir -p /tmp/rbuscli_logs 
+           cat << 'EOF' >rbuscli.sh
+           #!/bin/sh
+           LOG_DIR="/tmp/rbuscli_logs"
+           mkdir -p "$LOG_DIR"
+           TIMESTAMP=$(date +%Y%md_%H%M%S)
+           LOG_FILE="$LOG_DIR/rbuscli_valgrind_$TIMESTAMP.log"
+
+           #command to test 
+           RBUS_CMD="get Device.DeviceInfo.ModelName"
+           #run with valgrind
+           valgrind --leak-check-full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file="$LOG_FILE" rbuscli $RBUS_CMD
+
+           if grep -q "definitely lost: [^0] bytes" "$LOG_FILE"; then
+             echo "memory leak detected"
+             exit 1
+           else
+             echo "No leaks detected"
+             exit 0
+           fi
+           EOF
+           cd ${{github.workspace}}
+           chmod a+x rbuscli.sh
+           ./rbuscli.sh
+           
       
       
      
