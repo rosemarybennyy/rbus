@@ -116,7 +116,7 @@ jobs:
             lcov -c -o coverage.info -d build/rbus/src
             
             #lcov -r coverage.info 'install/usr/include/*' 'build/rbus/*' -o filtered-coverage.info
-            lcov -r coverage.info 'install/usr/include/msgpack/*' 'build/rbus/src/core/*' 'build/rbus/src/rbus/*' 'build/rbus/src/rtmessage/*' 'build/rbus/src/session_manager/*' 'build/rbus/unittests/*' -o filtered-coverage.info
+            #lcov -r coverage.info 'install/usr/include/msgpack/*' 'build/rbus/src/core/*' 'build/rbus/src/rbus/*' 'build/rbus/src/rtmessage/*' 'build/rbus/src/session_manager/*' 'build/rbus/unittests/*' -o filtered-coverage.info
       - name: Generate the html report
         run: |
             genhtml filtered-coverage.info --output-directory /tmp/coverage_report
