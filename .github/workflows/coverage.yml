@@ -57,10 +57,10 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
-      - name: Build rbuscli
-        run: | 
-          cd rbuscli_source
-          make clean && make
+      #- name: Build rbuscli
+       # run: | 
+        #  cd rbuscli_source
+         # make clean && make
       - name: Script for rbuscli
         run: |
            #mkdir -p /tmp/rbuscli_logs 
