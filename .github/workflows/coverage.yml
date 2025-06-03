@@ -77,7 +77,7 @@ jobs:
            export PREFIX=$PWD
            export LD_LIBRARY_PATH=$PREFIX/li
            #run with valgrind
-           valgrind --leak-check-full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file="$LOG_FILE" ./bin/rbuscli $RBUS_CMD
+           valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file="$LOG_FILE" ./bin/rbuscli $RBUS_CMD
 
            if grep -q "definitely lost: [^0] bytes" "$LOG_FILE"; then
              echo "memory leak detected"
