@@ -9,16 +9,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Set up GCC
-      uses: actions/setup-gcc@v1
-      with:
-        gcc-version: 'latest'
-
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y gcov lcov genhtml c++filt gcovr
+        sudo apt-get install -y  gcc g++ gcov lcov genhtml c++filt gcovr
 
     - name: Set coverage flags
       run: |
