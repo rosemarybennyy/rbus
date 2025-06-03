@@ -62,9 +62,7 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli1.log ./bin/rbuscli reg prop A.B 
-          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli2.log ./bin/rbuscli set A.B string "ROSE"
-          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli3.log ./bin/rbuscli get A.B 
+          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli1.log ./bin/rbuscli -i reg prop A.B set A.B string "ROSE" get A.B quit
 
           
 
