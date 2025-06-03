@@ -115,7 +115,7 @@ jobs:
       - name:  Run CodeCoverage
         run: |
             rm -rf /tmp/rtrouted*
-            lcov -c -o coverage.info -d build/rbus/src -d build/rbus/msgpack -d build/rbus/unittests
+            lcov -c -o coverage.info -d build/rbus/src -d build/rbus/unittests
          #   echo "Removing unwanted files"
             
           #  lcov -l coverage.info
