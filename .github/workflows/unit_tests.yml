@@ -110,28 +110,12 @@ jobs:
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
-      - name: Run CodeCoverage
-        run: |
-          rm -rf /tmp/rtrouted*
-          lcov -c -o coverage.info -d build/rbus
-          echo "Removing unwanted files"
-          lcov -r coverage.info \
-          'test/rbus/common/*' \
-          'test/rbus/consumer/*' \
-          'test/rbus/multiRbusOpenConsumer/*' \
-          'test/rbus/multiRbusOpenMethodProvider/*' \
-          'test/rbus/multiRbusOpenProvider/*' \
-          'test/rbus/multiRbusOpenRbusGetConsumer/*' \
-          'test/rbus/multiRbusOpenRbusGetProvider/*' \
-          'test/rbus/multiRbusOpenRbusSetConsumer/*' \
-          'test/rbus/provider/*' \
-          'test/rbus/rbusTestTimeoutValues/*' \
-          -o filtered_coverage.info
 
-     # - name:  Run CodeCoverage
-      #  run: |
-       #     rm -rf /tmp/rtrouted*
-        #    lcov -c -o coverage.info -d build/rbus/src
+
+      - name:  Run CodeCoverage
+        run: |
+            rm -rf /tmp/rtrouted*
+            lcov -c -o coverage.info -d build/rbus/src -d build/rbus/msgpack -d build/rbus/unittests
          #   echo "Removing unwanted files"
             
           #  lcov -l coverage.info
@@ -142,13 +126,13 @@ jobs:
             
             #lcov -r coverage.info 'install/usr/include/*' 'build/rbus/*' -o filtered-coverage.info
             #lcov -r coverage.info 'install/usr/include/msgpack/*' 'build/rbus/src/core/*' 'build/rbus/src/rbus/*' 'build/rbus/src/rtmessage/*' 'build/rbus/src/session_manager/*' 'build/rbus/unittests/*' -o filtered-coverage.info
-    #- name: Generate the html report
-     #   run: |
-      #      genhtml filtered_coverage.info --output-directory /tmp/coverage_report
+      - name: Generate the html report
+        run: |
+            genhtml coverage.info --output-directory /tmp/coverage_report
 
-      #- name: Upload the coverage report to Pull request using actions
-       # uses: actions/upload-artifact@v4
-        #with:
-         # name: coverage-report
-          #path: /tmp/coverage_report
+      - name: Upload the coverage report to Pull request using actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: /tmp/coverage_report
             
