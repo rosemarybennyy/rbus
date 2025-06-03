@@ -62,7 +62,11 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli.log ./bin/rbuscli get Device.DeviceInfo.ModelName
+          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli1.log ./bin/rbuscli reg A.B
+          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli2.log ./bin/rbuscli set A.B string "ROSE"
+          valgrind --show-leak-kinds=all --track-origins=yes --error-exitcode=1 --log-file=/tmp/valgrind_rbuscli3.log ./bin/rbuscli get A.B 
+
+          
 
       #- name: Build rbuscli
        # run: | 
