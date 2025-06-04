@@ -114,7 +114,10 @@ jobs:
         run: |
             rm -rf /tmp/rtrouted*
             lcov -c -o coverage.info -d build/rbus/src -d install/usr/include
-            lcov --remove coverage.info  '/usr/include/*'  -o filtered-coverage.info
+            lcov  --list coverage.info
+            ls -lt /tmp/coverage_report
+            lcov --remove coverage.info '${{github.workspace}}/rbus/install/usr/include/msgpack/*' -o filtered-coverage.info
+            #lcov --remove coverage.info  '/usr/include/*'  -o filtered-coverage.info
       - name: Generate the html report
         run: |
             genhtml filtered-coverage.info --output-directory /tmp/coverage_report
