@@ -112,7 +112,7 @@ jobs:
       - name:  Run CodeCoverage
         run: |
             rm -rf /tmp/rtrouted*
-            lcov -c -o coverage.info -d build/rbus/src
+            lcov -c -o coverage.info -d build/rbus/src -d install/usr/include
             lcov --remove coverage.info  '/usr/include/*'  -o filtered-coverage.info
       - name: Generate the html report
         run: |
