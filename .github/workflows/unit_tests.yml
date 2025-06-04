@@ -113,6 +113,7 @@ jobs:
       - name:  Run CodeCoverage
         run: |
             rm -rf /tmp/rtrouted*
+            cd build/rbus
             lcov -c -o coverage.info -d build/rbus/src 
             lcov  --list coverage.info
             #ls -lt /tmp/coverage_report
