@@ -207,7 +207,7 @@ else()
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/deps/src/linenoise/liblinenoise.so DESTINATION ${CMAKE_INSTALL_LIBDIR})
   
-
+  ENDIF()
   set(INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include)
   set(LIBRARY_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
 
