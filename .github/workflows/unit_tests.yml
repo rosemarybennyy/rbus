@@ -25,8 +25,14 @@ jobs:
           cmake-version: '3.16.x'
       - name: Install packages
         run: >
-          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libmsgpack* libcjson-dev
-              
+          sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libmsgpack* libcjson-dev install -y build-essential
+      - name: Install linenoise
+        run: git clone https://github.com/antirez/linenoise.git
+      - name: Build linenoise
+        run: | 
+          cd linenoise
+          gcc -o linenoise linenoise.c
+          sudo cp linenoise /usr/local/bin
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
