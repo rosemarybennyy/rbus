@@ -27,15 +27,15 @@ jobs:
       - name: Install packages
         run: >
           sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libmsgpack* libcjson-dev  build-essential 
-      - name: Install linenoise
-        run: |
-           git clone https://github.com/antirez/linenoise.git
-           cd linenoise
-           gcc -c -fPIC linenoise.c -o linenoise.o
-           gcc linenoise.o -shared -o liblinenoise.so
-           sudo cp linenoise.h /usr/local/include
-           sudo cp liblinenoise.so /usr/local/lib/
-           sudo ldconfig
+  #    - name: Install linenoise
+   #     run: |
+     #      git clone https://github.com/antirez/linenoise.git
+      #     cd linenoise
+       #    gcc -c -fPIC linenoise.c -o linenoise.o
+        #   gcc linenoise.o -shared -o liblinenoise.so
+         #  sudo cp linenoise.h /usr/local/include
+          # sudo cp liblinenoise.so /usr/local/lib/
+           #sudo ldconfig
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
