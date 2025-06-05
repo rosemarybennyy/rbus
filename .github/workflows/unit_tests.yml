@@ -26,7 +26,6 @@ jobs:
       - name: Install packages
         run: >
           sudo apt update && sudo apt install -y libcurl4-openssl-dev libgtest-dev lcov gcovr libmsgpack* libcjson-dev  build-essential linenoise-dev
-  
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
