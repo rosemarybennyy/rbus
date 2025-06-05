@@ -31,7 +31,8 @@ jobs:
         run: |
            git clone https://github.com/antirez/linenoise.git
            cd linenoise
-           make
+           gcc -c -fPIC linenoise.c -o linenoise.o
+           gcc linenoise.o -shared -o liblinenoise.so
            sudo cp linenoise.h /usr/local/include
            sudo cp liblinenoise.so /usr/local/lib/
            sudo ldconfig
