@@ -31,8 +31,11 @@ jobs:
       - name: Build linenoise
         run: | 
           cd linenoise
-          gcc -o linenoise linenoise.c
-          sudo cp linenoise /usr/local/bin
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make
+          sudo make install
       - name: Checkout rbus
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v3
