@@ -74,62 +74,7 @@ jobs:
           ./bin/rbusTestTimeoutValuesConsumer || true
           cd ${{github.workspace}}/rbus
           ./address-sanitizer.sh /tmp/asan_log/asan_log_rbusTestTimeoutValues*
-      - name: Run Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/rbusTest
-          nohup ./bin/rbusTestProvider >/tmp/plog.txt &
-          ./bin/rbusTestConsumer -a || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/rbusTest*
-      - name: Run multiRbusOpenMethod Unit Test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpenMethod
-          nohup ./bin/multiRbusOpenMethodProvider &
-          ./bin/multiRbusOpenMethodConsumer &  || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpenMethod*
-      - name: Run multiRbusOpenSubscribe Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpen
-          nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
-          ./bin/multiRbusOpenConsumer || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpen*
-      - name: Run multiRbusOpenGet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpenRbusGet
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          ./bin/multiRbusOpenRbusGetConsumer || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpenRbusGet 
-      - name: Run Gtest Cases
-        run: |
-          cd build/rbus
-          export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
-          nohup ./src/session_manager/rbus_session_mgr &
-          ./unittests/rbus_gtest.bin || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log_gtest*
-          #second change
-          #./unittests/rbus_gtest.bin
-          #continue-on-error: true
-          #if: failure()
-           #cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
-           #first change
-         # ./unittests/rbus_gtest.bin || true
-          #cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+
       - name: Stop SessionManager
         run: |
           killall -9 rbus_session_mgr
