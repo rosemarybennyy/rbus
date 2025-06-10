@@ -54,10 +54,9 @@ jobs:
           make -C build/rbus install
       - name: Verify script location
         run: |
-         cd ${{github.workspace}}
-         ls -lt
          cd ${{github.workspace}}/rbus
          ls -lt
+         chmod a+x address-sanitizer.sh
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
@@ -110,12 +109,17 @@ jobs:
       - name: Run Gtest Cases
         run: |
           cd build/rbus
-          export ASAN_OPTIONS=log_path=/tmp/asan_log
+          export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
           nohup ./src/session_manager/rbus_session_mgr &
-          ./unittests/rbus_gtest.bin
-          continue-on-error: true
-          if: failure()
-           cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+          ./unittests/rbus_gtest.bin || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log_gtest*
+          #second change
+          #./unittests/rbus_gtest.bin
+          #continue-on-error: true
+          #if: failure()
+           #cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+           #first change
          # ./unittests/rbus_gtest.bin || true
           #cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
       - name: Stop SessionManager
