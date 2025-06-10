@@ -57,6 +57,8 @@ jobs:
          cd ${{github.workspace}}/rbus
          ls -lt
          chmod a+x address-sanitizer.sh
+         cd /tmp
+         ls -lt
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
