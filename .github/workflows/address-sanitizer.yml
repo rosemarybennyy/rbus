@@ -52,6 +52,12 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: >
           make -C build/rbus install
+      - name: Verify script location
+        run: |
+         cd ${{github.workspace}}
+         ls -lt
+         cd ${{github.workspace}}/rbus
+         ls -lt
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
