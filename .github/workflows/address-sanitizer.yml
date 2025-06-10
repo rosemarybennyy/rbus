@@ -91,7 +91,7 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpenMethod
           nohup ./bin/multiRbusOpenMethodProvider &
-          ./bin/multiRbusOpenMethodConsumer &  || true
+          ./bin/multiRbusOpenMethodConsumer || true
           cd ${{github.workspace}}/rbus
           ./address-sanitizer.sh /tmp/asan_log/multiRbusOpenMethod*
       - name: Run multiRbusOpenSubscribe Unit test
