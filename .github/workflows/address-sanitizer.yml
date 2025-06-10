@@ -83,6 +83,7 @@ jobs:
           cd /tmp
           ls -lt
           rm -rf /tmp/asan_log_gtest*
+          ls -lt
       - name: Stop SessionManager
         run: |
           killall -9 rbus_session_mgr
