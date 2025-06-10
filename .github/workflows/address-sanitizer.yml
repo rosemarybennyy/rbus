@@ -69,15 +69,13 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/asan_log_rbusTestTimeoutValues
+          export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTest
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer || true
-          cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/asan_log_rbusTestTimeoutValues*
+           cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+     
 
-      - name: Stop SessionManager
-        run: |
-          killall -9 rbus_session_mgr
+  
       - name: Stop rtrouted
         run: |
           killall -9 rtrouted
