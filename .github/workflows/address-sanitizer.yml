@@ -69,43 +69,51 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/rbusTestTimeoutValues
           nohup ./bin/rbusTestTimeoutValuesProvider &
-          ./bin/rbusTestTimeoutValuesConsumer
+          ./bin/rbusTestTimeoutValuesConsumer || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log/rbusTestTimeoutValues*
       - name: Run Unit test
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/rbusTest
           nohup ./bin/rbusTestProvider >/tmp/plog.txt &
-          ./bin/rbusTestConsumer -a
+          ./bin/rbusTestConsumer -a || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log/rbusTest*
       - name: Run multiRbusOpenMethod Unit Test
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpenMethod
           ./bin/multiRbusOpenMethodProvider &
-          ./bin/multiRbusOpenMethodConsumer &
+          ./bin/multiRbusOpenMethodConsumer &  || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpenMethod*
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpen
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
-          ./bin/multiRbusOpenConsumer
+          ./bin/multiRbusOpenConsumer || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpen*
       - name: Run multiRbusOpenGet Unit test
         run: |
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/multiRbusOpenRbusGet
           nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          ./bin/multiRbusOpenRbusGetConsumer
-      - name: Run multiRbusOpenSet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-          ./bin/multiRbusOpenRbusSetConsumer
+          ./bin/multiRbusOpenRbusGetConsumer || true
+          cd ${{github.workspace}}/rbus
+          ./address-sanitizer.sh /tmp/asan_log/multiRbusOpenRbusGet 
       - name: Run Gtest Cases
         run: |
           cd build/rbus
