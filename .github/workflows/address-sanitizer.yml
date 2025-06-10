@@ -72,6 +72,7 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTest
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer || true
+          ls -lt /tmp/asan_log*
            cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
      
 
