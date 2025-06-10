@@ -69,11 +69,11 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log/rbusTestTimeoutValues
+          export ASAN_OPTIONS=log_path=/tmp/asan_log/asan_log_rbusTestTimeoutValues
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer || true
           cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_log/rbusTestTimeoutValues*
+          ./address-sanitizer.sh /tmp/asan_log/asan_log_rbusTestTimeoutValues*
       - name: Run Unit test
         run: |
           cd install/usr
