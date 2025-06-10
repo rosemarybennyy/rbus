@@ -82,6 +82,7 @@ jobs:
           cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
           cd /tmp
           ls -lt
+          rm -rf /tmp/asan_log_gtest*
       - name: Stop SessionManager
         run: |
           killall -9 rbus_session_mgr
