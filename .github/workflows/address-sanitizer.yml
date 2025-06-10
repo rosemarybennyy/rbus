@@ -80,6 +80,8 @@ jobs:
            #first change
           ./unittests/rbus_gtest.bin || true
           cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+          cd /tmp
+          ls -lt
       - name: Stop SessionManager
         run: |
           killall -9 rbus_session_mgr
