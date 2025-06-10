@@ -79,7 +79,7 @@ jobs:
            #cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
            #first change
           ./unittests/rbus_gtest.bin || true
-          cat /tmp/asan_log* >> $GITHUB_STEP_SUMMARY
+          cat /tmp/asan_log_gtest* >> $GITHUB_STEP_SUMMARY
           cd /tmp
           ls -lt
           rm -rf /tmp/asan_log_gtest*
