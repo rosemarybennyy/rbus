@@ -64,6 +64,20 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
+      - name: Run RbusTestTimeoutValues Unit test
+        run: |
+          cd install/usr
+          export PREFIX=$PWD
+          export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTestTimeoutValues
+          nohup ./bin/rbusTestTimeoutValuesProvider &
+          ./bin/rbusTestTimeoutValuesConsumer || true
+          cat /tmp/asan_log_rbusTestTimeoutValues* >>GITHUB_STEP_SUMMARY
+          cd /tmp
+          ls -lt
+          rm -rf /tmp/asan_log_rbusTestTimeoutValues*
+          ls -lt
+          
       - name: Run Gtest Cases
         run: |
           cd build/rbus
