@@ -99,7 +99,7 @@ option(MSG_ROUNDTRIP_TIME "MSG_ROUNDTRIP_TIME" OFF)
 
 
 
-if (0)
+if (BUILD_FOR_DESKTOP)
   set(MSG_ROUNDTRIP_TIME ON)
   message("Building for desktop")
   include_directories(${CMAKE_INSTALL_PREFIX}/include)
