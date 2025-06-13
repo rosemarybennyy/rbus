@@ -155,27 +155,7 @@ if (BUILD_FOR_DESKTOP)
     ${LIBRARY_DIR})
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/deps/src/linenoise/liblinenoise.so DESTINATION ${CMAKE_INSTALL_LIBDIR})
-  ExternalProject_Add(
-    msgpack
-    GIT_REPOSITORY https://github.com/msgpack/msgpack-c.git
-    GIT_TAG 2.1.4
-    PREFIX deps
-    UPDATE_DISCONNECTED 1
-    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
-    BUILD_IN_SOURCE 1
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DMSGPACK_BUILD_EXAMPLES=OFF -DMSGPACK_BUILD_TESTS=OFF
-    BUILD_COMMAND make)
-
-  set(MSGPACK_LIBRARIES "-lmsgpackc")
-
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/msgpack/src/msgpack/include)
-  link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/deps/src/msgpack
-    ${CMAKE_BINARY_DIR}
-    ${LIBRARY_DIR})
+  find_package(msgpack REQUIRED) 
   
 
 else()
