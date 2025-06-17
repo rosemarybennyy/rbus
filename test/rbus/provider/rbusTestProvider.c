@@ -381,10 +381,17 @@ rbusError_t addTable2RowHandler(TableNode* tableNode, char const* alias, uint32_
 
     if(err != RBUS_ERROR_SUCCESS)
         return err;
-
-    /*add properties and tables to the new row object*/
-    createTableNode((Node*)rowNode, "Table3", addTable3RowHandler);
-    createPropertyNode((Node*)rowNode, "data");
+        /*add properties and tables to the new row object*/
+    if (!createTableNode((Node*)rowNode, "Table3", addTable3RowHandler))
+    {
+        destroyNode((Node*)rowNode);
+        return RBUS_ERROR_BUS_ERROR;
+    }
+    if (!createPropertyNode((Node*)rowNode, "data"))
+    {
+        destroyNode((Node*)rowNode);
+        return RBUS_ERROR_BUS_ERROR;
+    }
 
     return RBUS_ERROR_SUCCESS;
 }
@@ -399,9 +406,17 @@ rbusError_t addTable1RowHandler(TableNode* tableNode, char const* alias, uint32_
     if(err != RBUS_ERROR_SUCCESS)
         return err;
 
-    /*add properties and tables to the new row object*/
-    createTableNode((Node*)rowNode, "Table2", addTable2RowHandler);
-    createPropertyNode((Node*)rowNode, "data");
+        /*add properties and tables to the new row object*/
+    if (!createTableNode((Node*)rowNode, "Table2", addTable2RowHandler))
+    {
+        destroyNode((Node*)rowNode);
+        return RBUS_ERROR_BUS_ERROR;
+    }
+    if (!createPropertyNode((Node*)rowNode, "data"))
+    {
+        destroyNode((Node*)rowNode);
+        return RBUS_ERROR_BUS_ERROR;
+    }
 
     return RBUS_ERROR_SUCCESS;
 }
