@@ -33,12 +33,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 enable_testing()
 
 find_package(PkgConfig REQUIRED)
+pkg_check_modules(CJSON REQUIRED cjson)
 
 set(CMAKE_C_FLAGS_DEBUG "-fPIC -Wall -Werror -Wextra -Wno-type-limits -fno-inline ${CMAKE_C_FLAGS_DEBUG} -DRBUS_ALWAYS_ON ")
 set(CMAKE_C_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_C_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
 
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -Wall -Werror -Wextra -Wno-type-limits -fno-inline ${CMAKE_C_FLAGS_DEBUG} -DRBUS_ALWAYS_ON ")
-set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_C_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
+set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_CXX_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
 
 if(ENABLE_ADDRESS_SANITIZER)
 	set(CMAKE_C_FLAGS "-fsanitize=address ${CMAKE_C_FLAGS}")
@@ -104,8 +105,6 @@ if (BUILD_FOR_DESKTOP)
   message("Building for desktop")
   find_package(linenoise REQUIRED)
   find_package(msgpack REQUIRED) 
-  
-
 else()
   find_package(cJSON REQUIRED)
   IF (NOT BUILD_ONLY_RTMESSAGE)
@@ -179,8 +178,21 @@ if (ENABLE_RDKLOGGER)
     add_definitions(-DENABLE_RDKLOGGER)
 endif (ENABLE_RDKLOGGER)
 
-
 add_subdirectory(src)
+
+# --- Begin: Ensure cJSON is linked to rtrouted and librtMessage ---
+# This block should be placed after add_subdirectory(src) so the targets exist.
+# The following assumes your src/CMakeLists.txt defines the rtrouted and rtMessage targets.
+# If your targets are named differently, adjust accordingly.
+
+if(TARGET rtrouted)
+  target_link_libraries(rtrouted PRIVATE ${CJSON_LIBRARIES})
+endif()
+
+if(TARGET rtMessage)
+  target_link_libraries(rtMessage PRIVATE ${CJSON_LIBRARIES})
+endif()
+# --- End: cJSON linkage ---
 
 IF (NOT BUILD_ONLY_RTMESSAGE)
    add_subdirectory(utils)
