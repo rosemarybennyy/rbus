@@ -1,3 +1,4 @@
+
 #############################################################################
 # If not stated otherwise in this file or this component's Licenses.txt file
 # the following copyright and licenses apply:
@@ -33,13 +34,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 enable_testing()
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(CJSON REQUIRED cjson)
 
 set(CMAKE_C_FLAGS_DEBUG "-fPIC -Wall -Werror -Wextra -Wno-type-limits -fno-inline ${CMAKE_C_FLAGS_DEBUG} -DRBUS_ALWAYS_ON ")
 set(CMAKE_C_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_C_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
 
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -Wall -Werror -Wextra -Wno-type-limits -fno-inline ${CMAKE_C_FLAGS_DEBUG} -DRBUS_ALWAYS_ON ")
-set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_CXX_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
+set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -Werror -Wextra ${CMAKE_C_FLAGS_RELEASE} -DRBUS_ALWAYS_ON ")
 
 if(ENABLE_ADDRESS_SANITIZER)
 	set(CMAKE_C_FLAGS "-fsanitize=address ${CMAKE_C_FLAGS}")
@@ -103,8 +103,39 @@ option(MSG_ROUNDTRIP_TIME "MSG_ROUNDTRIP_TIME" OFF)
 if (BUILD_FOR_DESKTOP)
   set(MSG_ROUNDTRIP_TIME ON)
   message("Building for desktop")
+  include_directories(${CMAKE_INSTALL_PREFIX}/include)
+
+  include(ExternalProject)
+  ExternalProject_Add(
+    cjson
+    GIT_REPOSITORY https://github.com/DaveGamble/cJSON.git
+    GIT_TAG v1.6.0
+    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
+    INSTALL_COMMAND ""
+    CONFIGURE_COMMAND ""
+    BUILD_IN_SOURCE 1
+    PREFIX deps
+    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
+    BUILD_COMMAND make)
+
+  include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/deps/src)
+  link_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson
+    ${CMAKE_BINARY_DIR}
+    ${LIBRARY_DIR})
+  
+  set(CJSON_LIBRARIES "-lcjson")
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so.1 ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so.1.6.0 DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+
   find_package(linenoise REQUIRED)
   find_package(msgpack REQUIRED) 
+  
+
 else()
   find_package(cJSON REQUIRED)
   IF (NOT BUILD_ONLY_RTMESSAGE)
@@ -178,21 +209,8 @@ if (ENABLE_RDKLOGGER)
     add_definitions(-DENABLE_RDKLOGGER)
 endif (ENABLE_RDKLOGGER)
 
+
 add_subdirectory(src)
-
-# --- Begin: Ensure cJSON is linked to rtrouted and librtMessage ---
-# This block should be placed after add_subdirectory(src) so the targets exist.
-# The following assumes your src/CMakeLists.txt defines the rtrouted and rtMessage targets.
-# If your targets are named differently, adjust accordingly.
-
-if(TARGET rtrouted)
-  target_link_libraries(rtrouted PRIVATE ${CJSON_LIBRARIES})
-endif()
-
-if(TARGET rtMessage)
-  target_link_libraries(rtMessage PRIVATE ${CJSON_LIBRARIES})
-endif()
-# --- End: cJSON linkage ---
 
 IF (NOT BUILD_ONLY_RTMESSAGE)
    add_subdirectory(utils)
