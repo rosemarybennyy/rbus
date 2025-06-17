@@ -105,31 +105,8 @@ if (BUILD_FOR_DESKTOP)
   include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
   include(ExternalProject)
-  ExternalProject_Add(
-    cjson
-    GIT_REPOSITORY https://github.com/DaveGamble/cJSON.git
-    GIT_TAG v1.6.0
-    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
-    INSTALL_COMMAND ""
-    CONFIGURE_COMMAND ""
-    BUILD_IN_SOURCE 1
-    PREFIX deps
-    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
-    BUILD_COMMAND make)
-
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/deps/src)
-  link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson
-    ${CMAKE_BINARY_DIR}
-    ${LIBRARY_DIR})
-  
-  set(CJSON_LIBRARIES "-lcjson")
-
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so.1 ${CMAKE_CURRENT_BINARY_DIR}/deps/src/cjson/libcjson.so.1.6.0 DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
+ 
+  find_package(cJSON REQUIRED)
 
   ExternalProject_Add(
     linenoise
