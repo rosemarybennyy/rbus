@@ -216,6 +216,7 @@ TokenChain* TokenChain_create(char const* sourceName, elementNode* regNode)
     }
 
     chain->first = next;
+    free(name);
     return chain;
 
 tokenChainError:
