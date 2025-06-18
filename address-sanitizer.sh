@@ -1,12 +1,12 @@
 #!/bin/sh
 
 LOGFILE=$1
-echo "Inside the script $LOG_FILE"
-cat "$LOG_FILE"
+echo "Inside the script $LOGFILE"
+cat "$LOGFILE"
 LEAKS_FOUND=false
 if grep -q "ERROR" "$LOGFILE"; then
   LEAKS_FOUND=true
   cat "$LOGFILE" >> $GITHUB_STEP_SUMMARY
-  rm -rf $LOG_FILE
+  rm -rf $LOGFILE
   exit 1
 fi
