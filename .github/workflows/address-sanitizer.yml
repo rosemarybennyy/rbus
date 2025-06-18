@@ -86,7 +86,7 @@ jobs:
           ./unittests/rbus_gtest.bin || true
           cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
           rm -rf /tmp/asan_log_gtest.*
-          cd ${{github.workspace}}/rbus
+          cd ${{github.workspace}}
           ./address_sanitizer.sh /tmp/asan_gtest_log.log
           #second change
           #./unittests/rbus_gtest.bin
