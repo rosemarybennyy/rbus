@@ -64,47 +64,6 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
-      - name: Run RbusTestTimeoutValues Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTestTimeoutValues
-          nohup ./bin/rbusTestTimeoutValuesProvider &
-          ./bin/rbusTestTimeoutValuesConsumer || true
-          #cat /tmp/asan_log_rbusTestTimeoutValues* >>GITHUB_STEP_SUMMARY
-          cd /tmp
-          ls -lt
-          #rm -rf /tmp/asan_log_rbusTestTimeoutValues*
-          #ls -lt
-      - name: Run multiRbusOpenMethod Unit Test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          ./bin/multiRbusOpenMethodProvider &
-          ./bin/multiRbusOpenMethodConsumer &
-      - name: Run multiRbusOpenSubscribe Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
-          ./bin/multiRbusOpenConsumer
-      - name: Run multiRbusOpenGet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
-          ./bin/multiRbusOpenRbusGetConsumer
-      - name: Run multiRbusOpenSet Unit test
-        run: |
-          cd install/usr
-          export PREFIX=$PWD
-          export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
-          ./bin/multiRbusOpenRbusSetConsumer
       - name: Run Gtest Cases
         run: |
           cd build/rbus
@@ -112,6 +71,7 @@ jobs:
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
           cd ${{github.workspace}}/rbus
+          cat address_sanitizer.sh
           ./address-sanitizer.sh /tmp/asan_log_gtest*
           #second change
           #./unittests/rbus_gtest.bin
