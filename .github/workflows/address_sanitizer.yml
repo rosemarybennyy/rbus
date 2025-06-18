@@ -153,6 +153,8 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
+          cd /tmp
+          ls -lt
           cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
           rm -rf /tmp/asan_log_gtest.*
           cd ${{github.workspace}}
