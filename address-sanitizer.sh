@@ -2,7 +2,6 @@
 
 LOGFILE=$1
 echo "Inside the script $LOGFILE"
-cat "$LOGFILE"
 LEAKS_FOUND=false
 if grep -q "ERROR" "$LOGFILE"; then
   LEAKS_FOUND=true
