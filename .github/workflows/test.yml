@@ -1,6 +1,4 @@
-
-
-name: unit_tests_adress_sanitizer
+name: tests_adress_sanitizer
 on:
   push:
      branches: [ main, 'rbus-**' ]
