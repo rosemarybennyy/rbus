@@ -57,9 +57,6 @@ jobs:
          cd ${{github.workspace}}/rbus
          ls -lt
          chmod a+x address-sanitizer.sh
-         cd /tmp
-         rm -rf asan_log_gtest.*
-         ls -lt
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
@@ -76,8 +73,6 @@ jobs:
           cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
           rm -rf /tmp/asan_log_gtest.*
           cd ${{github.workspace}}/rbus
-          ls -ltrh
-          cat address-sanitizer.sh
           ./address-sanitizer.sh /tmp/asan_gtest_log.log
           #second change
           #./unittests/rbus_gtest.bin
