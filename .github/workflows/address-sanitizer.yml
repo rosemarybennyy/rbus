@@ -71,7 +71,8 @@ jobs:
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
           cd ${{github.workspace}}/rbus
-          cat address_sanitizer.sh
+          ls -ltrh
+          cat address-sanitizer.sh
           ./address-sanitizer.sh /tmp/asan_log_gtest*
           #second change
           #./unittests/rbus_gtest.bin
