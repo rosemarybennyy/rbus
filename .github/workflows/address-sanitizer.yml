@@ -70,13 +70,13 @@ jobs:
       - name: Run Gtest Cases
         run: |
           cd build/rbus
-          export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
+          export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest:log_exe_name=false
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
           cd ${{github.workspace}}/rbus
           ls -ltrh
           cat address-sanitizer.sh
-          ./address-sanitizer.sh /tmp/asan_log_gtest*
+          ./address-sanitizer.sh /tmp/asan_log_gtest
           #second change
           #./unittests/rbus_gtest.bin
           #continue-on-error: true
