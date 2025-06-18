@@ -85,10 +85,12 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTestTimeoutValues
           nohup ./bin/rbusTestTimeoutValuesProvider &
           ./bin/rbusTestTimeoutValuesConsumer || true
-          cat /tmp/asan_log_rbusTestTimeoutValues.* >>/tmp/asan_rbusTestTimeoutValues_log.log
-          rm -rf /tmp/asan_log_rbusTestTimeoutValues.*
-          cd ${{github.workspace}} 
-          ./address-sanitizer.sh /tmp/asan_rbusTestTimeoutValues_log.log
+          if ls /tmp/asan_log_rbusTestTimeoutValues.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_rbusTestTimeoutValues.* >>/tmp/asan_rbusTestTimeoutValues_log.log
+           rm -rf /tmp/asan_log_rbusTestTimeoutValues.*
+           cd ${{github.workspace}} 
+           ./address-sanitizer.sh /tmp/asan_rbusTestTimeoutValues_log.log
+          fi
       - name: Run Unit test
         run: |
           cd install/usr
@@ -97,10 +99,12 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_rbusTest
           nohup ./bin/rbusTestProvider >/tmp/plog.txt &
           ./bin/rbusTestConsumer -a || true
-          cat /tmp/asan_log_rbusTest.* >>/tmp/asan_rbusTest_log.log
-          rm -rf /tmp/asan_log_rbusTest.*
-          cd ${{github.workspace}}
-          ./address-sanitizer.sh /tmp/asan_rbusTest_log.log
+          if ls /tmp/asan_log_rbusTest.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_rbusTest.* >>/tmp/asan_rbusTest_log.log
+           rm -rf /tmp/asan_log_rbusTest.*
+           cd ${{github.workspace}}
+           ./address-sanitizer.sh /tmp/asan_rbusTest_log.log
+          fi 
       - name: Run multiRbusOpenMethod Unit Test
         run: |
           cd install/usr
@@ -109,10 +113,12 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_multiRbusOpenMethod
           nohup ./bin/multiRbusOpenMethodProvider &
           ./bin/multiRbusOpenMethodConsumer || true
-          cat /tmp/asan_log_multiRbusOpenMethod.* >>/tmp/asan_multiRbusOpenMethod_log.log
-          rm -rf /tmp/asan_log_multiRbusOpenMethod.*
-          cd ${{github.workspace}}
+          if ls /tmp/asan_log_multiRbusOpenMethod.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_multiRbusOpenMethod.* >>/tmp/asan_multiRbusOpenMethod_log.log
+           rm -rf /tmp/asan_log_multiRbusOpenMethod.*
+           cd ${{github.workspace}}
           ./address-sanitizer.sh /tmp/asan_multiRbusOpenMethod_log.log
+          fi
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
           cd install/usr
@@ -121,10 +127,12 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_multiRbusOpen
           nohup ./bin/multiRbusOpenProvider >/tmp/log_multiRbusOpenProvider.txt &
           ./bin/multiRbusOpenConsumer || true
-          cat /tmp/asan_log_multiRbusOpen.* >>/tmp/asan_multiRbusOpen_log.log
-          rm -rf /tmp/asan_log_multiRbusOpen.*
-          cd ${{github.workspace}}
-          ./address-sanitizer.sh /tmp/asan_multiRbusOpen_log.log
+          if ls /tmp/asan_log_multiRbusOpen.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_multiRbusOpen.* >>/tmp/asan_multiRbusOpen_log.log
+           rm -rf /tmp/asan_log_multiRbusOpen.*
+           cd ${{github.workspace}}
+           ./address-sanitizer.sh /tmp/asan_multiRbusOpen_log.log
+          fi 
       - name: Run multiRbusOpenGet Unit test
         run: |
           cd install/usr
@@ -133,20 +141,24 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_multiRbusOpenRbusGet
           nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusGetProvider.txt &
           ./bin/multiRbusOpenRbusGetConsumer || true
-          cat /tmp/asan_log_multiRbusOpenRbusGet.* >>tmp/asan_multiRbusOpenRbusGet_log.log
-          rm -rf /tmp/asan_log_multiRbusOpenRbusGet.*
-          cd ${{github.workspace}}
-          ./address-sanitizer.sh /tmp/asan_multiRbusOpenRbusGet_log.log
+          if ls /tmp/asan_log_multiRbusOpenRbusGet.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_multiRbusOpenRbusGet.* >>tmp/asan_multiRbusOpenRbusGet_log.log
+           rm -rf /tmp/asan_log_multiRbusOpenRbusGet.*
+           cd ${{github.workspace}}
+           ./address-sanitizer.sh /tmp/asan_multiRbusOpenRbusGet_log.log
+          fi 
       - name: Run Gtest Cases
         run: |
           cd build/rbus
           export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
-          cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
-          rm -rf /tmp/asan_log_gtest.*
-          cd ${{github.workspace}}
-          ./address_sanitizer.sh /tmp/asan_gtest_log.log
+          if ls /tmp/asan_log_gtest.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
+           rm -rf /tmp/asan_log_gtest.*
+           cd ${{github.workspace}}
+           ./address_sanitizer.sh /tmp/asan_gtest_log.log
+          fi 
       - name: Stop SessionManager
         run: |
           killall -9 rbus_session_mgr
