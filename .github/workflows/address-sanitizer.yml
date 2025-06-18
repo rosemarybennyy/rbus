@@ -59,6 +59,7 @@ jobs:
          chmod a+x address-sanitizer.sh
          cd /tmp
          rm -rf asan_log_gtest.*
+         ls -lt
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
