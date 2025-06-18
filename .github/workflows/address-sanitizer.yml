@@ -78,7 +78,7 @@ jobs:
           cd ${{github.workspace}}/rbus
           ls -ltrh
           cat address-sanitizer.sh
-          ./address-sanitizer.sh /tmp/asan_log_gtest.log
+          ./address-sanitizer.sh /tmp/asan_gtest_log.log
           #second change
           #./unittests/rbus_gtest.bin
           #continue-on-error: true
