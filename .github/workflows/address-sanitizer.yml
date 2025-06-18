@@ -54,9 +54,23 @@ jobs:
           make -C build/rbus install
       - name: Verify script location
         run: |
-         cd ${{github.workspace}}/rbus
-         ls -lt
-         chmod a+x address-sanitizer.sh
+         cat << 'EOF' >address_sanitizer.sh
+         #!/bin/sh
+
+         LOGFILE=$1
+         echo "Inside the script $LOGFILE"
+         LEAKS_FOUND=false
+         if grep -q "ERROR" "$LOGFILE"; then
+          LEAKS_FOUND=true
+          cat "$LOGFILE" >> $GITHUB_STEP_SUMMARY
+          rm -rf $LOGFILE
+          cd /tmp
+          ls -lt
+          exit 1
+         fi
+         EOF
+         cd ${{github.workspace}}
+         chmod a+x address_sanitizer.sh
       - name: Start rtrouted
         # nohup to keep it running.
         run: |
@@ -73,7 +87,7 @@ jobs:
           cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
           rm -rf /tmp/asan_log_gtest.*
           cd ${{github.workspace}}/rbus
-          ./address-sanitizer.sh /tmp/asan_gtest_log.log
+          ./address_sanitizer.sh /tmp/asan_gtest_log.log
           #second change
           #./unittests/rbus_gtest.bin
           #continue-on-error: true
