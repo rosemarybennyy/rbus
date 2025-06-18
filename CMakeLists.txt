@@ -129,8 +129,7 @@ if (BUILD_FOR_DESKTOP)
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/deps/src/linenoise/liblinenoise.so DESTINATION ${CMAKE_INSTALL_LIBDIR})
   
-  find_package(cJSON REQUIRED)
-  find_package(msgpack REQUIRED) 
+
 else()
   find_package(cJSON REQUIRED)
   IF (NOT BUILD_ONLY_RTMESSAGE)
