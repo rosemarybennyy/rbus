@@ -102,6 +102,7 @@ TokenChain* TokenChain_create(char const* sourceName, elementNode* regNode)
     chain->first = chain->last = NULL;
 
     name = strdup(sourceName);
+    chain->buffer = name;
 
     node = regNode;
 
@@ -216,7 +217,7 @@ TokenChain* TokenChain_create(char const* sourceName, elementNode* regNode)
     }
 
     chain->first = next;
-    free(name);
+    //free(name);
     return chain;
 
 tokenChainError:
@@ -238,14 +239,16 @@ void TokenChain_destroy(TokenChain* chain)
     if(!chain)
         return;
     Token* token = chain->first;
-    if(token)
-        free(token->text);
+    //if(token)
+      //  free(token->text);
     while(token)
     {
         Token* next = token->next;
         free(token);
         token = next;
     }
+        if(chain->buffer)
+          free(chain->buffer);
     free(chain);
 }
 
