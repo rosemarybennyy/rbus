@@ -1461,6 +1461,8 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
         HANDLE_EVENTSUBS_MUTEX_UNLOCK(handleInfo);
         if(event.data)
             rbusObject_Release(event.data);
+        if(filter) // FIX: prevent resource leak 256907
+        rbusFilter_Release(filter);
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 exit_1:

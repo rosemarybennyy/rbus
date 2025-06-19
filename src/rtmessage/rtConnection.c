@@ -549,17 +549,41 @@ rtConnection_CreateInternal(rtConnection* con, char const* application_name, cha
   }
   c->send_buffer_in_use = 0;
   c->send_buffer = (uint8_t *) rt_try_malloc(RTMSG_SEND_BUFFER_SIZE);
-  if(!c->send_buffer)
+  // bug fix for 259464
+  if(!c->send_buffer) {
+    pthread_mutex_destroy(&c->mutex);
+    pthread_mutex_destroy(&c->callback_message_mutex);
+    pthread_mutex_destroy(&c->reconnect_mutex);
+    pthread_cond_destroy(&c->callback_message_cond);
+    free(c);
     return rtErrorFromErrno(ENOMEM);
+  }  
   c->recv_buffer = (uint8_t *) rt_try_malloc(RTMSG_SEND_BUFFER_SIZE);
-  if(!c->recv_buffer)
+  if(!c->recv_buffer) {
+    free(c->send_buffer);
+    pthread_mutex_destroy(&c->mutex);
+    pthread_mutex_destroy(&c->callback_message_mutex);
+    pthread_mutex_destroy(&c->reconnect_mutex);
+    pthread_cond_destroy(&c->callback_message_cond);
+    free(c);
     return rtErrorFromErrno(ENOMEM);
+  }
   c->recv_buffer_capacity = RTMSG_SEND_BUFFER_SIZE;
   c->sequence_number = 1;
 #ifdef C11_ATOMICS_SUPPORTED
   atomic_init(&(c->sequence_number), 1);
 #endif
   c->application_name = strdup(application_name);
+  if (!c->application_name) {
+    free(c->send_buffer);
+    free(c->recv_buffer);
+    pthread_mutex_destroy(&c->mutex);
+    pthread_mutex_destroy(&c->callback_message_mutex);
+    pthread_mutex_destroy(&c->reconnect_mutex);
+    pthread_cond_destroy(&c->callback_message_cond);
+    free(c);
+    return rtErrorFromErrno(ENOMEM);
+  }
   c->max_retries = max_retries;
   /*if user config tries to set 0, we just override with 1, as 0 makes no sense currently*/
   if(c->max_retries == 0)
@@ -592,6 +616,10 @@ rtConnection_CreateInternal(rtConnection* con, char const* application_name, cha
     free(c->application_name);
     rtList_Destroy(c->pending_requests_list,NULL);
     rtList_Destroy(c->callback_message_list, NULL);
+    pthread_mutex_destroy(&c->mutex);
+    pthread_mutex_destroy(&c->callback_message_mutex);
+    pthread_mutex_destroy(&c->reconnect_mutex);
+    pthread_cond_destroy(&c->callback_message_cond);
     free(c);
     return err;
   }
@@ -605,7 +633,12 @@ rtConnection_CreateInternal(rtConnection* con, char const* application_name, cha
     free(c->application_name);
     rtList_Destroy(c->pending_requests_list,NULL);
     rtList_Destroy(c->callback_message_list, NULL);
+    pthread_mutex_destroy(&c->mutex);
+    pthread_mutex_destroy(&c->callback_message_mutex);
+    pthread_mutex_destroy(&c->reconnect_mutex);
+    pthread_cond_destroy(&c->callback_message_cond);
     free(c);
+    return err; // <-- FIXED: return immediately after cleanup
   }
 
   if (err == RT_OK)

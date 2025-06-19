@@ -54,6 +54,8 @@ static void testSerialize(rbusFilter_t f1)
     if(!file)
     {
         TEST(file != NULL);
+        //bug fix for cid : 177980
+        rbusBuffer_Destroy(buffOut);
         return;
     }
     fwrite(buffOut->data, 1, buffOut->posWrite, file);
@@ -64,6 +66,9 @@ static void testSerialize(rbusFilter_t f1)
     if(!file)
     {
         TEST(file != NULL);
+        //bug fix for cid : 177980
+        rbusBuffer_Destroy(buffOut);
+        rbusBuffer_Destroy(buffIn);
         return;
     }
     fseek(file, 0, SEEK_END);
