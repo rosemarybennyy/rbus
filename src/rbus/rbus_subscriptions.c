@@ -504,6 +504,8 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         }
         memcpy(sub->listener, buff->data + buff->posRead, length);
         buff->posRead += length;
+	if(length > 0)
+          sub->listener[length-1] = '\0';
 
         //read eventName
         if(rbusBuffer_ReadUInt16(buff, &type) < 0) goto remove_bad_file;
@@ -518,7 +520,8 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         }
         memcpy(sub->eventName, buff->data + buff->posRead, length);
         buff->posRead += length;
-
+        if(length > 0)
+          sub->eventName[length-1] = '\0';
         //read componentId
         if(rbusBuffer_ReadUInt16(buff, &type) < 0) goto remove_bad_file;
         if(rbusBuffer_ReadUInt16(buff, &length) < 0) goto remove_bad_file;
