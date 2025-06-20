@@ -960,10 +960,14 @@ rtRouted_OnMessageDiscoverWildcardDestinations(rtConnectedClient* sender, rtMess
     if(RT_OK == rtMessage_GetString(m, RTM_DISCOVERY_EXPRESSION, &expression) && (NULL != expression) &&
         (0 == validate_string(expression, RTMSG_MAX_EXPRESSION_LEN)))
     {
+      char safe_expr[RTMSG_MAX_EXPRESSION_LEN];
+      strncpy(safe_expr, expression, RTMSG_MAX_EXPRESSION_LEN - 1);
+      safe_expr[RTMSG_MAX_EXPRESSION_LEN - 1] = '\0';	    
+
       size_t count = 0;
       rtListItem item;
       rtMessage_SetInt32(response, RTM_DISCOVERY_RESULT, RT_OK);
-      rtRoutingTree_ResolvePartialPath(gRoutingTree, expression, g_discovery_result);
+      rtRoutingTree_ResolvePartialPath(gRoutingTree, safe_expr, g_discovery_result);
       rtList_GetSize(g_discovery_result, &count);
       rtMessage_SetInt32(response, RTM_DISCOVERY_COUNT, (int32_t)count);
       rtList_GetFront(g_discovery_result, &item);
