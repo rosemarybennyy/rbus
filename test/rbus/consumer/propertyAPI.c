@@ -385,9 +385,11 @@ void testValue_InitGetSetByType()
 
     rbusProperty_Releases(17, vbtrue, vbfalse, vi16_n1234, vu16_4321, vi32_689013, vu32_856712, vi64_987654321213, vu64_987654321213, vf32_354dot678, vf64_789dot4738291023, vtv, vs, vbytes, vprop, vobj, prop, prop2);
     rbusObject_Releases(2, obj, obj2);
+#if 0
     // BUG FIX: Release prop and prop2 to avoid resource leak 277625
     rbusProperty_Release(prop);
     rbusProperty_Release(prop2);
+#endif
 }
 
 void testPropertyAPI(rbusHandle_t handle, int* countPass, int* countFail)
