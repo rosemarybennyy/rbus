@@ -1306,7 +1306,7 @@ void testValue_Print()
 void testValue_InitType()
 {
     rbusDateTime_t tv1 = {{0},{0}};
-    time_t nowtime = 0;
+    time_t nowtime = time(NULL);
     const char teststring[] = "Hello World";
     rbusProperty_t prop;
     rbusObject_t obj;
