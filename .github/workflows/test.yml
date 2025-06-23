@@ -60,14 +60,13 @@ jobs:
          echo "Inside the script $LOGFILE"
          LEAKS_FOUND=false
          if grep -q "ERROR" "$LOGFILE"; then
+          echo "Errrrrrrrrrrrrrrrrooooorrrrrrrrr"
           LEAKS_FOUND=true
           cat "$LOGFILE" >> $GITHUB_STEP_SUMMARY
           rm -rf $LOGFILE
           cd /tmp
           ls -lt
           exit 1
-         else
-          echo "No errors found" >>$GITHUB_STEP_SUMMARY
          fi
          EOF
          cd ${{github.workspace}}
