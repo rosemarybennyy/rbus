@@ -420,7 +420,7 @@ void testValue_Time()
 {
     rbusDateTime_t tv1 = {{0},{0}};
     rbusDateTime_t const* tv2;
-    time_t nowtime = 0;
+    time_t nowtime = time(NULL);
 
     rbusValue_t val;
 
@@ -436,6 +436,7 @@ void testValue_Time()
     TEST(memcmp(&tv1, tv2, sizeof(rbusDateTime_t)) == 0);
 
     sleep(1);
+    nowtime = time(NULL);
     /*test replacing time works*/
     //memcpy(&(tv1.m_time), localtime(&nowtime),sizeof(struct tm));
     rbusValue_MarshallTMtoRBUS(&tv1, localtime(&nowtime));
