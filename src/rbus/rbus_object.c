@@ -56,8 +56,13 @@ rbusObject_t rbusObject_Init(rbusObject_t* pobject, char const* name)
 
 void rbusObject_InitMultiInstance(rbusObject_t* pobject, char const* name)
 {
+    //rbusObject_Init(pobject, name);
+   // (*pobject)->type = RBUS_OBJECT_MULTI_INSTANCE;
+    if(!pobject)
+        return;
     rbusObject_Init(pobject, name);
-    (*pobject)->type = RBUS_OBJECT_MULTI_INSTANCE;
+    if(*pobject)
+        (*pobject)->type = RBUS_OBJECT_MULTI_INSTANCE;
 }
 
 void rbusObject_Destroy(rtRetainable* r)
