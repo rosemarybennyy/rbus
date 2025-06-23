@@ -120,8 +120,8 @@ static void rbusSubscriptions_onSubscriptionCreated(rbusSubscription_t* sub, ele
 /*add a new subscription*/
 rbusSubscription_t* rbusSubscriptions_addSubscription(rbusSubscriptions_t subscriptions, char const* listener, char const* eventName, int32_t componentId, rbusFilter_t filter, int32_t interval, int32_t duration, bool autoPublish, elementNode* registryElem, bool rawData)
 {
-    rbusSubscription_t* sub;
-    TokenChain* tokens;
+    rbusSubscription_t* sub = NULL;
+    TokenChain* tokens = NULL;
 
     static uint32_t subscriptionId = 3; /* Starting the subscription ID with 3 as the initial 2 values are allocated for the below add listener
                                             rtconnection create internal
@@ -136,12 +136,37 @@ rbusSubscription_t* rbusSubscriptions_addSubscription(rbusSubscriptions_t subscr
         return NULL;
     }
     if(!subscriptions)
+    {
+	TokenChain_destroy(tokens);    
         return NULL;
+    }
 
     sub = rt_malloc(sizeof(rbusSubscription_t));
 
+    if (!sub)
+    {
+        TokenChain_destroy(tokens);
+        return NULL;
+    }
+    
+    memset(sub, 0, sizeof(rbusSubscription_t)); // Defensive zeroing
+
     sub->listener = strdup(listener);
+    if (!sub->listener)
+    {
+        TokenChain_destroy(tokens);
+        free(sub);
+        return NULL;
+    }
+
     sub->eventName = strdup(eventName);
+    if (!sub->eventName)
+    {
+        TokenChain_destroy(tokens);
+        free(sub->listener);
+        free(sub);
+        return NULL;
+    }
     sub->componentId = componentId;
     sub->filter = filter;
     if(sub->filter)
@@ -153,7 +178,18 @@ rbusSubscription_t* rbusSubscriptions_addSubscription(rbusSubscriptions_t subscr
     sub->tokens = tokens;
     sub->rawData = rawData;
     sub->subscriptionId = subscriptionId;
-    rtList_Create(&sub->instances);
+
+    if (rtList_Create(&sub->instances) != RT_OK)
+    {
+        TokenChain_destroy(tokens);
+        free(sub->eventName);
+        free(sub->listener);
+        free(sub);
+        return NULL;
+    }
+    
+    	
+    //rtList_Create(&sub->instances);
     rtList_PushBack(subscriptions->subList, sub, NULL);
 
     rbusSubscriptions_onSubscriptionCreated(sub, subscriptions->root);
