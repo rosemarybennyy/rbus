@@ -91,7 +91,10 @@ jobs:
             rm -rf /tmp/asan_log_gtest.*
             cd ${{github.workspace}}
            ./address_sanitizer.sh /tmp/asan_gtest_log.log
-           fi
+           else
+            echo "No errors found" >>$GITHUB_STEP_SUMMARY
+           fi 
+           
           #second change
           #./unittests/rbus_gtest.bin
           #continue-on-error: true
