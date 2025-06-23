@@ -519,9 +519,11 @@ rtRouteDirect_SendMessage(const rtPrivateClientInfo* pClient, uint8_t const* pIn
             new_header.control_data = subscriptionId; /* Rawdata unique subscription ID */
         else
             new_header.control_data = pClient->clientID;
-
+// bug fix for 340438
         strncpy(new_header.topic, pClient->clientTopic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
-        new_header.topic_length = strlen(pClient->clientTopic);
+	new_header.topic[RTMSG_HEADER_MAX_TOPIC_LENGTH-1] = '\0';
+        new_header.topic_length = strlen(new_header.topic); // safer: get length after null-termination
+       // new_header.topic_length = strlen(pClient->clientTopic);
         new_header.reply_topic[0] = '\0';
         new_header.reply_topic_length = 0;
       
