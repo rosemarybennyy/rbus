@@ -701,10 +701,15 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
     current = *value;
 
     // read value
-    rbusBuffer_ReadUInt16(buff, &type);
-    rbusBuffer_ReadUInt16(buff, &length);
+    //rbusBuffer_ReadUInt16(buff, &type);
+    //rbusBuffer_ReadUInt16(buff, &length);
+       // read value
+    if(rbusBuffer_ReadUInt16(buff, &type) < 0) goto fail;
+    if(rbusBuffer_ReadUInt16(buff, &length) < 0) goto fail;
+
     if(!buff)
-        return -1;
+        //return -1;
+	goto fail;
     current->type = type;
     switch(type)
     {
@@ -713,7 +718,8 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
         if(!(buff->posRead + length <= buff->lenAlloc))
         {
             RBUSLOG_WARN("rbusValue_Decode failed");
-            return -1;
+            //return -1;
+	    goto fail;
         }
         assert(strlen((char const*)buff->data + buff->posRead) + 1 == (size_t)length);/*length should captures null term*/
         rbusValue_SetString(current, (char const*)buff->data + buff->posRead);
@@ -723,7 +729,8 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
         if(!(buff->posRead + length <= buff->lenAlloc))
         {
             RBUSLOG_WARN("rbusValue_Decode failed");
-            return -1;
+            //return -1;
+	    goto fail;
         }
         rbusValue_SetBytes(current, buff->data + buff->posRead, length);
         buff->posRead += length;
@@ -759,8 +766,16 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
         return rbusBuffer_ReadDateTime(buff, &current->d.tv);
     default:
         assert(false);
-        return -1;
+        //return -1;
+	goto fail;
     }
+  fail:
+    if(value && *value)
+    {
+        rbusValue_Release(*value);
+        *value = NULL;
+    }
+    return -1;  
 }
 
 void rbusValue_Encode(rbusValue_t value, rbusBuffer_t buff)
