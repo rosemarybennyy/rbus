@@ -66,6 +66,8 @@ jobs:
           cd /tmp
           ls -lt
           exit 1
+         else
+          echo "No errors found" >>$GITHUB_STEP_SUMMARY
          fi
          EOF
          cd ${{github.workspace}}
