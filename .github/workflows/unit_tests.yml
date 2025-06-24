@@ -99,30 +99,30 @@ jobs:
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/multiRbusOpenRbusGetProvider >/tmp/log_multiRbusOpenRbusSetProvider.txt &
           ./bin/multiRbusOpenRbusSetConsumer
-       - name: Run Gtest Cases
-         run: |
-           cd build/rbus
-           nohup ./src/session_manager/rbus_session_mgr &
-           ./unittests/rbus_gtest.bin
-       - name: Stop SessionManager
-         run: |
-           killall -15 rbus_session_mgr
-       - name: Stop rtrouted
-         run: |
-           #killall -9 rtrouted
-           cd build/rbus
-           nohup ./src/rtmessage/rtrouted_diag shutdown 
-       - name:  Run CodeCoverage
-         run: |
-             rm -rf /tmp/rtrouted*
-             lcov -c -o coverage.info -d build/rbus/src
-             lcov --remove coverage.info '/usr/include/*' -o filtered-coverage.info
-       - name: Generate the html report
-         run: |
-             genhtml filtered-coverage.info --output-directory /tmp/coverage_report
-       - name: Upload the coverage report to Pull request using actions
-         uses: actions/upload-artifact@v4
-         with:
-           name: coverage-report
-           path: /tmp/coverage_report
+      - name: Run Gtest Cases
+        run: |
+          cd build/rbus
+          nohup ./src/session_manager/rbus_session_mgr &
+          ./unittests/rbus_gtest.bin
+      - name: Stop SessionManager
+        run: |
+          killall -15 rbus_session_mgr
+      - name: Stop rtrouted
+        run: |
+          cd build/rbus
+          nohup ./src/rtmessage/rtrouted_diag shutdown
+      - name:  Run CodeCoverage
+        run: |
+            rm -rf /tmp/rtrouted*
+            lcov -c -o coverage.info -d build/rbus/src
+            lcov --remove coverage.info '/usr/include/*' -o filtered-coverage.info
+      - name: Generate the html report
+        run: |
+            genhtml filtered-coverage.info --output-directory /tmp/coverage_report
+
+      - name: Upload the coverage report to Pull request using actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: /tmp/coverage_report
 
