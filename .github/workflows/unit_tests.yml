@@ -110,7 +110,8 @@ jobs:
       - name: Stop rtrouted
         run: |
           #killall -9 rtrouted
-          nohup ./src/rtmessage/rtrouted_diag shutdown
+          cd build/src
+          nohup ./src/rtmessage/rtrouted_diag shutdown 
       - name:  Run CodeCoverage
         run: |
             rm -rf /tmp/rtrouted*

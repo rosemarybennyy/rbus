@@ -183,5 +183,6 @@ jobs:
       - name: Stop rtrouted
         run: |
           #killall -9 rtrouted 
-          nohup ./src/rtmessage/rtrouted_diag shutdown   
-
+          cd build/rbus
+          nohup ./src/rtmessage/rtrouted_diag shutdown 
+          
