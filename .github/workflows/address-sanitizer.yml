@@ -1,7 +1,7 @@
 name: unit_tests_adress_sanitizer
 on:
   workflow_run:
-     workflows: ["" ]
+     workflows: ["unit_tests" ]
      types:
        - completed
 jobs:
