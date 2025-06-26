@@ -95,6 +95,7 @@ jobs:
             cd ${{github.workspace}}
            ./address_sanitizer.sh /tmp/asan_gtest_log.log
            fi
+          ls -lt 
           #second change
           #./unittests/rbus_gtest.bin
           #continue-on-error: true
