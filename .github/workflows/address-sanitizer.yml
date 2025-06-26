@@ -1,5 +1,5 @@
 name: unit_tests_adress_sanitizer
-  on:
+on:
    workflow_run:
      workflows: [unit_tests]
      types:
