@@ -83,6 +83,8 @@ jobs:
           export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
           nohup ./src/session_manager/rbus_session_mgr &
           ./unittests/rbus_gtest.bin || true
+          cd /tmp
+          ls -lt
           cat /tmp/asan_log_gtest* >> $GITHUB_STEP_SUMMARY
           #    ./unittests/rbus_gtest.bin 
           #if ls /tmp/asan_log_gtest.* 1> /dev/null 2>&1; then
