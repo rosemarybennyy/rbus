@@ -118,7 +118,8 @@ jobs:
            cat /tmp/asan_log_multiRbusOpenMethod.* >>/tmp/asan_multiRbusOpenMethod_log.log
            rm -rf /tmp/asan_log_multiRbusOpenMethod.*
            cd ${{github.workspace}}
-          ./address-sanitizer.sh /tmp/asan_multiRbusOpenMethod_log.log
+           ls -lt
+           ./address-sanitizer.sh /tmp/asan_multiRbusOpenMethod_log.log
           fi
       - name: Run multiRbusOpenSubscribe Unit test
         run: |
