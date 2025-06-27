@@ -82,8 +82,10 @@ jobs:
         run: |
           cd build/rbus
           export ASAN_OPTIONS=log_path=/tmp/asan_log_gtest
-          nohup ./src/session_manager/rbus_session_mgr &
-          ./unittests/rbus_gtest.bin || true
+          #nohup ./src/session_manager/rbus_session_mgr &
+          #./unittests/rbus_gtest.bin || true
+          nohup ./src/session_manager/rbus_session_mgr > rbus_/session_mgr.log 2>&1 &
+          nohup ./unittests/rbus_gtest.bin > rbus_gtest.log 2>&1 || true
            if ls /tmp/asan_log_gtest.* 1> /dev/null 2>&1; then
             cat /tmp/asan_log_gtest.* >> /tmp/asan_gtest_log.log
             rm -rf /tmp/asan_log_gtest.*
