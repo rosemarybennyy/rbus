@@ -135,8 +135,9 @@ jobs:
       - name: Run Gtest Cases with Valgrind
         run: |
           cd build/rbus
-          valgrind --leak-check=full --log-file=/tmp/valgrind/rbus_session_manager.log ./src/session_manager/rbus_session_mgr &
-          valgrind --leak-check=full --log-file=/tmp/valgrind/rbus_gtest.log --track-origins=yes --verbose ./unittests/rbus_gtest.bin  
+          nohup valgrind --leak-check=full --log-file=/tmp/valgrind/rbus_session_manager.log ./src/session_manager/rbus_session_mgr > /tmp/rbus_session_mgr.out 2>&1 &
+          nohup valgrind --leak-check=full --log-file=/tmp/valgrind/rbus_gtest.log --track-origins=yes --verbose ./unittests/rbus_gtest.bin >> /tmp/gtest.out 2>&1 &
+          cd ${{github.workspace}} && ./memoryleak.sh  
      # - name: Stop rtrouted
         #run: |
           #cd install/usr
