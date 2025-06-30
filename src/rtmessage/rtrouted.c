@@ -791,7 +791,8 @@ rtRouted_OnMessageSubscribe(rtConnectedClient* sender, rtMessageHeader* hdr, uin
 
           if(strstr(expression, ".INBOX.") && sender->inbox[0] == '\0')
           {
-              strncpy(sender->inbox, expression, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+              //strncpy(sender->inbox, expression, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+	      snprintf(sender->inbox, RTMSG_HEADER_MAX_TOPIC_LENGTH, "%s", expression);
               rtLog_Debug("init client inbox to %s", sender->inbox);
               rtRouted_SendAdvisoryMessage(sender, rtAdviseClientConnect);
           }
