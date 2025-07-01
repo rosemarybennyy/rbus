@@ -375,10 +375,12 @@ rtRouted_ParseConfig(char const* fname)
 static rtError
 rtRouted_AddRoute(rtRouteMessageHandler handler, char const* exp, rtSubscription* subscription)
 {
-  rtRouteEntry* route = (rtRouteEntry *) rt_malloc(sizeof(rtRouteEntry));
+//  rtRouteEntry* route = (rtRouteEntry *) rt_malloc(sizeof(rtRouteEntry));
+  rtRouteEntry* route = (rtRouteEntry *) rt_calloc(1, sizeof(rtRouteEntry));
   route->subscription = subscription;
   route->message_handler = handler;
-  strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN);
+  //strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN);
+  snprintf(route->expression, RTMSG_MAX_EXPRESSION_LEN, "%s", exp);
   rtVector_PushBack(gRoutes, route);
   rtLog_Debug("AddRoute route=[%p] address=[%s] expression=[%s]", route, subscription->client->ident, exp);
   rtRoutingTree_AddTopicRoute(gRoutingTree, exp, (void *)route, 0/*ignfore duplicate entry*/);
@@ -789,7 +791,8 @@ rtRouted_OnMessageSubscribe(rtConnectedClient* sender, rtMessageHeader* hdr, uin
 
           if(strstr(expression, ".INBOX.") && sender->inbox[0] == '\0')
           {
-              strncpy(sender->inbox, expression, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+              //strncpy(sender->inbox, expression, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+	      snprintf(sender->inbox, RTMSG_HEADER_MAX_TOPIC_LENGTH, "%s", expression);
               rtLog_Debug("init client inbox to %s", sender->inbox);
               rtRouted_SendAdvisoryMessage(sender, rtAdviseClientConnect);
           }
@@ -1471,7 +1474,8 @@ dispatch:
     if(clnt->header.flags & rtMessageFlags_Request)
     {
       /*Turn this message around without the payload. Set the right error flag.*/
-      strncpy(clnt->header.topic, clnt->header.reply_topic, (strlen(clnt->header.reply_topic) + 1));
+//      strncpy(clnt->header.topic, clnt->header.reply_topic, (strlen(clnt->header.reply_topic) + 1));
+      snprintf(clnt->header.topic, sizeof(clnt->header.topic), "%s", clnt->header.reply_topic);
       clnt->header.flags &= ~rtMessageFlags_Request; 
       clnt->header.flags |= (rtMessageFlags_Response | rtMessageFlags_Undeliverable);
       clnt->header.payload_length = 0;
