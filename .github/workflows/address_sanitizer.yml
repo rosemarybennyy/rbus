@@ -54,6 +54,7 @@ jobs:
           make -C build/rbus install
       - name: Verify script location
         run: |
+         mkdir -p /tmp/provider_logs
          cat << 'EOF' >address_sanitizer.sh
          #!/bin/sh
 
