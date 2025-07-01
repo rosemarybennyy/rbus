@@ -191,8 +191,19 @@ jobs:
           else
             echo "No adress sanitizer error !!!!" 
           fi
-      - name: Upload the address sanitizer logs using actions
-        uses: actions/upload-artifact@v4
-        with:
-          name: address_sanitizer_logs
-          path: /tmp/provider_logs/    
+          # - name: Upload the address sanitizer logs using actions
+          # uses: actions/upload-artifact@v4
+          #with:
+          #name: address_sanitizer_logs
+          #path: /tmp/provider_logs/   
+        - name: Check and zip address sanitizer and provider logs if present
+           run: |
+            if [ -d /tmp/provider_logs ] || [ -d /tmp/asan_logs ]; then
+             zip -r /tmp/asan_and_provider_logs.zip /tmp/provider_logs /tmp/asan_logs || true
+            fi
+        - name: Upload the address sanitizer logs if present
+          if: always() && (hashFiles('/tmp/asan_and_provider_logs.zip') != '')
+          uses: actions/upload-artifact@v4
+          with:
+            name: address_sanitizer_logs
+            path: /tmp/asan_and_provider_logs.zip
