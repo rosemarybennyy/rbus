@@ -161,7 +161,7 @@ jobs:
           nohup ./src/session_manager/rbus_session_mgr > rbus_session_mgr.log 2>&1 &
           nohup ./unittests/rbus_gtest.bin --gtest_filter=StressTestServer.* > rbus_gtest.log 2>&1 || true
           ls -lt
-          echo "rbus_gtest logs"
+          echo "rbus_gtest logs...."
           cat rbus_gtest.log
           echo "END OF RBUS_GTEST LOG!!!!!!!!!!"
           if ls /tmp/asan_log_gtest.* 1> /dev/null 2>&1; then
