@@ -621,7 +621,7 @@ TEST_F(StressTestServer, rbus_resolveWildcardDestination_test3)
         printf("fork failed.\n");
     }
 }
-
+#if 0
 TEST_F(StressTestServer, rbus_resolveWildcardDestination_test4)
 {
     int counter = 4, i = 0;
@@ -681,6 +681,85 @@ TEST_F(StressTestServer, rbus_resolveWildcardDestination_test4)
     else
     {
         printf("fork failed.\n");
+    }
+}
+#endif
+TEST_F(StressTestServer, rbus_resolveWildcardDestination_test4)
+{
+    int counter = 4, i = 0;
+    char client_name[] = "TEST_CLIENT_1";
+    char server_obj1[] = "Test_Obj1";
+    char server_obj2[] = "Test_Obj2";
+    int obj1_element_count = 3;
+    int obj2_element_count = 2;
+    char obj1_elements[][MAX_ELEMENT_NAME_LENGTH] = { "global.obj1.foo.1",
+                                                      "global.obj1.foo.2",
+                                                      "global.obj1.bar.1"};
+    char obj2_elements[][MAX_ELEMENT_NAME_LENGTH] = { "global.obj2.foo.1",
+                                                      "global.obj2.bar.1"};
+    bool conn_status = false;
+    rbusCoreError_t err = RBUSCORE_SUCCESS;
+
+    pid_t pid = fork();
+
+    if(pid == 0)
+    {
+        // (Optional) Install a signal handler for SIGTERM if you want graceful shutdown
+        // signal(SIGTERM, [](int){ _exit(0); });
+
+        CREATE_RBUS_SERVER_INSTANCE(counter);
+
+        err = rbus_registerObj(server_obj1, callback, NULL);
+        EXPECT_EQ(err, RBUSCORE_SUCCESS) << "rbus_registerObj failed";
+
+        for (i = 0; i < obj1_element_count; i++)
+        {
+            // Defensive: Ensure strings fit
+            assert(strlen(obj1_elements[i]) < MAX_ELEMENT_NAME_LENGTH);
+            err = rbus_addElement(server_obj1, obj1_elements[i]);
+            EXPECT_EQ(err, RBUSCORE_SUCCESS) << "rbus_addElement failed";
+        }
+
+        err = rbus_registerObj(server_obj2, callback, NULL);
+        EXPECT_EQ(err, RBUSCORE_SUCCESS) << "rbus_registerObj failed";
+
+        for (i = 0; i < obj2_element_count; i++)
+        {
+            assert(strlen(obj2_elements[i]) < MAX_ELEMENT_NAME_LENGTH);
+            err = rbus_addElement(server_obj2, obj2_elements[i]);
+            EXPECT_EQ(err, RBUSCORE_SUCCESS) << "rbus_addElement failed";
+        }
+        printf("********** SERVER ENTERING PAUSED STATE******************** \n");
+        pause(); // Wait for signal from parent
+        _exit(0); // Ensure clean exit without running parent's destructors
+    }
+    else if (pid > 0)
+    {
+        char result_array[3][MAX_ELEMENT_NAME_LENGTH] = {{0}};
+        sleep(2);
+        conn_status = OPEN_BROKER_CONNECTION(client_name);
+        resolveWildcardExpression("global.", 2, result_array);
+
+        // Print result for debugging
+        for (int j = 0; j < 2; ++j) {
+            printf("result_array[%d]: '%s'\n", j, result_array[j]);
+            // Defensive: Ensure null-termination
+            assert(result_array[j][MAX_ELEMENT_NAME_LENGTH - 1] == '\0');
+        }
+
+        EXPECT_TRUE(doesStringMatch(result_array[0], server_obj1, strlen(server_obj1)));
+        EXPECT_TRUE(doesStringMatch(result_array[1], server_obj2, strlen(server_obj2)));
+
+        if(conn_status)
+            CLOSE_BROKER_CONNECTION();
+
+        kill(pid, SIGTERM); // Stop server process
+        waitpid(pid, NULL, 0); // Wait for child to exit
+    }
+    else
+    {
+        printf("fork failed.\n");
+        FAIL() << "fork failed";
     }
 }
 
