@@ -174,4 +174,4 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
-          nohup ./bin/rtrouted_diag "shutdown" 
+          nohup ./bin/rtrouted_diag shutdown
