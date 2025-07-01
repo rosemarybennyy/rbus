@@ -77,6 +77,7 @@ jobs:
           cd install/usr
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
+          export ASAN_OPTIONS=log_path=/tmp/asan_log_rtrouted
           nohup ./bin/rtrouted -f -l DEBUG > /tmp/rtrouted_log.txt &
       - name: Run RbusTestTimeoutValues Unit test
         run: |
@@ -178,3 +179,13 @@ jobs:
           export PREFIX=$PWD
           export LD_LIBRARY_PATH=$PREFIX/lib
           nohup ./bin/rtrouted_diag shutdown
+          rm -rf /tmp/rtrouted*
+          ls -lt
+          if ls /tmp/asan_log_rtrouted.* 1> /dev/null 2>&1; then
+           cat /tmp/asan_log_rtrouted.* >> /tmp/asan_rtrouted_log.log
+           rm -rf /tmp/asan_log_rtrouted.*
+           cd ${{github.workspace}}
+           ./address_sanitizer.sh /tmp/asan_rtrouted_log.log
+          else
+            echo "No adress sanitizer error !!!!" 
+          fi
