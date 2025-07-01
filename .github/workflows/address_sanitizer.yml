@@ -160,6 +160,7 @@ jobs:
           #nohup ./src/session_manager/rbus_session_mgr &
           #./unittests/rbus_gtest.bin || true
           nohup ./src/session_manager/rbus_session_mgr > /tmp/provider_logs/rbus_session_mgr.log 2>&1 &
+          sleep 2
           # nohup ./unittests/rbus_gtest.bin --gtest_filter=StressTestServer.* > rbus_gtest.log 2>&1 || true
           nohup ./unittests/rbus_gtest.bin  > rbus_gtest.log 2>&1 || true
           ls -lt
