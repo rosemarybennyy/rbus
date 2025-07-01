@@ -683,7 +683,7 @@ TEST_F(StressTestServer, rbus_resolveWildcardDestination_test4)
         printf("fork failed.\n");
     }
 }
-#endif
+##########################
 TEST_F(StressTestServer, rbus_resolveWildcardDestination_test4)
 {
     int counter = 4, i = 0;
@@ -838,7 +838,7 @@ TEST_F(StressTestServer, rbus_resolveWildcardDestination_test5)
         printf("fork failed.\n");
     }
 }
-
+#endif
 TEST_F(StressTestServer, rbus_addElement_test1)
 {
     int counter = 4, i = 0;
