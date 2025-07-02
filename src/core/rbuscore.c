@@ -2375,7 +2375,7 @@ rbus_getOpenTelemetryContextFromThreadLocal()
         }
         else
         {
-            RBUSLOG_ERROR("Failed to allocate memory for OpenTelemetry context");
+            RBUSCORELOG_ERROR("Failed to allocate memory for OpenTelemetry context");
         }
     }
 
