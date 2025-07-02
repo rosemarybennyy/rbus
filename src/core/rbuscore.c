@@ -2373,6 +2373,10 @@ rbus_getOpenTelemetryContextFromThreadLocal()
             memset(ot_ctx->otTraceState, 0, sizeof(ot_ctx->otTraceState));
             pthread_setspecific(_open_telemetry_key, ot_ctx);
         }
+        else
+        {
+            RBUSCORELOG_ERROR("Failed to allocate memory for OpenTelemetry context");
+        }
     }
 
     return ot_ctx;
