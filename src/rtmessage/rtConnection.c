@@ -487,7 +487,7 @@ rtConnection_ReadUntil(rtConnection con, uint8_t* buff, int count, int32_t timeo
     if ((0 < timeout) && (timeout != INT32_MAX))
     {
       // TODO: include suseconds_t tv_usecs;
-      time_t seconds = (timeout / 1000);
+      int64_t seconds = (timeout / 1000); /* Use int64_t instead of time_t for portability */
       struct timeval tv = { seconds, 0 };
       select(con->fd + 1, &read_fds, NULL, NULL, &tv);
       if (!FD_ISSET(con->fd, &read_fds))

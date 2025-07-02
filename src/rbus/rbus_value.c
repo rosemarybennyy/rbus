@@ -409,12 +409,19 @@ char* rbusValue_ToDebugString(rbusValue_t v, char* buf, size_t buflen)
     if(!v)
         return NULL;
     char* s = rbusValue_ToString(v, NULL, 0);
+    if(!s)
+        return NULL;  /* Return NULL if we couldn't get string representation */
+
     char const* t = rbusValueType_ToDebugString(v->type);
     char fmt[] = "rbusValue type:%s value:%s";
     if(!p)
     {
         len = snprintf(NULL, 0, fmt, t, s) + 1;
         p = rt_malloc(len);
+        if(!p) {
+            free(s);  /* Free the string if we couldn't allocate buffer */
+            return NULL;
+        }
     }
     snprintf(p, len, fmt, t, s);
     free(s);
@@ -935,9 +942,9 @@ int rbusValue_Compare(rbusValue_t v1, rbusValue_t v2)
         rbusValue_UnMarshallRBUStoTM(&t1m, &dt1);
         rbusValue_UnMarshallRBUStoTM(&t2m, &dt2);
 
-        time_t t1 = mktime(&t1m);
-        time_t t2 = mktime(&t2m);
-        double diffSecs = difftime(t1, t2);
+        int64_t t1 = (int64_t)mktime(&t1m);
+        int64_t t2 = (int64_t)mktime(&t2m);
+        double diffSecs = (double)(t1 - t2);
 
         if(diffSecs == 0)
             return 0;

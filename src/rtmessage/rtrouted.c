@@ -96,7 +96,7 @@ rtRouted_TransactionTimingDetails(rtMessageHeader header_details)
 {
   char time_buff[64] = {0};
   rtTime_t timestamp = {0};
-  time_t boottime = 0;
+  int64_t boottime = 0;
   rtTime_t uptime = {0};
 
   rtTime_Now(&uptime);
@@ -639,8 +639,8 @@ rtRouted_ForwardMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
   new_header.topic_length = hdr->topic_length;
   new_header.reply_topic_length = hdr->reply_topic_length;
   new_header.flags = hdr->flags;
-  strncpy(new_header.topic, hdr->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
-  strncpy(new_header.reply_topic, hdr->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
+  snprintf(new_header.topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, "%s", hdr->topic);
+  snprintf(new_header.reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, "%s", hdr->reply_topic);
 #ifdef MSG_ROUNDTRIP_TIME
   new_header.T1 = hdr->T1;
   new_header.T2 = hdr->T2;
@@ -1254,7 +1254,7 @@ rtRouted_SendAdvisoryMessage(rtConnectedClient* clnt, rtAdviseEvent event)
 
   rtMessageHeader_Init(&hdr);
   hdr.topic_length = strlen(RTMSG_ADVISORY_TOPIC);
-  strncpy(hdr.topic, RTMSG_ADVISORY_TOPIC, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
+  snprintf(hdr.topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, "%s", RTMSG_ADVISORY_TOPIC);
 
   rtLog_Debug("Sending advisory message");
   if (RT_OK != rtRouted_SendMessage(&hdr, msg, clnt))
@@ -1792,7 +1792,7 @@ int main(int argc, char* argv[])
   {
     route = (rtRouteEntry *)rt_malloc(sizeof(rtRouteEntry));
     route->subscription = NULL;
-    strncpy(route->expression, "_RTROUTED.>", RTMSG_MAX_EXPRESSION_LEN-1);
+    snprintf(route->expression, RTMSG_MAX_EXPRESSION_LEN, "%s", "_RTROUTED.>");
     route->message_handler = rtRouted_OnMessage;
     rtVector_PushBack(gRoutes, route);
     rtRoutingTree_AddTopicRoute(gRoutingTree, "_RTROUTED.INBOX.SUBSCRIBE", (void *)route, 0);
@@ -1853,7 +1853,7 @@ int main(int argc, char* argv[])
         route = (rtRouteEntry *)rt_malloc(sizeof(rtRouteEntry));
         route->subscription = NULL;
         route->message_handler = &rtRouted_TrafficMonitorLog;
-        strncpy(route->expression, ">", RTMSG_MAX_EXPRESSION_LEN-1);
+        snprintf(route->expression, RTMSG_MAX_EXPRESSION_LEN, "%s", ">");
         rtVector_PushBack(gRoutes, route);
       }
       case '?':

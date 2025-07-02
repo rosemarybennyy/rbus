@@ -2472,6 +2472,11 @@ static int _method_callback_handler(rbusHandle_t handle, rbusMessage request, rb
             RBUSLOG_DEBUG("calling methodHandler method [%s]", methodName);
 
             rbusMethodAsyncHandle_t asyncHandle = rt_malloc(sizeof(struct _rbusMethodAsyncHandle));
+            if (!asyncHandle)
+            {
+                RBUSLOG_ERROR("Failed to allocate memory for async handle");
+                return RBUS_ERROR_OUT_OF_RESOURCES;
+            }
             asyncHandle->hdr = *hdr;
 
             ELM_PRIVATE_LOCK(methRegElem);
@@ -2484,6 +2489,9 @@ static int _method_callback_handler(rbusHandle_t handle, rbusMessage request, rb
                 RBUSLOG_DEBUG("async method in progress [%s]", methodName);
             }
             else
+            {
+                /* Free the handle if not using async response */
+                free(asyncHandle);
             {
                 if (result != RBUS_ERROR_SUCCESS)
                 {
