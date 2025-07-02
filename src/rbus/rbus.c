@@ -2492,7 +2492,7 @@ static int _method_callback_handler(rbusHandle_t handle, rbusMessage request, rb
             {
                 /* Free the handle if not using async response */
                 free(asyncHandle);
-            {
+		
                 if (result != RBUS_ERROR_SUCCESS)
                 {
                     outParamsVal = rbusObject_GetValue(outParams, "error_code");
