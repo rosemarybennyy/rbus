@@ -501,8 +501,7 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         if(rbusBuffer_ReadUInt16(buff, &length) < 0) goto remove_bad_file;
         if(type != RBUS_STRING || length >= RBUS_MAX_NAME_LENGTH) goto remove_bad_file;
 
-        #sub->listener = rt_try_malloc(length);
-        #sub->eventName = rt_try_calloc(length + 1, 1); //second approach 
+        //sub->listener = rt_try_malloc(length);
         sub->listener =  rt_try_malloc(length + 1); // +1 for null terminator
 
         if(!sub->listener)
@@ -519,8 +518,8 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         if(rbusBuffer_ReadUInt16(buff, &length) < 0) goto remove_bad_file;
         if(type != RBUS_STRING || length >= RBUS_MAX_NAME_LENGTH) goto remove_bad_file;
 
-        #sub->eventName = rt_try_malloc(length);
-        #sub->eventName = rt_try_calloc(length + 1, 1); //second_approach
+        //sub->eventName = rt_try_malloc(length);
+        //sub->eventName = rt_try_calloc(length + 1, 1); //second_approach
         sub->eventName =  rt_try_malloc(length + 1); // +1 for null terminator
         if(!sub->eventName)
         {
