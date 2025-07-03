@@ -654,6 +654,27 @@ TEST(rbusSubAsyncNegTest, test4)
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
 
+TEST(rbusPublishRawDataNegTest, test1)
+{
+   rbusHandle_t handle=NULL;
+   static char userData[] = "Hi Rose";
+   int rc = RBUS_ERROR_SUCCESS;
+   handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+   rc = rbusEvent_PublishRawData(handle, userData);
+   EXPECT_EQ(rc, RBUS_ERROR_INVALID_HANDLE);
+   free(handle); 
+}
+
+TEST(rbusPublishRawDataNegTest, test2)
+{
+    rbusHandle_t handle=NULL;
+    int rc = RBUS_ERROR_SUCCESS;
+    rbusEventHandler_t handler;
+    static char userData[] = "My Data";
+
+    rc = rbusEvent_PublishRawData(handle,"Device.rbusProvider.", handler, userData, 30);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+}
 
 TEST(rbusSubExAsyncNegTest, test1)
 {
