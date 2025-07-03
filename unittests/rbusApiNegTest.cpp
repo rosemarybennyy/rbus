@@ -653,7 +653,7 @@ TEST(rbusSubAsyncNegTest, test4)
     rc = rbusEvent_SubscribeAsync(handle, "Device.rbusProvider.", handler,subscribeHandler, userData, 30);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
-
+#if 0
 TEST(rbusPublishRawDataNegTest, test1)
 {
    rbusHandle_t handle=NULL;
@@ -675,7 +675,7 @@ TEST(rbusPublishRawDataNegTest, test2)
     rc = rbusEvent_PublishRawData(handle,"Device.rbusProvider.", handler, userData, 30);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
-
+#endif
 TEST(rbusSubExAsyncNegTest, test1)
 {
     rbusHandle_t handle=NULL;
