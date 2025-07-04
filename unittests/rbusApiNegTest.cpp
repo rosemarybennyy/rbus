@@ -1012,3 +1012,14 @@ TEST(rbusLogHandler, test1)
     EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
 }
 
+TEST(rbusSubRawDataNegTest,test1)
+{
+   rbusHandle_t handle=NULL;
+   int rc = RBUS_ERROR_SUCCESS;
+   static char userData[] = "Hi Rose";
+
+   handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+   rc = rbusEvent_SubscribeRawData(handle,"Device.rbusProvide.",NULL,userData,30);
+   EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
+   free(handle);
+}
