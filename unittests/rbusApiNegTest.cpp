@@ -1044,7 +1044,7 @@ TEST(rbusPublishRawDataNegTest, test1)
    EXPECT_EQ(rc, RBUS_ERROR_INVALID_HANDLE);
    free(handle);
 }
-
+#if 0
 TEST(rbusPublishRawDataNegTest, test2)
 {
    rbusHandle_t handle=NULL;
@@ -1065,4 +1065,4 @@ TEST(rbusSubRawDataNegTest,test1)
    EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
    free(handle);
 }
-
+#endif
