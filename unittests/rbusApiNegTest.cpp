@@ -1032,4 +1032,37 @@ TEST(rbusLogHandler, test1)
     rc = rbus_registerLogHandler(NULL);
     EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
 }
+TEST(rbusPublishRawDataNegTest, test1)
+{
+   rbusHandle_t handle=NULL;
+   rbusEventRawData_t event = {0};
+            event.rawData = "Hello";
+            event.rawDataLen = strlen("Hello")+1;
+   int rc = RBUS_ERROR_SUCCESS;
+   handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+   rc = rbusEvent_PublishRawData(handle, &event);
+   EXPECT_EQ(rc, RBUS_ERROR_INVALID_HANDLE);
+   free(handle);
+}
+
+TEST(rbusPublishRawDataNegTest, test2)
+{
+   rbusHandle_t handle=NULL;
+   int rc = RBUS_ERROR_SUCCESS;
+   handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+   rc = rbusEvent_PublishRawData(handle, NULL);
+   EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
+   free(handle);
+}
+TEST(rbusSubRawDataNegTest,test1)
+{
+   rbusHandle_t handle=NULL;
+   int rc = RBUS_ERROR_SUCCESS;
+   static char userData[] = "Hi Rose";
+
+   handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+   rc = rbusEvent_SubscribeRawData(handle,"Device.rbusProvide.",NULL,userData,30);
+   EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
+   free(handle);
+}
 
