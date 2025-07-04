@@ -1023,3 +1023,24 @@ TEST(rbusSubRawDataNegTest,test1)
    EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
    free(handle);
 }
+
+TEST(rbusUnsubNegTest, test1)
+{
+    rbusHandle_t handle=NULL;
+    int rc = RBUS_ERROR_SUCCESS;
+
+    rc = rbusEvent_UnsubscribeRawData(handle, "Device.Provider1.");
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+}
+#if 0
+TEST(rbusUnsubNegTest, test2)
+{
+    rbusHandle_t handle=NULL;
+    int rc = RBUS_ERROR_SUCCESS;
+
+    handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
+    rc = rbusEvent_Unsubscribe(handle, NULL);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
+    free(handle);
+}
+#endif
