@@ -189,6 +189,25 @@ static int exec_rbus_multiExt_test(rbusHandle_t handle, int expectedRc, int numP
   rbusProperty_Release(last);
   return rc;
 }
+static int exec_rbus_set_commit_test(rbusHandle_t handle, int expectedRc, const char *param)
+{
+  int rc = RBUS_ERROR_BUS_ERROR;
+  rbusValue_t value = NULL;
+
+  if( NULL == param)
+  {
+    rc = rbus_setCommit(handle, "test.params",NULL);
+  }
+  else
+  {
+    rc = rbus_setCommit(handle, param, NULL);
+  }
+
+  EXPECT_EQ(rc,expectedRc);
+
+  return rc;
+}
+
 
 static int exec_rbus_set_test(rbusHandle_t handle, int expectedRc, const char *param, const char *paramValue)
 {
@@ -1047,6 +1066,13 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = exec_rbus_set_test(handle, RBUS_ERROR_INVALID_INPUT, param, "unregister_row_fail");
       }
       break;
+    case RBUS_GTEST_SET_COMMIT:
+    {
+        const char *param = "Device.rbusProvider.Param2";
+        isElementPresent(handle, param);
+        rc = exec_rbus_set_commit_test(handle,RBUS_ERROR_INVALID_INPUT,param);
+    }
+    break;
   }
 
   rc |= rbus_close(handle);

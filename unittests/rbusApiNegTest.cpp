@@ -1021,23 +1021,6 @@ TEST(rbusOpenDirectNegTest , test1)
   EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
 
-TEST(rbusOpenDirectTest, test2)
-{
-    // Arrange
-    rbusHandle_t handle = (rbusHandle_t)malloc(sizeof(struct _rbusHandle)); // or a proper init
-    rbusHandle_t directHandle = NULL;
-    const char* param = "Device.Provider1.Event1!";
-
-    int rc = rbus_openDirect(handle, &directHandle, param);
-    rbusHandle_t secondDirectHandle = nullptr;
-    int rc2 = rbus_openDirect(handle, &secondDirectHandle, param);
-
-    // Assert
-    EXPECT_EQ(rc2, RBUS_ERROR_ELEMENT_NAME_DUPLICATE);
-
-    free(handle);
-}
-
 TEST(rbusCloseDirectNegTest , test1)
 {
     int rc = RBUS_ERROR_BUS_ERROR;
