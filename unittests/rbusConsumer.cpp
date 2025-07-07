@@ -541,6 +541,13 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = rbus_setUInt(handle, param, 10);
       }
       break;
+    case RBUS_GTEST_SET_BOOL:
+      {
+	 const char *param = "Device.rbusProvider.Bool;
+	 isElementPresent(handle,param);
+	 rc = rbus_setBoolean(handle,param,"true");
+      }
+      break; 
     case RBUS_GTEST_SET11:
       {
         const char *param = "Device.rbusProvider.Param2";
