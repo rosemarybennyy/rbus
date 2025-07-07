@@ -527,3 +527,8 @@ TEST(rbusUnRegRowTest, test)
 {
   exec_func_test(RBUS_GTEST_UNREG_ROW);
 }
+
+TEST(rbusSetCommitTest , test)
+{
+  exec_func_test(RBUS_GTEST_SET_COMMIT);	
+}
