@@ -610,14 +610,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = exec_rbus_multiExt_test(handle, RBUS_ERROR_NOT_WRITABLE, 2, param1, param2);
       }
       break;
-      case RBUS_GTEST_SET_BOOL:
-      {
-        const char *param = "Device.rbusProvider.Bool";
-        isElementPresent(handle, param);
-        rc = rbus_setBoolean(handle, param, true);
-        EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
-      }
-      break;  
+     
     case RBUS_GTEST_GET1:
       {
         rc = rbus_get(NULL, "Device.rbusProvider.PartialPath.1.Param1", NULL);
@@ -1081,6 +1074,15 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = exec_rbus_set_commit_test(handle,RBUS_ERROR_INVALID_INPUT,param);
     }
     break;
+    case RBUS_GTEST_SET_BOOL:
+    {
+        printf("Rose Mary.............................");	    
+        const char *param = "Device.rbusProvider.Bool";
+        isElementPresent(handle, param);
+        rc = rbus_setBoolean(handle, param, true);
+        EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    }
+      break; 
   }
 
   rc |= rbus_close(handle);

@@ -71,7 +71,6 @@ typedef enum
   RBUS_GTEST_SET8,
   RBUS_GTEST_SET9,
   RBUS_GTEST_SET10,
-  RBUS_GTEST_SET_BOOL,
   RBUS_GTEST_SET11,
   RBUS_GTEST_SET_MULTI1,
   RBUS_GTEST_SET_MULTI2,
@@ -93,6 +92,7 @@ typedef enum
   RBUS_GTEST_REG_ROW,
   RBUS_GTEST_UNREG_ROW,
   RBUS_GTEST_SET_COMMIT,
+  RBUS_GTEST_SET_BOOL,
 } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);
