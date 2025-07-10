@@ -1083,7 +1083,6 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
     }
       break; 
-  }
   case RBUS_GTEST_OPEN_DIRECT:
   {
         const char *param = "Device.rbusProvider.Int32";
@@ -1111,7 +1110,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
       }
   break;
-
+  }
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
