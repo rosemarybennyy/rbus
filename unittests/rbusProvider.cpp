@@ -123,8 +123,6 @@ rbusError_t getVCHandler(rbusHandle_t handle, rbusProperty_t property, rbusGetHa
     rbusValue_SetString(value, name);
   else if(strcmp("Device.rbusMultiProvider2.Param1",name) == 0)
     rbusValue_SetString(value, name);
-  else if(strcmp("Device.rbusProvider.Bool",name) == 0)
-    rbusValue_SetBoolean(value,GTEST_VAL_BOOL);	  
 
   rbusProperty_SetValue(property, value);
   rbusValue_Release(value);
@@ -356,7 +354,6 @@ int rbusProvider(rbusGtest_t test, pid_t pid, int *consumer_status)
     {(char *)"Device.rbusProvider.Param1", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, NULL, NULL, NULL, NULL, NULL}},
     {(char *)"Device.rbusProvider.Param2", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, setHandler, NULL, NULL, NULL, NULL}},
     {(char *)"Device.rbusProvider.Param3", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, setHandler, NULL, NULL, NULL, NULL}},
-    {(char *)"Device.rbusProvider.Bool", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, NULL, NULL, NULL, NULL, NULL}},
     {(char *)"Device.rbusProvider.Int16", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, NULL, NULL, NULL, NULL, NULL}},
     {(char *)"Device.rbusProvider.Int32", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, setHandler, NULL, NULL, NULL, NULL}},
     {(char *)"Device.rbusProvider.Int64", RBUS_ELEMENT_TYPE_PROPERTY, {getVCHandler, NULL, NULL, NULL, NULL, NULL}},
