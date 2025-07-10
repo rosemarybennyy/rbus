@@ -194,6 +194,28 @@ rbusError_t ppTableAddRowHandler(
   return RBUS_ERROR_SUCCESS;
 }
 
+rbusError_t eventSubHandler(rbusHandle_t handle, rbusEventSubAction_t action, const char* eventName, rbusFilter_t filter, int32_t interval, bool* autoPublish)
+{
+    (void)handle;
+    (void)filter;
+    (void)autoPublish;
+    (void)interval;
+
+    printf(
+        "eventSubHandler called:\n" \
+        "\taction=%s\n" \
+        "\teventName=%s\n",
+        action == RBUS_EVENT_ACTION_SUBSCRIBE ? "subscribe" : "unsubscribe",
+        eventName);
+
+    if(!strcmp("Device.Provider1.Event1!", eventName))
+    {
+        subscribed = action == RBUS_EVENT_ACTION_SUBSCRIBE ? 1 : 0;
+    }
+
+    return RBUS_ERROR_SUCCESS;
+}
+
 rbusError_t ppTableRemRowHandler(
     rbusHandle_t handle,
     char const* rowName)
@@ -372,7 +394,9 @@ int rbusProvider(rbusGtest_t test, pid_t pid, int *consumer_status)
     {(char *)"Device.rbusProvider.Method11()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, (void*)methodHandler}},
     {(char *)"Device.rbusProvider.Method123()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, (void*)methodHandler}},
     {(char *)"Device.rbusProvider.MethodAsync1()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, (void*)methodHandler}},
-    {(char *)"Device.rbusProvider.MethodAsync_2()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, (void*)methodHandler}}
+    {(char *)"Device.rbusProvider.MethodAsync_2()", RBUS_ELEMENT_TYPE_METHOD, {NULL, NULL, NULL, NULL, NULL, (void*)methodHandler}},
+     {(char *)"Device.Provider1.Event1!", RBUS_ELEMENT_TYPE_EVENT, {NULL, NULL, NULL, NULL, eventSubHandler, NULL}}
+
   };
 #define elements_count sizeof(dataElements)/sizeof(dataElements[0])
 
