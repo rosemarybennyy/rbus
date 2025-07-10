@@ -1074,17 +1074,6 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = exec_rbus_set_commit_test(handle,RBUS_ERROR_INVALID_INPUT,param);
     }
     break;
-#if 0
-    case RBUS_GTEST_SET_BOOL:
-    {
-        printf("Rose Mary.............................");	    
-        const char *param = "Device.rbusProvider.Bool";
-        isElementPresent(handle, param);
-        rc = rbus_setBoolean(handle, param, true);
-        EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
-    }
-      break;
-#endif 
   case RBUS_GTEST_OPEN_DIRECT:
   {
         const char *param = "Device.rbusProvider.Int32";

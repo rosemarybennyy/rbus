@@ -532,13 +532,12 @@ TEST(rbusSetCommitTest , test)
 {
   exec_func_test(RBUS_GTEST_SET_COMMIT);	
 }
-
-TEST(rbusSetBooleanTest , test)
-{
-  exec_func_test(RBUS_GTEST_SET_BOOL);	
-}
-
 TEST(rbusOpenDirect , test)
 {
   exec_func_test(RBUS_GTEST_OPEN_DIRECT);
+}
+
+TEST(rbusRawDataSubTest, test)
+{
+  exec_func_test(RBUS_GTEST_SUB_RAWDATA);	
 }
