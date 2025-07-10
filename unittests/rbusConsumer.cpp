@@ -1115,14 +1115,13 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
       }
   break;
-  }
   case RBUS_GTEST_SET_LOGLEVEL:
   {
     rc = rbus_setLogLevel(0);
     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
   }
   break;
-
+  }
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
