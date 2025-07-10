@@ -1091,10 +1091,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         printf("calling rbus set for [%s]\n", "Device.rbusProvider.Int32");
         rc = rbus_setInt(handle, param, -10);
 
-        printf ("###############   GET 1 #####################################################\n");
-        rc = rbus_get(handle, "Device.rbusProvider.Int32", &value); //get the value of "Device.rbusProvider.Param2
-        //rc = exec_rbus_get_test(handle,"Device.rbusProvider.Int32");
-        printf("#################### rc = %d rosemary function %s line %d\n",rc,__func__,__LINE__);
+        rc = rbus_get(handle, "Device.rbusProvider.Int32", &value); 
         if (rc == RBUS_ERROR_SUCCESS)
         {
             rbusValue_fwrite(value, 0, stdout); printf("\n");
@@ -1102,7 +1099,6 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         }
         sleep(2);
         rbusHandle_t  directHNDL = NULL;
-        printf ("###############   OPEN DIRECT ################################################\n");
         rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
 
         sleep(2);
@@ -1111,6 +1107,19 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       }
   break;
   }
+  case RBUS_GTEST_SUB_RAWDATA:
+  {
+      strcpy(user_data,"My User Data");
+      isElementPresent(handle, event_param);
+      rc = rbusEvent_SubscribeRawData(handle, event_param, eventReceiveHandler, user_data,0);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+
+      sleep(runtime);
+
+      rc |= rbusEvent_Unsubscribe(handle, event_param);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+  }
+  break;
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
