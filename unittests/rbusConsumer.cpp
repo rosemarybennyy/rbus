@@ -1106,7 +1106,6 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
       }
   break;
-  }
   case RBUS_GTEST_SUB_RAWDATA:
   {
       strcpy(user_data,"My User Data");
@@ -1120,6 +1119,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
   }
   break;
+  }
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
