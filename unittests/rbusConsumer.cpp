@@ -1084,8 +1084,8 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     }
       break; 
   }
-      case RBUS_GTEST_OPEN_DIRECT:
-      {
+  case RBUS_GTEST_OPEN_DIRECT:
+  {
         const char *param = "Device.rbusProvider.Int32";
         isElementPresent(handle,param);
         rbusValue_t value = NULL;
@@ -1110,6 +1110,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rbus_closeDirect(directHNDL);
 
       }
+  break;
 
   rc |= rbus_close(handle);
 exit:
