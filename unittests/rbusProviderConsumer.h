@@ -93,6 +93,7 @@ typedef enum
   RBUS_GTEST_UNREG_ROW,
   RBUS_GTEST_SET_COMMIT,
   RBUS_GTEST_SET_BOOL,
+  RBUS_GTEST_OPEN_DIRECT,
 } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);

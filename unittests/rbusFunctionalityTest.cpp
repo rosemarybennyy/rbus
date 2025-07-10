@@ -532,3 +532,8 @@ TEST(rbusSetCommitTest , test)
 {
   exec_func_test(RBUS_GTEST_SET_COMMIT);	
 }
+
+TEST(rbusOpenDirect , test)
+{
+  exec_func_test(RBUS_GTEST_OPEN_DIRECT);
+}

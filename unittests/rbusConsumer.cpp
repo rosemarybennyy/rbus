@@ -1084,6 +1084,32 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     }
       break; 
   }
+      case RBUS_GTEST_OPEN_DIRECT:
+      {
+        const char *param = "Device.rbusProvider.Int32";
+        isElementPresent(handle,param);
+        rbusValue_t value = NULL;
+        printf("calling rbus set for [%s]\n", "Device.rbusProvider.Int32");
+        rc = rbus_setInt(handle, param, -10);
+
+        printf ("###############   GET 1 #####################################################\n");
+        rc = rbus_get(handle, "Device.rbusProvider.Int32", &value); //get the value of "Device.rbusProvider.Param2
+        //rc = exec_rbus_get_test(handle,"Device.rbusProvider.Int32");
+        printf("#################### rc = %d rosemary function %s line %d\n",rc,__func__,__LINE__);
+        if (rc == RBUS_ERROR_SUCCESS)
+        {
+            rbusValue_fwrite(value, 0, stdout); printf("\n");
+            rbusValue_Release(value);
+        }
+        sleep(2);
+        rbusHandle_t  directHNDL = NULL;
+        printf ("###############   OPEN DIRECT ################################################\n");
+        rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
+
+        sleep(2);
+        rbus_closeDirect(directHNDL);
+
+      }
 
   rc |= rbus_close(handle);
 exit:
