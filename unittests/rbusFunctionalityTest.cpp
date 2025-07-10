@@ -542,3 +542,8 @@ TEST(rbusOpenDirect , test)
 {
   exec_func_test(RBUS_GTEST_OPEN_DIRECT);
 }
+
+TEST(rbusSetLoglevelTest , test)
+{
+  exec_func_test(RBUS_GTEST_SET_LOGLEVEL);	
+}

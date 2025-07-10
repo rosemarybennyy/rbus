@@ -1078,8 +1078,11 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     {
         printf("Rose Mary.............................");	    
         const char *param = "Device.rbusProvider.Bool";
+	printf("### Rosuuuuuuuu############\n");
         isElementPresent(handle, param);
+	printf("### Rosuuuuuuuu############\n");
         rc = rbus_setBoolean(handle, param, true);
+	printf("### Rosuuuuuuuu############\n");
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
     }
       break; 
@@ -1111,6 +1114,13 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       }
   break;
   }
+  case RBUS_GTEST_SET_LOGLEVEL:
+  {
+    rc = rbus_setLogLevel(0);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+  }
+  break;
+
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
