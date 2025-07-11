@@ -483,6 +483,26 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         sleep(runtime);
       }
       break;
+#if 1
+  case RBUS_GTEST_SUBRAWDATA:
+  {
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);
+      strcpy(user_data,"My User Data");
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);
+      isElementPresent(handle, event_param);
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);
+      rc = rbusEvent_SubscribeRawData(handle, event_param,(rbusEventHandler_t)generalEvent1Handler, user_data,0);
+      printf(" rc = %d ####### rosemary ########## function %s ###### line %d\n", rc ,__func__,__LINE__);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+
+      sleep(runtime);
+
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);
+      rc |= rbusEvent_Unsubscribe(handle, event_param);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+  }
+  break;
+#endif  
     case RBUS_GTEST_INTERVAL_SUB1:
       {
         rc = rbusEvent_SubscribeEx(handle, sub, 2, 0);
@@ -1135,6 +1155,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
   }
   break;
+#if 0
   case RBUS_GTEST_SUBRAWDATA:
   {
       printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);	  
@@ -1153,6 +1174,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
   }
   break;
+#endif
   }
   rc |= rbus_close(handle);
 exit:

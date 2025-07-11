@@ -531,7 +531,12 @@ TEST(rbusAsyncSubTest, test5)
 {
   exec_func_test(RBUS_GTEST_ASYNC_SUB5);
 }
-
+#if 1
+TEST(rbusSubRawdataTest , test)
+{
+ exec_func_test(RBUS_GTEST_SUBRAWDATA);
+}
+#endif
 TEST(rbusRegRowTest, test)
 {
   exec_func_test(RBUS_GTEST_REG_ROW);

@@ -28,6 +28,7 @@ typedef enum
   RBUS_GTEST_ASYNC_SUB3,
   RBUS_GTEST_ASYNC_SUB4,
   RBUS_GTEST_ASYNC_SUB5,
+  RBUS_GTEST_SUBRAWDATA,
   RBUS_GTEST_GET1,
   RBUS_GTEST_GET2,
   RBUS_GTEST_GET3,
@@ -95,7 +96,7 @@ typedef enum
 //  RBUS_GTEST_SET_BOOL,
   RBUS_GTEST_OPEN_DIRECT,
   RBUS_GTEST_SET_LOGLEVEL,
-  RBUS_GTEST_SUBRAWDATA,
+//  RBUS_GTEST_SUBRAWDATA,
 } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);
