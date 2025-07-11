@@ -293,6 +293,20 @@ static void eventReceiveHandler2(
     }
 }
 
+static void generalEvent1Handler(
+    rbusHandle_t handle,
+    rbusEventRawData_t const* event,
+    rbusEventSubscription_t* subscription)
+{
+    (void)handle;
+    (void)subscription;
+    printf("\nevent_receive_handler1 called\r\n");
+    printf("Event received %s\r\n", event->name);
+    printf("Event data: %s\r\n", (char*)event->rawData);
+    printf("Event data len: %d\r\n", event->rawDataLen);
+    printf("\r\n");
+}
+
 static void asyncMethodHandler(
     rbusHandle_t handle,
     char const* methodName,
@@ -1119,6 +1133,19 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
   {
     rc = rbus_setLogLevel(RBUS_LOG_DEBUG);
     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+  }
+  break;
+  case RBUS_GTEST_SUBRAWDATA:
+  {
+      strcpy(user_data,"My User Data");
+      isElementPresent(handle, event_param);
+      rc = rbusEvent_SubscribeRawData(handle, event_param,(rbusEventHandler_t)generalEvent1Handler, user_data,0);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+
+      sleep(runtime);
+
+      rc |= rbusEvent_Unsubscribe(handle, event_param);
+      EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
   }
   break;
   }

@@ -94,6 +94,20 @@ static void exec_func_test(rbusGtest_t test)
           }
         }
         break;
+       case RBUS_GTEST_SUBRAWDATA:
+        {
+          pid_t pid1 = fork();
+          if(0 == pid1){
+            printf("Provider21 starts.\n");
+            ret = rbusProvider2((runtime/3),0);
+            exit(ret);
+          } else {
+            printf("Provider22 starts.\n");
+            waitpid(pid1, &consumer_status, 0);
+            ret = rbusProvider2((runtime/2),1);
+          }
+        }
+        break;	
       default:
         ret = rbusProvider(test, pid, &consumer_status);
         break;

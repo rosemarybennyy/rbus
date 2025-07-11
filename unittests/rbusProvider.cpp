@@ -175,6 +175,31 @@ rbusError_t ppTableGetHandler(rbusHandle_t handle, rbusProperty_t property, rbus
 
   return RBUS_ERROR_SUCCESS;
 }
+int loopFor = 60;
+int subscribed = 0;
+
+rbusError_t eventSubHandler(rbusHandle_t handle, rbusEventSubAction_t action, const char* eventName, rbusFilter_t filter, int32_t interval, bool* autoPublish)
+{
+    (void)handle;
+    (void)filter;
+    (void)autoPublish;
+    (void)interval;
+
+    printf(
+        "eventSubHandler called:\n" \
+        "\taction=%s\n" \
+        "\teventName=%s\n",
+        action == RBUS_EVENT_ACTION_SUBSCRIBE ? "subscribe" : "unsubscribe",
+        eventName);
+
+    if(!strcmp("Device.Provider1.Event1!", eventName))
+    {
+        subscribed = action == RBUS_EVENT_ACTION_SUBSCRIBE ? 1 : 0;
+    }
+
+    return RBUS_ERROR_SUCCESS;
+}
+
 rbusError_t ppTableAddRowHandler(
     rbusHandle_t handle,
     char const* tableName,
@@ -462,6 +487,43 @@ exit2:
   printf("%s: exit\n",__func__);
   return rc;
 }
+
+// rbusProvider2 for rbus_rawdatasub
+int rbusProvider2(int runtime,int should_exit)
+{
+  rbusHandle_t handle;
+  int rc = RBUS_ERROR_BUS_ERROR;
+
+  char *componentName = NULL;
+  rbusDataElement_t dataElements[] = {
+	  {"Device.Provider1.Event1!", RBUS_ELEMENT_TYPE_EVENT, {NULL, NULL, NULL, NULL, eventSubHandler, NULL}}
+  };
+#define elements_count sizeof(dataElements)/sizeof(dataElements[0])
+
+  printf("%s: start\n",__func__);
+
+  componentName = strdup(__func__);
+  rc = rbus_open(&handle, componentName);
+  EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+  if(RBUS_ERROR_SUCCESS != rc) goto exit2;
+
+  rc = rbus_regDataElements(handle, 1, dataElements);
+  EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+  if(RBUS_ERROR_SUCCESS != rc) goto exit1;
+
+  sleep(runtime);
+
+  if(!should_exit)
+    goto exit2;
+
+exit1:
+  rc |= rbus_close(handle);
+exit2:
+  free(componentName);
+  printf("%s: exit\n",__func__);
+  return rc;
+}
+
 
 int rbusMultiProvider(int index)
 {
