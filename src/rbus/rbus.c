@@ -5255,11 +5255,14 @@ rbusError_t  rbusEvent_SubscribeRawData(
     void*               userData,
     int                 timeout)
 {
+
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);	  
     rbusError_t errorcode = RBUS_ERROR_SUCCESS;
     char rawDataTopic[RBUS_MAX_NAME_LENGTH] = {0};
     rbusEventSubscriptionInternal_t* subInternal = NULL;
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
 
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);	  
     VERIFY_NULL(handle);
     VERIFY_NULL(eventName);
     VERIFY_NULL(handler);
@@ -5267,6 +5270,7 @@ rbusError_t  rbusEvent_SubscribeRawData(
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
 
+      printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);	  
     RBUSLOG_DEBUG("SubscribeRawData for %s", eventName);
 
     errorcode = rbusEvent_SubscribeWithRetries(handle, eventName, handler, userData, NULL, 0, 0 , timeout, NULL, false, true);
