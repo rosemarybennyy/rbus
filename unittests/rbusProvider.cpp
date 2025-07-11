@@ -184,7 +184,7 @@ rbusError_t eventSubHandler(rbusHandle_t handle, rbusEventSubAction_t action, co
     (void)filter;
     (void)autoPublish;
     (void)interval;
-
+  printf("################ rosemary function : %s ###### line : %d ###########\n",__func__,__LINE__);
     printf(
         "eventSubHandler called:\n" \
         "\taction=%s\n" \
@@ -192,9 +192,12 @@ rbusError_t eventSubHandler(rbusHandle_t handle, rbusEventSubAction_t action, co
         action == RBUS_EVENT_ACTION_SUBSCRIBE ? "subscribe" : "unsubscribe",
         eventName);
 
+  printf("################ rosemary function : %s ###### line : %d ###########\n",__func__,__LINE__);
     if(!strcmp("Device.Provider1.Event1!", eventName))
     {
+  printf("################ rosemary function : %s ###### line : %d ###########\n",__func__,__LINE__);
         subscribed = action == RBUS_EVENT_ACTION_SUBSCRIBE ? 1 : 0;
+  printf("################ rosemary function : %s ###### line : %d ###########\n",__func__,__LINE__);
     }
 
     return RBUS_ERROR_SUCCESS;
@@ -491,6 +494,7 @@ exit2:
 // rbusProvider2 for rbus_rawdatasub
 int rbusProvider2(int runtime,int should_exit)
 {
+  int loopFor = 60;	
   rbusHandle_t handle;
   int rc = RBUS_ERROR_BUS_ERROR;
 
@@ -511,7 +515,29 @@ int rbusProvider2(int runtime,int should_exit)
   EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
   if(RBUS_ERROR_SUCCESS != rc) goto exit1;
 
-  sleep(runtime);
+     while (loopFor != 0)
+    {
+        printf("provider: exiting in %d seconds\n", loopFor);
+        sleep(1);
+        loopFor--;
+#if 1
+        if(subscribed)
+        {
+            sleep(2);
+            printf("======= publishing RawData Event ===== \n");
+
+            rbusEventRawData_t event = {0};
+            event.name = dataElements[0].name;
+            event.rawData = "Hello";
+            event.rawDataLen = strlen("Hello")+1;
+
+            rc = rbusEvent_PublishRawData(handle, &event);
+            if(rc != RBUS_ERROR_SUCCESS)
+                printf("provider: rbusEvent_PublishRawData Event failed: %d\n", rc);
+        }
+#endif
+
+    }
 
   if(!should_exit)
     goto exit2;
