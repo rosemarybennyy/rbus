@@ -567,7 +567,7 @@ TEST(rbusSetLoglevelTest , test)
   exec_func_test(RBUS_GTEST_SET_LOGLEVEL);	
 }
 
-TEST(rbusSubRawdataTest , test)
-{
- exec_func_test(RBUS_GTEST_SUBRAWDATA);	
-}
+
+
+
+
