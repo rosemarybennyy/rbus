@@ -101,6 +101,7 @@ typedef enum
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);
 int rbusProvider(rbusGtest_t test, pid_t pid, int *consumer_status);
 int rbusProvider1(int runtime,int should_exit);
+int rbusProvider2(int runtime,int should_exit);
 int rbusMultiProvider(int index);
 int rbuscoreProvider(rbusGtest_t test, pid_t pid, int *consumer_status);
 
