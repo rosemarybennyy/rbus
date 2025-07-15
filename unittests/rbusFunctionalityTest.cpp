@@ -571,12 +571,12 @@ TEST(rbusSetLoglevelTest , test)
   exec_func_test(RBUS_GTEST_SET_LOGLEVEL);	
 }
 
-TEST(rbusEventPublishRawData , test)
+TEST(rbusEventPublishRawData , test1)
 {
    exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA);	
 }
 
-TEST(rbusEventPublishRawData , test)
+TEST(rbusEventPublishRawData , test2)
 {
    exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA1);
 }
