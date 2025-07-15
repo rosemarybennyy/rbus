@@ -41,11 +41,13 @@ static void exec_func_test(rbusGtest_t test)
     }
     case RBUS_GTEST_FILTER2:
     case RBUS_GTEST_INTERVAL_SUB1:
+#if 0
     case RBUS_GTEST_ASYNC_SUB4:
     {
       runtime = 15;
       break;
     }
+#endif
     default:
     {
       runtime = 3;
