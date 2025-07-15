@@ -97,6 +97,7 @@ typedef enum
   RBUS_GTEST_OPEN_DIRECT,
   RBUS_GTEST_SET_LOGLEVEL,
 //  RBUS_GTEST_SUBRAWDATA,
+  RBUS_GTEST_PUBLISH_RAWDATA,
 } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);

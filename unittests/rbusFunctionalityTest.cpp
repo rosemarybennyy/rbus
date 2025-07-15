@@ -41,7 +41,7 @@ static void exec_func_test(rbusGtest_t test)
     }
     case RBUS_GTEST_FILTER2:
     case RBUS_GTEST_INTERVAL_SUB1:
-#if 0
+#if 1
     case RBUS_GTEST_ASYNC_SUB4:
     {
       runtime = 15;
@@ -508,7 +508,7 @@ TEST(rbusApiIntervalSubTest, test1)
 {
   exec_func_test(RBUS_GTEST_INTERVAL_SUB1);
 }
-#if 0
+#if 1
 TEST(rbusAsyncSubTest, test1)
 {
   exec_func_test(RBUS_GTEST_ASYNC_SUB1);
@@ -569,6 +569,10 @@ TEST(rbusSetLoglevelTest , test)
   exec_func_test(RBUS_GTEST_SET_LOGLEVEL);	
 }
 
+TEST(rbusEventPublishRawData , test)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA);	
+}
 
 
 

@@ -938,7 +938,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         char const* elementNames1[] = {"Device.rbusProvider.Param1"};
         int numComponents = 0;
         char **componentName = NULL;
-
+rbusEvent_Publish
         rc = rbus_discoverComponentName(handle,0,elementNames1,&numComponents,&componentName);
       }
       break;
@@ -1177,7 +1177,25 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
   }
   break;
 #endif
+  case RBUS_GTEST_PUBLISH_RAWDATA:
+  {
+    const char *param = "Device.rbusProvider.Param2";
+    isElementPresent(handle,param);
+    int rc = RBUS_ERROR_SUCCESS;
+    rbusEvent_t event = {0};
+    rbusObject_t data;
+    rbusObject_Init(&data, NULL);
+    event.name = "Device.Provider1";
+    event.data = data;
+    event.type = RBUS_EVENT_GENERAL;
+
+    rc = rbusEvent_PublishRawData(handle, &event);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+    rbusObject_Release(data);
+
   }
+  break;
+}
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
