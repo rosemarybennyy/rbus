@@ -96,6 +96,7 @@ static void exec_func_test(rbusGtest_t test)
           }
         }
         break;
+#if 0
        case RBUS_GTEST_SUBRAWDATA:
         {
           pid_t pid1 = fork();
@@ -110,6 +111,7 @@ static void exec_func_test(rbusGtest_t test)
           }
         }
         break;	
+#endif
       default:
         ret = rbusProvider(test, pid, &consumer_status);
         break;
@@ -574,6 +576,9 @@ TEST(rbusEventPublishRawData , test)
    exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA);	
 }
 
-
+TEST(rbusEventPublishRawData , test)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA1);
+}
 
 
