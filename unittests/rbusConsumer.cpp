@@ -1182,13 +1182,9 @@ rbusEvent_Publish
     const char *param = "Device.rbusProvider.Param2";
     isElementPresent(handle,param);
     int rc = RBUS_ERROR_SUCCESS;
-    rbusEvent_t event = {0};
-    rbusObject_t data;
-    rbusObject_Init(&data, NULL);
-    event.name = "Device.Provider1";
-    event.data = data;
-    event.type = RBUS_EVENT_GENERAL;
-
+    rbusEventRawData_t event = {0};
+    event.rawData = "Hello";
+    event.rawDataLen = strlen("Hello")+1;
     rc = rbusEvent_PublishRawData(handle, &event);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
     rbusObject_Release(data);
