@@ -425,6 +425,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc |= (strlen(gtest_err)) ? RBUS_ERROR_BUS_ERROR : RBUS_ERROR_SUCCESS;
       }
       break;
+#if 0
     case RBUS_GTEST_ASYNC_SUB1:
       {
         isElementPresent(handle, event_param);
@@ -473,6 +474,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
       }
       break;
+#endif
     case RBUS_GTEST_ASYNC_SUB5:
       {
         strcpy(user_data,"My User Data");

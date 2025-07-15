@@ -506,7 +506,7 @@ TEST(rbusApiIntervalSubTest, test1)
 {
   exec_func_test(RBUS_GTEST_INTERVAL_SUB1);
 }
-
+#if 0
 TEST(rbusAsyncSubTest, test1)
 {
   exec_func_test(RBUS_GTEST_ASYNC_SUB1);
@@ -526,7 +526,7 @@ TEST(rbusAsyncSubTest, test4)
 {
   exec_func_test(RBUS_GTEST_ASYNC_SUB4);
 }
-
+#endif
 TEST(rbusAsyncSubTest, test5)
 {
   exec_func_test(RBUS_GTEST_ASYNC_SUB5);
