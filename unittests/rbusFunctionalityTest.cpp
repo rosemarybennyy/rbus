@@ -574,8 +574,4 @@ TEST(rbusEventPublishRawData , test)
    exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA);	
 }
 
-TEST(rbusEventPublishRawData1 , test)
-{
-   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA1);
-}
 

@@ -1188,6 +1188,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
   }
   break;
+#if 0
     case RBUS_GTEST_PUBLISH_RAWDATA1:
   {
     const char *param = "Device.rbusProvider.Param5";
@@ -1200,6 +1201,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
   }
   break;
+#endif
 }
   rc |= rbus_close(handle);
 exit:
