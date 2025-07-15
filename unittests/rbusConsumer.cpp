@@ -425,7 +425,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc |= (strlen(gtest_err)) ? RBUS_ERROR_BUS_ERROR : RBUS_ERROR_SUCCESS;
       }
       break;
-#if 0
+#if 1
     case RBUS_GTEST_ASYNC_SUB1:
       {
         isElementPresent(handle, event_param);
