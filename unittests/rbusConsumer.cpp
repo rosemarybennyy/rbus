@@ -938,7 +938,6 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         char const* elementNames1[] = {"Device.rbusProvider.Param1"};
         int numComponents = 0;
         char **componentName = NULL;
-rbusEvent_Publish
         rc = rbus_discoverComponentName(handle,0,elementNames1,&numComponents,&componentName);
       }
       break;
