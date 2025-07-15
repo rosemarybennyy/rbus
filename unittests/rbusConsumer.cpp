@@ -485,7 +485,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         sleep(runtime);
       }
       break;
-#if 0
+#if 1
   case RBUS_GTEST_SUBRAWDATA:
   {
       printf("####### rosemary ########## function %s ###### line %d\n",__func__,__LINE__);
@@ -1188,22 +1188,9 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
   }
   break;
-  case RBUS_GTEST_PUBLISH_RAWDATA1:
+    case RBUS_GTEST_PUBLISH_RAWDATA1:
   {
-    const char *param = "Device.rbusProvider.Param2";
-    isElementPresent(handle,param);
-    int rc = RBUS_ERROR_SUCCESS;
-    rbusEventRawData_t event = {0};
-    event.rawData = "Hello";
-    event.rawDataLen = strlen("Hello")+1;
-    rc = rbusEvent_PublishRawData(handle, &event);
-    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
-  }
-  break;
-
-  case RBUS_GTEST_PUBLISH_RAWDATA1:
-  {
-    const char *param = "Device.rbusProvider.Param8";
+    const char *param = "Device.rbusProvider.Param5";
     isElementPresent(handle,param);
     int rc = RBUS_ERROR_SUCCESS;
     rbusEventRawData_t event = {0};
