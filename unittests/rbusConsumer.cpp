@@ -1187,8 +1187,6 @@ rbusEvent_Publish
     event.rawDataLen = strlen("Hello")+1;
     rc = rbusEvent_PublishRawData(handle, &event);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
-    rbusObject_Release(data);
-
   }
   break;
 }
