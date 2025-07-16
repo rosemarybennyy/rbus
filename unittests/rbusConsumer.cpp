@@ -1140,6 +1140,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         isElementPresent(handle,param);
         rbusValue_t value = NULL;
         printf("calling rbus set for [%s]\n", "Device.rbusProvider.Int32");
+	bool callbackInvoked = false;  
         rc = rbus_setInt(handle, param, -10);
 
         printf ("###############   GET 1 #####################################################\n");
