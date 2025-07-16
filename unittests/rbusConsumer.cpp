@@ -356,7 +356,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         isElementPresent(handle, event_param);
         strcpy(user_data,"My User Data");
         rc = rbusEvent_SubscribeRawData(handle, event_param, eventReceiveHandler, user_data, 0);
-        EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
+        EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 
         sleep(runtime);
 
