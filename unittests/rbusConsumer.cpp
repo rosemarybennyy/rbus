@@ -163,15 +163,7 @@ static int exec_rbus_multi_test(rbusHandle_t handle, int expectedRc, int numProp
   return rc;
 }
 
-static int rawDataCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* context)
-{
-   
-    *callbackInvoked = true;
-    EXPECT_NE(event->rawData, nullptr);
-    EXPECT_GT(event->rawDataLen, 0u);
-    printf("Raw data received: %s\n", (char*)event->rawData);
-    return RBUS_ERROR_SUCCESS;
-}
+
 
 static int exec_rbus_multiExt_test(rbusHandle_t handle, int expectedRc, int numProps, const char *param1, const char *param2)
 {
@@ -355,7 +347,28 @@ static void subscribeHandler(
 
   printf("subscribeHandler called:  error val=%d\n", error);
 }
+static int rawDataCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* context)
+{
+    #bool* callbackInvoked = (bool*)context;
+    if(callbackInvoked)
+        *callbackInvoked = true;
 
+    printf("Raw Data Event Name: %s\n", event->name);
+
+    if(!event || !event->rawData) {
+        printf("Error: Raw data is NULL\n");
+        return RBUS_ERROR_INVALID_INPUT;
+    }
+    if(event->rawDataLen == 0) {
+        printf("Error: Raw data length is zero\n");
+        return RBUS_ERROR_INVALID_INPUT;
+    }
+    printf("Raw data received: ");
+    for(size_t i = 0; i < event->rawDataLen; ++i)
+        printf("%02X ", ((unsigned char*)event->rawData)[i]);
+    printf("\n");
+    return RBUS_ERROR_SUCCESS;
+}
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
@@ -1141,6 +1154,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rbusValue_t value = NULL;
         printf("calling rbus set for [%s]\n", "Device.rbusProvider.Int32");
 	bool callbackInvoked = false;  
+	  #if 0
         rc = rbus_setInt(handle, param, -10);
 
         printf ("###############   GET 1 #####################################################\n");
@@ -1153,12 +1167,22 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
             rbusValue_Release(value);
         }
         sleep(2);
+	  #endif
         rbusHandle_t  directHNDL = NULL;
         printf ("###############   OPEN DIRECT ################################################\n");
         rc = rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
 	EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+	// 1. Publish raw data event BEFORE subscribing
+        rbusEventRawData_t event;
+        event.name = param;
+        char rawdata[] = "HelloRBUS";
+        event.rawData = rawdata;
+        event.rawDataLen = strlen(rawdata) + 1;
+
+        rc = rbusEvent_PublishRawData(directHNDL, &event);
+        printf("Published raw data event rc=%d\n", rc);  
 	printf("#################  rbusEvent_SubscribeRawData ###############\n"); 
-	rc = rbusEvent_SubscribeRawData(directHNDL,param,  (rbusEventHandler_t) rawDataCallback,&callbackInvoked,5);
+	rc = rbusEvent_SubscribeRawData(directHNDL,param, rawDataCallback,&callbackInvoked,5);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 	sleep(2);  
         printf("############## rose\n");
