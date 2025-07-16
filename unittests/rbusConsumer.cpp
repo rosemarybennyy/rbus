@@ -162,6 +162,16 @@ static int exec_rbus_multi_test(rbusHandle_t handle, int expectedRc, int numProp
   return rc;
 }
 
+static int rawDataCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* context)
+{
+    bool* callbackInvoked = static_cast<bool*>(context);
+    *callbackInvoked = true;
+    EXPECT_NE(event->rawData, nullptr);
+    EXPECT_GT(event->rawDataLen, 0u);
+    printf("Raw data received: %s\n", (char*)event->rawData);
+    return RBUS_ERROR_SUCCESS;
+}
+
 static int exec_rbus_multiExt_test(rbusHandle_t handle, int expectedRc, int numProps, const char *param1, const char *param2)
 {
   int rc = RBUS_ERROR_BUS_ERROR;
@@ -1143,9 +1153,16 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         sleep(2);
         rbusHandle_t  directHNDL = NULL;
         printf ("###############   OPEN DIRECT ################################################\n");
-        rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
+        rc = rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
+	EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+	printf("#################  rbusEvent_SubscribeRawData ###############\n"); 
+	rc = rbusEvent_SubscribeRawData(directHandle,param,  (rbusEventHandler_t) rawDataCallback,&callbackInvoked,5 // timeout seconds);
+        EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+	sleep(2);  
+        printf("############## rose\n");
+        rc = rbusEvent_UnsubscribeRawData(directHandle, param);
+        EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
-        sleep(2);
         rbus_closeDirect(directHNDL);
 
       }
