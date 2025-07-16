@@ -388,7 +388,7 @@ void rawDataAdapter(rbusHandle_t handle, const rbusEvent_t* event, rbusEventSubs
     // Optionally handle 'result' if you care about return code
     // This API expects void, so we just return
 }
-#endif
+
 // Callback for raw data event subscription
 static void rawDataEventCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* userData)
 {
@@ -399,6 +399,19 @@ static void rawDataEventCallback(rbusHandle_t handle, rbusEventRawData_t const* 
 
     // You can add assertions here if needed, for example:
     EXPECT_STREQ((const char*)event->rawData, "HelloRBUS");
+}
+#endif
+static void rawDataEventHandler(rbusHandle_t /*handle*/, const rbusEvent_t* event, rbusEventSubscription_t* /*subscription*/)
+{
+    if(event && event->data.rawData)
+    {
+        printf("Received raw data event: name=%s, data=%s, len=%u\n",
+            event->name,
+            (const char*)event->data.rawData,
+            event->data.rawDataLen);
+        // Optionally add GTest assertions here
+        EXPECT_STREQ((const char*)event->data.rawData, "HelloRBUS");
+    }
 }
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
@@ -1240,11 +1253,11 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 	  
 
     // 1. Subscribe to raw data event
-    rc = rbusEvent_SubscribeRawData(directHNDL, param, rawDataEventCallback, NULL);
+    rc = rbusEvent_SubscribeRawData(directHNDL, param, rawDataEventCallback, NULL,0);
     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
     // 2. Publish raw data event BEFORE or AFTER subscribing (depending on your test logic)
-    rbusEventRawData_t event = {0};
+    rbusEventRawData_t event = {};
     event.name = param;
     char rawdata[] = "HelloRBUS";
     event.rawData = rawdata;
