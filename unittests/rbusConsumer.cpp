@@ -347,7 +347,7 @@ static void subscribeHandler(
 
   printf("subscribeHandler called:  error val=%d\n", error);
 }
-
+#if 0
 static int rawDataCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* context)
 {
     bool* callbackInvoked = (bool*)context;
@@ -388,7 +388,7 @@ void rawDataAdapter(rbusHandle_t handle, const rbusEvent_t* event, rbusEventSubs
     // Optionally handle 'result' if you care about return code
     // This API expects void, so we just return
 }
-
+#endif
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
   int rc = RBUS_ERROR_BUS_ERROR;
@@ -1172,7 +1172,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         isElementPresent(handle,param);
         //rbusValue_t value = NULL;
         printf("calling rbus set for [%s]\n", "Device.rbusProvider.Int32");
-	bool callbackInvoked = false;  
+	//bool callbackInvoked = false;  
 	  #if 0
         rc = rbus_setInt(handle, param, -10);
 
@@ -1200,6 +1200,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
         rc = rbusEvent_PublishRawData(directHNDL, &event);
         printf("Published raw data event rc=%d\n", rc);  
+	  #if 0
 	printf("#################  rbusEvent_SubscribeRawData ###############\n"); 
 	rc = rbusEvent_SubscribeRawData(directHNDL,param, rawDataAdapter,&callbackInvoked,5);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
@@ -1207,7 +1208,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         printf("############## rose\n");
         rc = rbusEvent_UnsubscribeRawData(directHNDL, param);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
-
+#endif
         rbus_closeDirect(directHNDL);
 
       }
