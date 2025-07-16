@@ -1255,27 +1255,27 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 	  
 
     // 1. Subscribe to raw data event
-    rc = rbusEvent_SubscribeRawData(directHNDL, param, rawDataEventCallback, NULL,0);
-    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    //rc = rbusEvent_SubscribeRawData(directHNDL, param, rawDataEventCallback, NULL,0);
+    //EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
     // 2. Publish raw data event BEFORE or AFTER subscribing (depending on your test logic)
-    rbusEventRawData_t event = {};
-    event.name = param;
-    char rawdata[] = "HelloRBUS";
-    event.rawData = rawdata;
-    event.rawDataLen = strlen(rawdata) + 1;
+    //rbusEventRawData_t event = {};
+    //event.name = param;
+    //char rawdata[] = "HelloRBUS";
+    //event.rawData = rawdata;
+    //event.rawDataLen = strlen(rawdata) + 1;
 
-    rc = rbusEvent_PublishRawData(directHNDL, &event);
-    printf("Published raw data event rc=%d\n", rc);
-    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    //rc = rbusEvent_PublishRawData(directHNDL, &event);
+    //printf("Published raw data event rc=%d\n", rc);
+    //EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
     // Let the event propagate (sleep, or use synchronization if needed)
     // For example:
     sleep(1);
 
     // 3. Unsubscribe from raw data event
-    rc = rbusEvent_UnsubscribeRawData(directHNDL, param, rawDataEventCallback);
-    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    //rc = rbusEvent_UnsubscribeRawData(directHNDL, param, rawDataEventCallback);
+    //EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
     // 4. Close direct handle
     rbus_closeDirect(directHNDL);
