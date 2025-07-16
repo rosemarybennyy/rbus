@@ -1190,7 +1190,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     }
       break;
 #endif 
-	  #if 0
+	  #if 1
   case RBUS_GTEST_OPEN_DIRECT:
   {
         const char *param = "Device.rbusProvider.Int32";
