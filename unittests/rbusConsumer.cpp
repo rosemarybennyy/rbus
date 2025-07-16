@@ -389,6 +389,17 @@ void rawDataAdapter(rbusHandle_t handle, const rbusEvent_t* event, rbusEventSubs
     // This API expects void, so we just return
 }
 #endif
+// Callback for raw data event subscription
+static void rawDataEventCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* userData)
+{
+    printf("Received raw data event: name=%s, data=%s, len=%zu\n",
+           event->name,
+           (const char*)event->rawData,
+           event->rawDataLen);
+
+    // You can add assertions here if needed, for example:
+    EXPECT_STREQ((const char*)event->rawData, "HelloRBUS");
+}
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
   int rc = RBUS_ERROR_BUS_ERROR;
@@ -1166,6 +1177,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     }
       break;
 #endif 
+	  #if 0
   case RBUS_GTEST_OPEN_DIRECT:
   {
         const char *param = "Device.rbusProvider.Int32";
@@ -1191,6 +1203,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         printf ("###############   OPEN DIRECT ################################################\n");
         rc = rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
 	EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+	  
 	// 1. Publish raw data event BEFORE subscribing
         rbusEventRawData_t event= {0};
         event.name = param;
@@ -1212,6 +1225,46 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rbus_closeDirect(directHNDL);
 
       }
+  break;
+	  #endif
+  case RBUS_GTEST_OPEN_DIRECT:
+  {
+    const char* param = "Device.rbusProvider.Int32";
+    isElementPresent(handle, param);
+
+    rbusHandle_t directHNDL = NULL;
+    printf ("###############   OPEN DIRECT ################################################\n");
+    rc = rbus_openDirect(handle, &directHNDL, param);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    printf("rc ======= %d\n",rc);	  
+	  
+
+    // 1. Subscribe to raw data event
+    rc = rbusEvent_SubscribeRawData(directHNDL, param, rawDataEventCallback, NULL);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+
+    // 2. Publish raw data event BEFORE or AFTER subscribing (depending on your test logic)
+    rbusEventRawData_t event = {0};
+    event.name = param;
+    char rawdata[] = "HelloRBUS";
+    event.rawData = rawdata;
+    event.rawDataLen = strlen(rawdata) + 1;
+
+    rc = rbusEvent_PublishRawData(directHNDL, &event);
+    printf("Published raw data event rc=%d\n", rc);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+
+    // Let the event propagate (sleep, or use synchronization if needed)
+    // For example:
+    sleep(1);
+
+    // 3. Unsubscribe from raw data event
+    rc = rbusEvent_UnsubscribeRawData(directHNDL, param, rawDataEventCallback);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+
+    // 4. Close direct handle
+    rbus_closeDirect(directHNDL);
+  }
   break;
   case RBUS_GTEST_SET_LOGLEVEL:
   {
