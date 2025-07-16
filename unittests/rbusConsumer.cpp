@@ -1188,6 +1188,50 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
   }
   break;
+ case RBUS_GTEST_PUBLISH_RAWDATA_INVALIDHANDLE:
+ {
+    rbusEventRawData_t event = {0};
+    event.rawData = "Test";
+    event.rawDataLen = strlen("Test")+1;
+    int rc = rbusEvent_PublishRawData(NULL, &event);
+    EXPECT_EQ(rc, RBUS_ERROR_INVALID_HANDLE); 
+ }
+  break;
+case  RBUS_GTEST_PUBLISH_RAWDATA_NULLEVENTPOINTER:
+{
+    int rc = rbusEvent_PublishRawData(handle, NULL);
+    EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);  		
+}
+break;
+case RBUS_GTEST_PUBLISH_RAWDATA_NULLRAWDATA:
+{
+    rbusEventRawData_t event = {0};
+    event.rawData = NULL;
+    event.rawDataLen = 10;
+    int rc = rbusEvent_PublishRawData(handle, &event);
+    EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
+}
+break;
+case RBUS_GTEST_PUBLISH_RAWDATA_NULLZERODATA:
+{
+    rbusEventRawData_t event = {0};
+    event.rawData = "Test";
+    event.rawDataLen = 0;
+    int rc = rbusEvent_PublishRawData(handle, &event);
+    EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
+}
+break;	  
+case  RBUS_GTEST_PUBLISH_RAWDATA_OVERSIZEDRAWDATA:
+{
+    char largeData[1024*1024] = {0}; // Example large data
+    rbusEventRawData_t event = {0};
+    event.rawData = largeData;
+    event.rawDataLen = sizeof(largeData);
+    int rc = rbusEvent_PublishRawData(handle, &event);
+    EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT); // Or whatever error is appropriate	
+}
+break;	  
+  
 #if 0
     case RBUS_GTEST_PUBLISH_RAWDATA1:
   {
