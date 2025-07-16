@@ -30,6 +30,7 @@
 void hasProviderStarted(const char *provider);
 void isElementPresent(rbusHandle_t handle, const char *elementName);
 void getCompileTime(struct tm *t);
+bool* callbackInvoked = static_cast<bool*>(context);
 #define FILTER_VAL 3
 
 static char gtest_err[64];
@@ -164,7 +165,7 @@ static int exec_rbus_multi_test(rbusHandle_t handle, int expectedRc, int numProp
 
 static int rawDataCallback(rbusHandle_t handle, rbusEventRawData_t const* event, void* context)
 {
-    bool* callbackInvoked = static_cast<bool*>(context);
+   
     *callbackInvoked = true;
     EXPECT_NE(event->rawData, nullptr);
     EXPECT_GT(event->rawDataLen, 0u);
@@ -1160,7 +1161,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 	sleep(2);  
         printf("############## rose\n");
-        rc = rbusEvent_UnsubscribeRawData(directHandle, param);
+        rc = rbusEvent_UnsubscribeRawData(directHNDL, param);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 
         rbus_closeDirect(directHNDL);
