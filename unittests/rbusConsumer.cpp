@@ -1156,7 +1156,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = rbus_openDirect(handle, &directHNDL, "Device.rbusProvider.Int32");
 	EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 	printf("#################  rbusEvent_SubscribeRawData ###############\n"); 
-	rc = rbusEvent_SubscribeRawData(directHandle,param,  (rbusEventHandler_t) rawDataCallback,&callbackInvoked,5 // timeout seconds);
+	rc = rbusEvent_SubscribeRawData(directHNDL,param,  (rbusEventHandler_t) rawDataCallback,&callbackInvoked,5);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 	sleep(2);  
         printf("############## rose\n");
