@@ -1228,7 +1228,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         printf("Published raw data event rc=%d\n", rc);  
 	  #if 0
 	printf("#################  rbusEvent_SubscribeRawData ###############\n"); 
-	rc = rbusEvent_SubscribeRawData(directHNDL,param, rawDataAdapter,&callbackInvoked,5);
+	rc = rbusEvent_SubscribeRawData(directHNDL,param, (rbusEventHandler_t)generalEvent1Handler,"mydata",5);
         EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
 	sleep(2);  
         printf("############## rose\n");
@@ -1239,7 +1239,8 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
       }
   break;
-	  #endif
+	  #else
+	  
   case RBUS_GTEST_OPEN_DIRECT:
   {
     const char* param = "Device.rbusProvider.Int32";
@@ -1279,6 +1280,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     rbus_closeDirect(directHNDL);
   }
   break;
+	  #endif
   case RBUS_GTEST_SET_LOGLEVEL:
   {
     rc = rbus_setLogLevel(RBUS_LOG_DEBUG);
