@@ -400,7 +400,7 @@ static void rawDataEventCallback(rbusHandle_t handle, rbusEventRawData_t const* 
     // You can add assertions here if needed, for example:
     EXPECT_STREQ((const char*)event->rawData, "HelloRBUS");
 }
-#endif
+
 static void rawDataEventHandler(rbusHandle_t /*handle*/, const rbusEvent_t* event, rbusEventSubscription_t* /*subscription*/)
 {
     if(event && event->data.rawData)
@@ -413,6 +413,7 @@ static void rawDataEventHandler(rbusHandle_t /*handle*/, const rbusEvent_t* even
         EXPECT_STREQ((const char*)event->data.rawData, "HelloRBUS");
     }
 }
+#endif
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
   int rc = RBUS_ERROR_BUS_ERROR;
