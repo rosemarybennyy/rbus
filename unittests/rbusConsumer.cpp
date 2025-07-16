@@ -355,12 +355,12 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         /* subscribe to all value change events on property "Device.rbusProvider.Param1" */
         isElementPresent(handle, event_param);
         strcpy(user_data,"My User Data");
-        rc = rbusEvent_Subscribe(handle, event_param, eventReceiveHandler, user_data, 0);
+        rc = rbusEvent_SubscribeRawData(handle, event_param, eventReceiveHandler, user_data, 0);
         EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
 
         sleep(runtime);
 
-        rbusEvent_Unsubscribe(handle, event_param);
+        rbusEvent_UnsubscribeRawData(handle, event_param);
       }
       break;
     case RBUS_GTEST_FILTER2:
