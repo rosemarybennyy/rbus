@@ -5269,12 +5269,12 @@ rbusError_t  rbusEvent_SubscribeRawData(
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
 
-    RBUSLOG_DEBUG("SubscribeRawData for %s", eventName);
+    printf("SubscribeRawData for %s", eventName);
 
     errorcode = rbusEvent_SubscribeWithRetries(handle, eventName, handler, userData, NULL, 0, 0 , timeout, NULL, false, true);
     if(errorcode != RBUS_ERROR_SUCCESS)
     {
-        RBUSLOG_ERROR("Subscribe failed err: %d", errorcode);
+        printf("Subscribe failed err: %d", errorcode);
         return errorcode;
     }
 
@@ -5288,7 +5288,7 @@ rbusError_t  rbusEvent_SubscribeRawData(
             errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
             if (errorcode != RT_OK)
             {
-                RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                printf("rbusMessage_RemoveListener:%d", errorcode);
             }
         }
         memset(rawDataTopic, '\0', strlen(rawDataTopic));
@@ -5296,7 +5296,7 @@ rbusError_t  rbusEvent_SubscribeRawData(
         errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
         if(errorcode != RBUS_ERROR_SUCCESS)
         {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            printf("%s: Listener failed err: %d", __FUNCTION__, errorcode);
         }
     }
     else
@@ -5307,7 +5307,7 @@ rbusError_t  rbusEvent_SubscribeRawData(
                 _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
         if(errorcode != RBUS_ERROR_SUCCESS)
         {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            printf("%s: Listener failed err: %d", __FUNCTION__, errorcode);
         }
     }
     return errorcode;
