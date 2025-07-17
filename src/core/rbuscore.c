@@ -137,7 +137,7 @@ void server_event_destroy(void* p)
     rtVector_Destroy(event->listeners, rtVector_Cleanup_Free);
     free(event);
 }
-#if 0
+
 void server_event_addListener(server_event_t event, char const* listener)
 {
     if(!listener)
@@ -183,7 +183,7 @@ void server_event_removeListener(server_event_t event, char const* listener)
         RBUSCORELOG_ERROR("Listener %s not found for event %s.", listener, event->name);
     }
 }
-#endif
+
 int server_object_compare(const void* left, const void* right)
 {
     return strncmp(((server_object_t)left)->name, (char*)right, MAX_OBJECT_NAME_LENGTH);
