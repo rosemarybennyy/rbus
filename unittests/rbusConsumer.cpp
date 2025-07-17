@@ -1047,6 +1047,15 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
         rc = exec_rbus_set_test(handle, RBUS_ERROR_INVALID_INPUT, param, "unregister_row_fail");
       }
       break;
+   case RBUS_GTEST_SET_BOOL:
+   {
+     const char *param = "Device.rbusProvider.Param2";
+     isElementPresent(handle, param);
+     rc = rbus_setBoolean(handle, param, true);
+     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+   }
+      break;
+	  
   }
 
   rc |= rbus_close(handle);
