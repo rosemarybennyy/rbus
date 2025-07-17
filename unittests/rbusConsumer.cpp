@@ -218,6 +218,25 @@ static int exec_rbus_set_test(rbusHandle_t handle, int expectedRc, const char *p
   return rc;
 }
 
+static int exec_rbus_set_commit_test(rbusHandle_t handle, int expectedRc, const char *param)
+{
+  int rc = RBUS_ERROR_BUS_ERROR;
+  rbusValue_t value = NULL;
+
+  if( NULL == param)
+  {
+    rc = rbus_setCommit(handle, "test.params",NULL);
+  }
+  else
+  {
+    rc = rbus_setCommit(handle, param, NULL);
+  }
+
+  EXPECT_EQ(rc,expectedRc);
+
+  return rc;
+}
+
 static void eventReceiveHandler(
     rbusHandle_t handle,
     rbusEvent_t const* event,
