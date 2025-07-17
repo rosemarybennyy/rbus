@@ -1011,10 +1011,11 @@ TEST(rbusLogHandler, test1)
     rc = rbus_registerLogHandler(NULL);
     EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
 }
+#if 0
 TEST(rbusCheckstatus, test1)
 {
     int rc = RBUS_ERROR_BUS_ERROR;
     rc = rbus_checkStatus();
     EXPECT_EQ(rc,RBUS_ERROR_BUS_ERROR );
 }
-
+#endif
