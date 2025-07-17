@@ -419,7 +419,7 @@ int rbusProvider(rbusGtest_t test, pid_t pid, int *consumer_status)
       printf("======= publishing RawData Event ===== \n");
 
       rbusEventRawData_t event = {0};
-      event.name = dataElements[0].name;
+      event.name = "Device.Provider1.Event1!";//dataElements[0].name;
       event.rawData = "Hello";
       event.rawDataLen = strlen("Hello")+1;
 
