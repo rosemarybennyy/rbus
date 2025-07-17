@@ -1014,7 +1014,7 @@ TEST(rbusLogHandler, test1)
 TEST(rbusCheckstatus, test1)
 {
     int rc = RBUS_ERROR_BUS_ERROR;
-    rc = rbus_checkStatus(NULL);
+    rc = rbus_checkStatus();
     EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
 }
 
