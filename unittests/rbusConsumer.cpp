@@ -1083,6 +1083,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
   break;
 case RBUS_GTEST_OPEN_DIRECT:
    {
+	   #if 0
     const char* param = "Device.rbusProvider.Int32";
     isElementPresent(handle, param);
     rbusHandle_t directHNDL = NULL;
@@ -1091,6 +1092,29 @@ case RBUS_GTEST_OPEN_DIRECT:
     EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
     sleep(2);
     rbus_closeDirect(directHNDL);
+	   #endif
+    const char* param = "Device.Provider1.Event1!";
+    isElementPresent(handle, param);
+    rbusHandle_t directHNDL = NULL;
+    printf ("###############   OPEN DIRECT ################################################\n");
+    rc = rbus_openDirect(handle, &directHNDL, param);
+    printf ("###############   OPEN DIRECT ################################################\n");
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    sleep(2);
+    printf("-----------------------------------------------------\n");
+    printf("Testing rbusEvent_SubscribeRawData\n");
+    printf("-----------------------------------------------------\n");
+    rc = rbusEvent_SubscribeRawData(
+        handle,
+        "Device.Provider1.Event1!",
+        (rbusEventHandler_t)generalEvent1Handler,
+        data[0],
+        0);
+    sleep(3);
+    rbusEvent_UnsubscribeRawData(handle, "Device.Provider1.Event1!");
+    rbus_closeDirect(directHNDL);
+
+	   
    }
    break;
    case RBUS_GTEST_PUBLISH_RAWDATA:
