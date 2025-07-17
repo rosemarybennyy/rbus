@@ -1133,10 +1133,11 @@ case RBUS_GTEST_OPEN_DIRECT:
    break;
    case RBUS_GTEST_PUBLISH_RAWDATA:
    {
-     const char *param = "Device.rbusProvider.Param2";
+     const char *param = "Device.Provider1.Event1!";
      isElementPresent(handle,param);
      int rc = RBUS_ERROR_SUCCESS;
      rbusEventRawData_t event = {0};
+     event.name = param;	   
      event.rawData = "Hello";
      event.rawDataLen = strlen("Hello")+1;
      rc = rbusEvent_PublishRawData(handle, &event);
@@ -1145,6 +1146,7 @@ case RBUS_GTEST_OPEN_DIRECT:
    break;
    case RBUS_GTEST_PUBLISH_RAWDATA_INVALIDHANDLE:
    {
+	   
       rbusEventRawData_t event = {0};
       event.rawData = "Test";
       event.rawDataLen = strlen("Test")+1;
