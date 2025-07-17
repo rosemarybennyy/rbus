@@ -531,3 +531,37 @@ TEST(rbusSetBoolTest , test)
 {
   exec_func_test(RBUS_GTEST_SET_BOOL);
 }
+TEST(rbusSetCommitTest , test)
+{
+  exec_func_test(RBUS_GTEST_SET_COMMIT);	
+}
+TEST(rbusOpenDirectTest, test)
+{
+  exec_func_test(RBUS_GTEST_OPEN_DIRECT);
+}
+
+TEST(rbusEventPublishRawData , test1)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA);
+}
+TEST(rbusEventPublishRawData , test2)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_INVALIDHANDLE);
+}
+TEST(rbusEventPublishRawData , test3)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_NULLEVENTPOINTER);
+}
+TEST(rbusEventPublishRawData , test4)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_NULLRAWDATA);
+}
+TEST(rbusEventPublishRawData , test5)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_NULLZERODATA);
+}
+TEST(rbusEventPublishRawData , test6)
+{
+   exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_OVERSIZEDRAWDATA);
+}
+
