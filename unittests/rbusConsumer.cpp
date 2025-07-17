@@ -331,6 +331,20 @@ static void subscribeHandler(
   printf("subscribeHandler called:  error val=%d\n", error);
 }
 
+static void generalEvent1Handler(
+    rbusHandle_t handle,
+    rbusEventRawData_t const* event,
+    rbusEventSubscription_t* subscription)
+{
+    (void)handle;
+    (void)subscription;
+    printf("\nevent_receive_handler1 called\r\n");
+    printf("Event received %s\r\n", event->name);
+    printf("Event data: %s\r\n", (char*)event->rawData);
+    printf("Event data len: %d\r\n", event->rawDataLen);
+    printf("\r\n");
+}
+
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 {
