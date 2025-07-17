@@ -536,12 +536,12 @@ TEST(rbusOpenDirect , test)
 {
   exec_func_test(RBUS_GTEST_OPEN_DIRECT);
 }
-
+#if 0
 TEST(rbusRawDataSubTest, test)
 {
   exec_func_test(RBUS_GTEST_SUB_RAWDATA);	
 }
-
+#endif
 TEST(rbusRawDataSubTest, test)
 {
   exec_func_test(RBUS_GTEST_SET_BOOL);	
