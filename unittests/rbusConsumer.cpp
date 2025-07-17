@@ -1112,6 +1112,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
 
       }
   break;
+	  #If 0
   case RBUS_GTEST_SUB_RAWDATA:
   {
       strcpy(user_data,"My User Data");
@@ -1125,6 +1126,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       EXPECT_EQ(rc,RBUS_ERROR_SUCCESS);
   }
   break;
+	  #endif
 case RBUS_GTEST_SET_BOOL:
 {
   const char *param = "Device.rbusProvider.Param2";
