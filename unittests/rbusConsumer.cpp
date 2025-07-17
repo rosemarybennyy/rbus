@@ -336,12 +336,13 @@ static void generalEvent1Handler(
     rbusEventRawData_t const* event,
     rbusEventSubscription_t* subscriptions)
 {
+	printf("ROSE MARY BENNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\n");
     (void)handle;
-    (void)subscription;
+    (void)subscriptions;
     printf("\nevent_receive_handler1 called\r\n");
-    printf("Event received %s\r\n", event->name);
-    printf("Event data: %s\r\n", (char*)event->rawData);
-    printf("Event data len: %d\r\n", event->rawDataLen);
+    printf("#####################################################################Event received %s\r\n", event->name);
+    printf("#####################################################################Event data: %s\r\n", (char*)event->rawData);
+    printf("#####################################################################Event data len: %d\r\n", event->rawDataLen);
     printf("\r\n");
 }
 
