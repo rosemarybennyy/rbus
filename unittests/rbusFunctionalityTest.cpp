@@ -527,3 +527,7 @@ TEST(rbusUnRegRowTest, test)
 {
   exec_func_test(RBUS_GTEST_UNREG_ROW);
 }
+TEST(rbusSetBoolTest , test)
+{
+  exec_func_test(RBUS_GTEST_SET_BOOL);
+}
