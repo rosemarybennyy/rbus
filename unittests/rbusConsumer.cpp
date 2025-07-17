@@ -361,7 +361,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
       {"Device.rbusProvider.Param1", NULL, 2, 0, (void *)eventReceiveHandler1, data[0], NULL, NULL, false},
       {"Device.rbusProvider.Param2", NULL, 2, 5, (void *)eventReceiveHandler2, data[1], NULL, NULL, false}
   };
-  rbusEventSubscription_t subscriptions = {"Device.Provider1.Event1!", NULL, 0, 0, generalEvent1Handler, data[0], NULL, NULL, false}	
+  //rbusEventSubscription_t subscriptions = {"Device.Provider1.Event1!", NULL, 0, 0, generalEvent1Handler, data[0], NULL, NULL, false}	
   if(RBUS_GTEST_GET_EXT2 == test)
   {
     int i = 0;
