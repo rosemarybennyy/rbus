@@ -1097,7 +1097,7 @@ int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime)
     rc = exec_rbus_set_commit_test(handle,RBUS_ERROR_INVALID_INPUT,param);
  }
   break;
-case RBUS_GTEST_OPEN_DIRECT:
+case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
    {
 	   #if 0
     const char* param = "Device.rbusProvider.Int32";
@@ -1133,6 +1133,18 @@ case RBUS_GTEST_OPEN_DIRECT:
 	   
    }
    break;
+   case RBUS_GTEST_OPEN_DIRECT:
+   {
+    const char* param = "Device.rbusProvider.Int32";
+    isElementPresent(handle, param);
+    rbusHandle_t directHNDL = NULL;
+    printf ("###############   OPEN DIRECT ################################################\n");
+    rc = rbus_openDirect(handle, &directHNDL, param);
+    EXPECT_EQ(rc, RBUS_ERROR_SUCCESS);
+    sleep(2);
+    rbus_closeDirect(directHNDL);
+   }
+   break;	  
    case RBUS_GTEST_PUBLISH_RAWDATA:
    {
      const char *param = "Device.Provider1.Event1!";
