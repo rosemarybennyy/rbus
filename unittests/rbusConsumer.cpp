@@ -1127,7 +1127,7 @@ case RBUS_GTEST_OPEN_DIRECT:
         data[0],
         0);
     sleep(3);
-    rbusEvent_UnsubscribeRawData(handle, "Device.Provider1.Event1!");
+    //rbusEvent_UnsubscribeRawData(handle, "Device.Provider1.Event1!");
     rbus_closeDirect(directHNDL);
 
 	   
