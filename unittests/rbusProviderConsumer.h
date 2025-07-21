@@ -105,8 +105,8 @@ typedef enum
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST2,
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST3.
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST4.
-
-} rbusGtest_t;
+  RBUS_GTEST_RBUSERROR_TO_STRING_TEST5
+  } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);
 int rbusProvider(rbusGtest_t test, pid_t pid, int *consumer_status);
