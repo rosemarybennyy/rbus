@@ -588,10 +588,7 @@ TEST(rbusErrorToString, test5)
 {
   exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST5);
 }
-TEST(rbusErrorToString, test5)
-{
-  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST5);
-}
+
 TEST(rbusErrorToString, test6)
 {
   exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST6);
