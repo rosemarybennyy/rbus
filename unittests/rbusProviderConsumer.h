@@ -121,6 +121,7 @@ typedef enum
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST18,
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST19,
   RBUS_GTEST_RBUSERROR_TO_STRING_TEST20,
+  RBUS_GTEST_RBUSVALID_HANDLE,
   } rbusGtest_t;
 
 int rbusConsumer(rbusGtest_t test, pid_t pid, int runtime);
