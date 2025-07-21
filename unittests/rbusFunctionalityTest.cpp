@@ -649,3 +649,7 @@ TEST(rbusErrorToString, test20)
 {
   exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST20);
 }
+TEST(rbusValidHandle, test)
+{
+  exec_func_test(RBUS_GTEST_RBUSVALID_HANDLE);
+}
