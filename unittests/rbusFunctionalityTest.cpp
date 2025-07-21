@@ -576,3 +576,15 @@ TEST(rbusErrorToString, test2)
 {
   exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST2);
 }
+TEST(rbusErrorToString, test3)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST3);
+}
+TEST(rbusErrorToString, test4)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST4);
+}
+TEST(rbusErrorToString, test5)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST5);
+}
