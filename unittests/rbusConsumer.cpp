@@ -1243,6 +1243,111 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
   }
   break;	  
   }
+ case RBUS_GTEST_RBUSERROR_TO_STRING_TEST6:
+  {
+      rbusError_t rc = RBUS_ERROR_DESTINATION_NOT_REACHABLE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"destination not reachable");
+  }
+  break;
+  case RBUS_GTEST_RBUSERROR_TO_STRING_TEST7:
+  {
+      rbusError_t rc = RBUS_ERROR_DESTINATION_RESPONSE_FAILURE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"destination response failure");
+  }
+  break;
+  case RBUS_GTEST_RBUSERROR_TO_STRING_TEST8:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_RESPONSE_FROM_DESTINATION;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid response from destination");
+  }
+  break;
+  case RBUS_GTEST_RBUSERROR_TO_STRING_TEST9:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_OPERATION;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid operation");
+  }
+	  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST10:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_EVENT;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid event");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST11:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_HANDLE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid handle");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST12:
+  {
+      rbusError_t rc = RBUS_ERROR_SESSION_ALREADY_EXIST;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"session already exists");
+  }
+  break;
+	      case RBUS_GTEST_RBUSERROR_TO_STRING_TEST13:
+  {
+      rbusError_t rc = RBUS_ERROR_COMPONENT_NAME_DUPLICATE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"duplicate component name");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST14:
+  {
+      rbusError_t rc = RBUS_ERROR_ELEMENT_NAME_DUPLICATE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"duplicate element name");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST15:
+  {
+      rbusError_t rc = RBUS_ERROR_ELEMENT_NAME_MISSING;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"name missing");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST16:
+  {
+      rbusError_t rc = RBUS_ERROR_COMPONENT_DOES_NOT_EXIST;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"component does not exist");
+  }
+  break;
+	      case RBUS_GTEST_RBUSERROR_TO_STRING_TEST17:
+  {
+      rbusError_t rc = RBUS_ERROR_ELEMENT_DOES_NOT_EXIST;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"element name does not exist");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST18:
+  {
+      rbusError_t rc = RBUS_ERROR_ACCESS_NOT_ALLOWED;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"access denied");
+  }
+  break;
+    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST19:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_CONTEXT;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid context");
+  }
+  break;
+	      case RBUS_GTEST_RBUSERROR_TO_STRING_TEST20:
+  {
+      rbusError_t rc = RBUS_ERROR_ASYNC_RESPONSE;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"async operation in progress");
+  }
+  break;
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
