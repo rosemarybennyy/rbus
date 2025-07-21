@@ -244,10 +244,11 @@ TEST(rbusgetExtNegTest, test6)
     int rc = RBUS_ERROR_SUCCESS;
     rbusProperty_t props;
     int actualCount = 0;
-    const char *params = "Device.rbusProvider.PartialPath";
+    const char *params = "Device";
     handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
     rc = rbus_getExt(handle, 1, &params, &actualCount, &props);
-    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
+    free(handle);
 }
 TEST(rbusgetExtNegTest, test7)
 {
@@ -259,6 +260,7 @@ TEST(rbusgetExtNegTest, test7)
     handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
     rc = rbus_getExt(handle, 0, &params, &actualCount, &props);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+    free(handle);
 }
 
 TEST(rbusgetIntNegTest, test1)
