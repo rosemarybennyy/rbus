@@ -232,7 +232,7 @@ TEST_F(MultipleServerTest, rbus_multipleServer_test1)
         rbusCoreError_t err;
         //Neg test discover Registered components without connection
         err = rbus_discoverRegisteredComponents(&num_comps, &components);
-	rbusCoreError_to_rbusError(err);    
+	//rbusCoreError_to_rbusError(err);    
         EXPECT_EQ(err, RBUSCORE_ERROR_INVALID_STATE) << "rbus_discoverRegisteredComponents failed";
         conn_status = OPEN_BROKER_CONNECTION2(client_name);
         err = rbus_discoverRegisteredComponents(&num_comps, &components);
