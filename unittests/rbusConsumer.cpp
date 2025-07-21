@@ -1206,7 +1206,13 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
 	  
 	  
   }
-
+  case RBUS_GTEST_RBUSERROR_TO_STRING:
+  {
+     int rc = RBUS_ERROR_SUCCESS;
+     rbusError_ToString(rc);
+     EXPECT_EQ("RBUS_ERROR_SUCCESS", rbusError_ToString(rc));	  
+     break;	  
+  }
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
