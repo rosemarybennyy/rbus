@@ -1597,7 +1597,7 @@ TEST_F(StressTestServer, rbus_invokeMethodWithTimeout_test3)
     {
         CREATE_RBUS_SERVER_INSTANCE(counter);
         err = rbus_registerMethod(server_obj,METHOD_SET_TIMEOUT_RPC,handle_timeout,NULL);
-	rbusCoreError_to_rbusError(err);    
+	//rbusCoreError_to_rbusError(err);    
         EXPECT_EQ(err, RBUSCORE_SUCCESS) << "rbus_unregisterMethod failed";
         printf("********** SERVER ENTERING PAUSED STATE******************** \n");
         pause();
