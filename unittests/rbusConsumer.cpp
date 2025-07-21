@@ -1210,7 +1210,7 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
   {
      rbusError_t rc = RBUS_ERROR_SUCCESS;
      rbusError_ToString(rc);
-     EXPECT_EQ("RBUS_ERROR_SUCCESS", rbusError_ToString(rc));	  
+     EXPECT_EQ(rbusError_ToString(rc),"ok");	  
      	  
   }
   break;
@@ -1218,11 +1218,30 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
    {
       rbusError_t rc = RBUS_ERROR_BUS_ERROR;
       rbusError_ToString(rc);
-      EXPECT_EQ("RBUS_ERROR_BUS_ERROR", rbusError_ToString(rc));	
+      EXPECT_EQ(rbusError_ToString(rc),"generic error");	
    }
   break;
-	  
-	  
+  case 	RBUS_GTEST_RBUSERROR_TO_STRING_TEST3:
+  {
+      rbusError_t rc = RBUS_ERROR_INVALID_INPUT;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"invalid input");		  
+  }
+  break;
+  case 	RBUS_GTEST_RBUSERROR_TO_STRING_TEST4:
+  {
+      rbusError_t rc = RBUS_ERROR_NOT_INITIALIZED;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"not initialized");		  
+  }
+  break;	  
+   case RBUS_GTEST_RBUSERROR_TO_STRING_TEST5:
+  {
+      rbusError_t rc = RBUS_ERROR_OUT_OF_RESOURCES;
+      rbusError_ToString(rc);
+      EXPECT_EQ(rbusError_ToString(rc),"out of resources");		  
+  }
+  break;	  
   }
   rc |= rbus_close(handle);
 exit:
