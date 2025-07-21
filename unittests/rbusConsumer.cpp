@@ -23,6 +23,7 @@
 #include <rbuscore.h>
 #include <rbus.h>
 #include "rbusProviderConsumer.h"
+#include "rbus_handle.h"
 #include <math.h>
 #include <cfloat>
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
