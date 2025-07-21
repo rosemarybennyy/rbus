@@ -1348,6 +1348,11 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
       EXPECT_EQ(rbusError_ToString(rc),"async operation in progress");
   }
   break;
+  case RBUS_GTEST_RBUSVALID_HANDLE:
+  {
+    int rc = rbusHandleList_IsValidHandle(handle);
+    EXPECT_EQ(rc,1);
+  }	  
   }
   rc |= rbus_close(handle);
 exit:
