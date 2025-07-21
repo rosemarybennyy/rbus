@@ -568,4 +568,7 @@ TEST(rbusEventPublishRawData , test6)
 {
    exec_func_test(RBUS_GTEST_PUBLISH_RAWDATA_OVERSIZEDRAWDATA);
 }
-
+TEST(rbusErrorToString,test)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING);
+}
