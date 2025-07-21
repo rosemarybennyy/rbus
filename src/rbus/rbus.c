@@ -3601,24 +3601,28 @@ rbusError_t _getExt_response_parser(rbusMessage response, int *numValues, rbusPr
 
 rbusError_t rbus_getExt(rbusHandle_t handle, int paramCount, char const** pParamNames, int *numValues, rbusProperty_t* retProperties)
 {
+    printf("test getext ###### function %s line %d\n",__func__,__LINE__);
     rbusError_t errorcode = RBUS_ERROR_SUCCESS;
     rbusCoreError_t err = RBUSCORE_SUCCESS;
     int i;
+     printf("test getext ###### function %s line %d\n",__func__,__LINE__);
     struct _rbusHandle* handleInfo = (struct _rbusHandle*) handle;
-
+     printf("test getext ###### function %s line %d\n",__func__,__LINE__);
     VERIFY_NULL(handleInfo);
     VERIFY_NULL(pParamNames);
     VERIFY_NULL(numValues);
     VERIFY_NULL(retProperties);
     VERIFY_ZERO(paramCount);
-
+     printf("test getext ###### function %s line %d\n",__func__,__LINE__); 
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
-
+     printf("test getext ###### function %s line %d\n",__func__,__LINE__);
     if ((1 == paramCount))
     {
+       printf("test getext ###### function %s line %d\n",__func__,__LINE__);
         if (!_is_wildcard_query(pParamNames[0]))
         {
+           printf("test getext ###### function %s line %d\n",__func__,__LINE__);
             rbusProperty_t outputVals = NULL;
             rbusValue_t getVal = NULL;
 
@@ -3630,35 +3634,44 @@ rbusError_t rbus_getExt(rbusHandle_t handle, int paramCount, char const** pParam
             errorcode = rbus_get(handle, pParamNames[0], &getVal);
             if(RBUS_ERROR_SUCCESS == errorcode)
             {
+               printf("test getext ###### function %s line %d\n",__func__,__LINE__);
                 *numValues = 1;
                 rbusProperty_Init(&outputVals, pParamNames[0], getVal);
                 rbusValue_Release(getVal);
                 *retProperties = outputVals;
+               printf("test getext ###### function %s line %d\n",__func__,__LINE__);
             }
             else
             {
+               printf("test getext ###### function %s line %d\n",__func__,__LINE__);
                 RBUSLOG_ERROR("Failed to get the data. Error : %d", errorcode);
             }
+           printf("test getext ###### function %s line %d\n",__func__,__LINE__);
             return errorcode;
         }
         else
         {
+          printf("test getext ###### function %s line %d\n",__func__,__LINE__);
             int numDestinations = 0;
             char** destinations;
             //int length = strlen(pParamNames[0]);
 
             err = rbus_discoverWildcardDestinations(pParamNames[0], &numDestinations, &destinations);
+           printf("test getext ###### function %s line %d\n",__func__,__LINE__);
             if (RBUSCORE_SUCCESS == err)
             {
+               printf("test getext ###### function %s line %d\n",__func__,__LINE__);
                 RBUSLOG_DEBUG("Query for expression %s was successful. See result below:", pParamNames[0]);
                 rbusProperty_t last = NULL;
                 *numValues = 0;
                 if (0 == numDestinations)
                 {
+                   printf("test getext ###### function %s line %d\n",__func__,__LINE__);
                     RBUSLOG_DEBUG("It is possibly a table entry from single component.");
                 }
                 else
                 {
+                   printf("test getext ###### function %s line %d\n",__func__,__LINE__);
                     for(i = 0; i < numDestinations; i++)
                     {
                         int tmpNumOfValues = 0;
