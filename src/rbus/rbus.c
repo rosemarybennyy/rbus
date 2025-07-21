@@ -322,7 +322,7 @@ static rbusEventSubscriptionInternal_t* rbusEventSubscription_find(rtVector even
     }
     return NULL;
 }
-
+#if 0
 rbusError_t rbusHandle_ConfigTimeoutValues(rbusHandle_t handle, rbusTimeoutValues_t timeoutValues)
 {
     VERIFY_NULL(handle);
@@ -333,7 +333,7 @@ rbusError_t rbusHandle_ConfigTimeoutValues(rbusHandle_t handle, rbusTimeoutValue
     rbusHandle_ConfigSubscribeTimeout(handle, timeoutValues.subscribeTimeout);
     return RBUS_ERROR_SUCCESS;
 }
-
+#endif
 rbusError_t rbusOpenDirect_SubAdd(rbusHandle_t handle, rtVector eventSubs, char const* eventName)
 {
     size_t i;
