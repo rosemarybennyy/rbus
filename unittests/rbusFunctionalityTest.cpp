@@ -588,3 +588,67 @@ TEST(rbusErrorToString, test5)
 {
   exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST5);
 }
+TEST(rbusErrorToString, test5)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST5);
+}
+TEST(rbusErrorToString, test6)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST6);
+}
+TEST(rbusErrorToString, test7)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST7);
+}
+TEST(rbusErrorToString, test8)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST8);
+}
+TEST(rbusErrorToString, test9)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST9);
+}
+TEST(rbusErrorToString, test10)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST10);
+}
+TEST(rbusErrorToString, test11)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST11);
+}
+TEST(rbusErrorToString, test12)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST12);
+}
+TEST(rbusErrorToString, test13)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST13);
+}
+TEST(rbusErrorToString, test14)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST14);
+}
+TEST(rbusErrorToString, test15)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST15);
+}
+TEST(rbusErrorToString, test16)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST16);
+}
+TEST(rbusErrorToString, test17)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST17);
+}
+TEST(rbusErrorToString, test18)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST18);
+}
+TEST(rbusErrorToString, test19)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST19);
+}
+TEST(rbusErrorToString, test20)
+{
+  exec_func_test(RBUS_GTEST_RBUSERROR_TO_STRING_TEST20);
+}
