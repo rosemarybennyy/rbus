@@ -249,6 +249,17 @@ TEST(rbusgetExtNegTest, test6)
     rc = rbus_getExt(handle, 1, &params, &actualCount, &props);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
+TEST(rbusgetExtNegTest, test7)
+{
+    rbusHandle_t handle=NULL;
+    int rc = RBUS_ERROR_SUCCESS;
+    rbusProperty_t props;
+    int actualCount = 0;
+    const char *params = "Device";
+
+    rc = rbus_getExt(handle, 0, &params, &actualCount, &props);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+}
 
 TEST(rbusgetIntNegTest, test1)
 {
