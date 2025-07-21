@@ -1242,7 +1242,7 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
       EXPECT_EQ(rbusError_ToString(rc),"out of resources");		  
   }
   break;	  
-  }
+  
  case RBUS_GTEST_RBUSERROR_TO_STRING_TEST6:
   {
       rbusError_t rc = RBUS_ERROR_DESTINATION_NOT_REACHABLE;
@@ -1348,6 +1348,7 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
       EXPECT_EQ(rbusError_ToString(rc),"async operation in progress");
   }
   break;
+  }
   rc |= rbus_close(handle);
 exit:
   free(consumerName);
