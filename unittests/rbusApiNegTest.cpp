@@ -1011,11 +1011,22 @@ TEST(rbusLogHandler, test1)
     rc = rbus_registerLogHandler(NULL);
     EXPECT_EQ(rc, RBUS_ERROR_INVALID_INPUT);
 }
-#if 0
-TEST(rbusCheckstatus, test1)
+TEST(rbusOpenDirectNegTest , test1)
+{
+  int rc = RBUS_ERROR_BUS_ERROR;
+  rbusHandle_t directHandle = NULL;
+  rc = rbus_openDirect(NULL, &directHandle, "Device.Provider1.Event1!");
+  printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ rc= %d function %s line %d\n",rc,__func__,__LINE__);
+  EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+}
+TEST(rbusCloseDirectNegTest , test1)
 {
     int rc = RBUS_ERROR_BUS_ERROR;
-    rc = rbus_checkStatus();
-    EXPECT_EQ(rc,RBUS_ERROR_BUS_ERROR );
+
+    rc = rbus_closeDirect(NULL);
+
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ rc= %d function %s line %d\n",rc,__func__,__LINE__);
+    EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
+
 }
-#endif
+
