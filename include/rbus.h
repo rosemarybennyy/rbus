@@ -2017,7 +2017,7 @@ typedef struct _rbusTimeoutValues
     uint32_t getMultiTimeout;    /* default timeout in miliseconds for Wildcard Query GET API*/
     uint32_t subscribeTimeout;   /* default timeout in miliseconds for Subscribe operation*/
 }rbusTimeoutValues_t;
-
+#if 0
 /** @fn rbusError_t rbusHandle_ConfigTimeoutValues(
  *     rbusHandle_t handle,
  *     rbusTimeoutValues_t timeoutValues);
@@ -2032,7 +2032,7 @@ typedef struct _rbusTimeoutValues
  */
 
 rbusError_t rbusHandle_ConfigTimeoutValues(rbusHandle_t handle, rbusTimeoutValues_t timeoutValues);
-
+#endif
 /** @fn int rbusHandle_ConfigSetTimeout(rbusHandle_t handle,int timeout)
  *  @brief  function to update SET Timeout value.
  *
