@@ -1208,7 +1208,7 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
   
   case RBUS_GTEST_RBUSERROR_TO_STRING:
   {
-     rbus_Error_t rc = RBUS_ERROR_SUCCESS;
+     rbusError_t rc = RBUS_ERROR_SUCCESS;
      rbusError_ToString(rc);
      EXPECT_EQ("RBUS_ERROR_SUCCESS", rbusError_ToString(rc));	  
      	  
@@ -1216,7 +1216,7 @@ case RBUS_GTEST_OPEN_DIRECT_SUBRAWDATA:
   break;
    case RBUS_GTEST_RBUSERROR_TO_STRING_TEST2:
    {
-      rbus_Error_t rc = RBUS_ERROR_BUS_ERROR;
+      rbusError_t rc = RBUS_ERROR_BUS_ERROR;
       rbusError_ToString(rc);
       EXPECT_EQ("RBUS_ERROR_BUS_ERROR", rbusError_ToString(rc));	
    }
