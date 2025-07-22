@@ -375,9 +375,11 @@ rtRouted_ParseConfig(char const* fname)
 static rtError
 rtRouted_AddRoute(rtRouteMessageHandler handler, char const* exp, rtSubscription* subscription)
 {
-  rtRouteEntry* route = (rtRouteEntry *) rt_malloc(sizeof(rtRouteEntry));
+  //rtRouteEntry* route = (rtRouteEntry *) rt_malloc(sizeof(rtRouteEntry));
+  rtRouteEntry* route = (rtRouteEntry *) rt_calloc(1, sizeof(rtRouteEntry));
   route->subscription = subscription;
   route->message_handler = handler;
+  //strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN);
   strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN);
   rtVector_PushBack(gRoutes, route);
   rtLog_Debug("AddRoute route=[%p] address=[%s] expression=[%s]", route, subscription->client->ident, exp);
