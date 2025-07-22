@@ -96,30 +96,14 @@ rtRouted_TransactionTimingDetails(rtMessageHeader header_details)
 {
   char time_buff[64] = {0};
   rtTime_t timestamp = {0};
-  //time_t boottime = 0;
-  //rtTime_t uptime = {0};
+  int64_t boottime = 0;
+  rtTime_t uptime = {0};
   
 
-  //rtTime_Now(&uptime);
-  //boottime = time(NULL) - uptime.tv_sec; /* To calculate actual boot time of the device
-    //                                        time(NULL) - Time since Epoch time(1st Jan 1970)
-      //                                      uptime.tv_sec - Time since boot of device */
-
-  struct timespec current_time, uptime;
-  clock_gettime(CLOCK_REALTIME, &current_time;
-  clock_gettime(CLOCK_MONOTONIC, &uptime);
-  
-  uint64_t now_sec = (uint64_t)current_time.tv_sec;
-  uint64_t uptime_sec = (uint64_t)uptime.tv_sec;
-
-
-    uint64_t boot_sec = now_sec - uptime_sec;
-
-    // Convert to time_t for formatting
-    time_t boottime = (time_t)boot_sec;
-
-  
-
+  rtTime_Now(&uptime);
+  boottime = time(NULL) - uptime.tv_sec; /* To calculate actual boot time of the device
+                                            time(NULL) - Time since Epoch time(1st Jan 1970)
+                                            uptime.tv_sec - Time since boot of device */
 
   rtLog_Info("=======================================================================");
   timestamp.tv_sec = header_details.T1 + boottime;
