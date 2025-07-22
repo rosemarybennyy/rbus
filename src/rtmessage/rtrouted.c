@@ -736,8 +736,11 @@ static void prep_reply_header_from_request(rtMessageHeader *reply, const rtMessa
   reply->sequence_number = request->sequence_number;
   reply->flags = rtMessageFlags_Response;
 
-  strncpy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
-  strncpy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
+  strncpy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+  reply->topic[RTMSG_HEADER_MAX_TOPIC_LENGTH];
+  strncpy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+  reply->reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH];
+
   reply->topic_length = request->reply_topic_length;
   reply->reply_topic_length = request->topic_length;
 #ifdef MSG_ROUNDTRIP_TIME
