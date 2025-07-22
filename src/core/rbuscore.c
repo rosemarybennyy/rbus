@@ -2841,7 +2841,7 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
         rbusServerDMLList_t *pTemp = rt_calloc(1,sizeof(rbusServerDMLList_t));
         strncpy(pTemp->m_privConnAddress, pPrivateConnAddress,MAX_OBJECT_NAME_LENGTH);
         strncpy(pTemp->m_consumerName, pConsumerName,MAX_OBJECT_NAME_LENGTH);
-        strncpy(pTemp->m_privateDML, pDMLName,MAX_MAX_OBJECT_NAME_LENGTH);
+        strncpy(pTemp->m_privateDML, pDMLName,MAX_OBJECT_NAME_LENGTH);
         memcpy(&pTemp->m_consumerInfo, &privConsInfo, sizeof(rtPrivateClientInfo));
         pTemp->m_pid = pid;
         pTemp->m_fnCallbackHandler = handler;
