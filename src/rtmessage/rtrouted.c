@@ -1482,7 +1482,9 @@ dispatch:
     if(clnt->header.flags & rtMessageFlags_Request)
     {
       /*Turn this message around without the payload. Set the right error flag.*/
-      strncpy(clnt->header.topic, clnt->header.reply_topic, (strlen(clnt->header.reply_topic) + 1));
+      
+      strcpy(clnt->header.topic, clnt->header.reply_topic);
+
       clnt->header.flags &= ~rtMessageFlags_Request; 
       clnt->header.flags |= (rtMessageFlags_Response | rtMessageFlags_Undeliverable);
       clnt->header.payload_length = 0;
