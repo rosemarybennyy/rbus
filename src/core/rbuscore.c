@@ -2452,15 +2452,15 @@ typedef struct _rbusServerDMLList
 
 typedef struct _server_directHandler
 {
-    char                  m_privConnAddress[MAX_OBJECT_NAME_LENGTH+1];
+    char                  m_privConnAddress[MAX_OBJECT_NAME_LENGTH];
     rtDriectClientHandler m_fnRouteCallback;
 } rbusServerDirectHandler_t;
 
 typedef struct _rbusClientDMLList
 {
-    char          m_privateDML[MAX_OBJECT_NAME_LENGTH+1];
-    char          m_providerName[MAX_OBJECT_NAME_LENGTH+1];
-    char          m_consumerName[MAX_OBJECT_NAME_LENGTH+1];
+    char          m_privateDML[MAX_OBJECT_NAME_LENGTH];
+    char          m_providerName[MAX_OBJECT_NAME_LENGTH];
+    char          m_consumerName[MAX_OBJECT_NAME_LENGTH];
     rtConnection  m_privConn;
 } rbusClientDMLList_t;
 
