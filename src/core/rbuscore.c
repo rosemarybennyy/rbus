@@ -2838,13 +2838,10 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
         }
 
         // Update the DMLs
-        rbusServerDMLList_t *pTemp = rt_malloc(sizeof(rbusServerDMLList_t));
-        strncpy(pTemp->m_privConnAddress, pPrivateConnAddress);
-        pTemp->m_privConnAddress[MAX_OBJECT_NAME_LENGTH] = '\0';
-        strncpy(pTemp->m_consumerName, pConsumerName);
-        pTemp->m_consumerName[MAX_OBJECT_NAME_LENGTH] = '\0';
-        strncpy(pTemp->m_privateDML, pDMLName);
-        pTemp->m_privateDML[MAX_DML_NAME_LEN] = '\0';
+        rbusServerDMLList_t *pTemp = rt_calloc(1,sizeof(rbusServerDMLList_t));
+        strncpy(pTemp->m_privConnAddress, pPrivateConnAddress,MAX_OBJECT_NAME_LENGTH);
+        strncpy(pTemp->m_consumerName, pConsumerName,MAX_OBJECT_NAME_LENGTH);
+        strncpy(pTemp->m_privateDML, pDMLName,MAX_DML_NAME_LEN);
         memcpy(&pTemp->m_consumerInfo, &privConsInfo, sizeof(rtPrivateClientInfo));
         pTemp->m_pid = pid;
         pTemp->m_fnCallbackHandler = handler;
