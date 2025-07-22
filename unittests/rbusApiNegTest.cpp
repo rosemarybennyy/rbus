@@ -591,7 +591,6 @@ TEST(rbusSubsNegTest, test2)
     handle = (struct _rbusHandle *) malloc(sizeof(struct _rbusHandle));
     rc = rbusEvent_Subscribe(handle, NULL, handler, userData, 30);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_HANDLE);
-    rbusError_ToString(rc);
     free(handle);
 }
 
@@ -603,7 +602,6 @@ TEST(rbusSubsNegTest, test3)
     static char userData[] = "My Data";
 
     rc = rbusEvent_Subscribe(handle,"Device.rbusProvider.", handler, userData, 30);
-    rbusError_ToString(rc);
     EXPECT_EQ(rc,RBUS_ERROR_INVALID_INPUT);
 }
 
