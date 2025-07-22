@@ -2441,9 +2441,9 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
 
 typedef struct _rbusServerDMLList 
 {
-    char                    m_privConnAddress[MAX_OBJECT_NAME_LENGTH+1];
-    char                    m_consumerName[MAX_OBJECT_NAME_LENGTH+1];
-    char                    m_privateDML [MAX_OBJECT_NAME_LENGTH+1];
+    char                    m_privConnAddress[MAX_OBJECT_NAME_LENGTH];
+    char                    m_consumerName[MAX_OBJECT_NAME_LENGTH];
+    char                    m_privateDML [MAX_OBJECT_NAME_LENGTH];
     rtPrivateClientInfo     m_consumerInfo;
     pthread_t               m_pid;
     rbus_callback_t         m_fnCallbackHandler;
