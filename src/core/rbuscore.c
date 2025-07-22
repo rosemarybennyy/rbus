@@ -2811,7 +2811,7 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
     rbusServerDMLList_t *obj = NULL;
     int err = 0;
     pthread_t pid;
-    rtPrivateClientInfo  privConsInfo;
+    rtPrivateClientInfo  privConsInfo = {0};
 
     if (pDMLName && pPrivateConnAddress && handler)
     {
@@ -2839,9 +2839,12 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
 
         // Update the DMLs
         rbusServerDMLList_t *pTemp = rt_malloc(sizeof(rbusServerDMLList_t));
-        strcpy(pTemp->m_privConnAddress, pPrivateConnAddress);
-        strcpy(pTemp->m_consumerName, pConsumerName);
-        strcpy(pTemp->m_privateDML, pDMLName);
+        strncpy(pTemp->m_privConnAddress, pPrivateConnAddress);
+        pTemp->m_privConnAddress[MAX_PRIV_CONN_ADDR_LEN] = '\0';
+        strncpy(pTemp->m_consumerName, pConsumerName);
+        pTemp->m_consumerName[MAX_CONSUMER_NAME_LEN] = '\0';
+        strncpy(pTemp->m_privateDML, pDMLName);
+        pTemp->m_privateDML[MAX_DML_NAME_LEN] = '\0';
         memcpy(&pTemp->m_consumerInfo, &privConsInfo, sizeof(rtPrivateClientInfo));
         pTemp->m_pid = pid;
         pTemp->m_fnCallbackHandler = handler;
