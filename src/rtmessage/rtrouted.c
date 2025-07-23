@@ -377,11 +377,9 @@ rtRouted_ParseConfig(char const* fname)
 static rtError
 rtRouted_AddRoute(rtRouteMessageHandler handler, char const* exp, rtSubscription* subscription)
 {
-  //rtRouteEntry* route = (rtRouteEntry *) rt_malloc(sizeof(rtRouteEntry));
   rtRouteEntry* route = (rtRouteEntry *) rt_calloc(1, sizeof(rtRouteEntry));
   route->subscription = subscription;
   route->message_handler = handler;
-  //strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN);
   strncpy(route->expression, exp, RTMSG_MAX_EXPRESSION_LEN - 1);
   rtVector_PushBack(gRoutes, route);
   rtLog_Debug("AddRoute route=[%p] address=[%s] expression=[%s]", route, subscription->client->ident, exp);
@@ -641,10 +639,10 @@ rtRouted_ForwardMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
   new_header.topic_length = hdr->topic_length;
   new_header.reply_topic_length = hdr->reply_topic_length;
   new_header.flags = hdr->flags;
-  strncpy(new_header.topic, hdr->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
-  new_header.topic[RTMSG_HEADER_MAX_TOPIC_LENGTH] = '\0';
-  strncpy(new_header.reply_topic, hdr->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
-  new_header.reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH] = '\0';
+  strncpy(new_header.topic, hdr->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
+  new_header.topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
+  strncpy(new_header.reply_topic, hdr->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
+  new_header.reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
 
 #ifdef MSG_ROUNDTRIP_TIME
   new_header.T1 = hdr->T1;
@@ -739,10 +737,10 @@ static void prep_reply_header_from_request(rtMessageHeader *reply, const rtMessa
   reply->sequence_number = request->sequence_number;
   reply->flags = rtMessageFlags_Response;
 
-  strncpy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
-  reply->topic[RTMSG_HEADER_MAX_TOPIC_LENGTH] = '\0';
-  strncpy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
-  reply->reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH] = '\0';;
+  strncpy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
+  reply->topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
+  strncpy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
+  reply->reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';;
 
   reply->topic_length = request->reply_topic_length;
   reply->reply_topic_length = request->topic_length;
