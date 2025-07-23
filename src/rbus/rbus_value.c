@@ -974,8 +974,8 @@ int rbusValue_Compare(rbusValue_t v1, rbusValue_t v2)
         rbusValue_UnMarshallRBUStoTM(&t1m, &dt1);
         rbusValue_UnMarshallRBUStoTM(&t2m, &dt2);
 
-        time_t t1 = mktime(&t1m);
-        time_t t2 = mktime(&t2m);
+        uint64_t t1 = mktime(&t1m);
+        uint64_t t2 = mktime(&t2m);
         double diffSecs = difftime(t1, t2);
 
         if(diffSecs == 0)
