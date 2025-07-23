@@ -104,7 +104,7 @@ TokenChain* TokenChain_create(char const* sourceName, elementNode* regNode)
         RBUSLOG_ERROR("ERROR: strdup failed");
         return NULL;
     }
-/
+
     chain = rt_malloc(sizeof(TokenChain));
 
    if(chain == NULL)
