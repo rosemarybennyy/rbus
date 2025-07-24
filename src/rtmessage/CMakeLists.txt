@@ -75,6 +75,7 @@ add_library(
       rtVector.c
       rtList.c
       rtTime.c
+      rtString.c
       rtSemaphore.c
       rtRetainable.c
       rtBase64.c
@@ -82,8 +83,7 @@ add_library(
       rtHashMap.c
       rtMemory.c
       rtrouteBase.c
-      local_benchmarking.c
-      rtString.c)
+      local_benchmarking.c)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${RDKLOGGER_INCLUDE_DIRS})
@@ -144,11 +144,11 @@ install (
   rtLog.h
   rtList.h
   rtTime.h
+  rtString.h
   rtAtomic.h
   rtAdvisory.h
   rtThreadPool.h
   rtHashMap.h
   rtMemory.h
   rtm_discovery_api.h
-  rtString.h
   DESTINATION "include/rtmessage")

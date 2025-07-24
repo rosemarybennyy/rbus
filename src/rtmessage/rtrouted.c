@@ -306,8 +306,9 @@ rtRouted_ParseConfig(char const* fname)
         }
         else
         {
-          g_spake2_L = rt_malloc(strlen(item->valuestring)+1);
-          strcpy(g_spake2_L, item->valuestring);
+          int valuestring_length = (strlen(item->valuestring)+1);		
+          g_spake2_L = rt_calloc(1,valuestring_length);
+	  rtString_Copy(g_spake2_L,item->valuestring,valuestring_length);
         }
       }
 
@@ -322,8 +323,9 @@ rtRouted_ParseConfig(char const* fname)
         }
         else
         {
-          g_spake2_w0 = rt_malloc(strlen(item->valuestring)+1);
-          strcpy(g_spake2_w0, item->valuestring);
+          int g_spake2_w0_length = strlen(item->valuestring)+1 ;		
+          g_spake2_w0 = rt_calloc(1,g_spake2_w0_length);
+	  rtString_Copy(g_spake2_w0,item->valuestring,g_spake2_w0_length);
         }
       }
 
@@ -629,10 +631,6 @@ rtRouted_ForwardMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
   new_header.flags = hdr->flags;
   rtString_Copy(new_header.topic,hdr->topic,RTMSG_HEADER_MAX_TOPIC_LENGTH);
   rtString_Copy(new_header.reply_topic,hdr->reply_topic,RTMSG_HEADER_MAX_TOPIC_LENGTH);
-  //strncpy(new_header.topic, hdr->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
-  //new_header.topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
-  //strncpy(new_header.reply_topic, hdr->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
-  //new_header.reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
 
 #ifdef MSG_ROUNDTRIP_TIME
   new_header.T1 = hdr->T1;
@@ -726,15 +724,8 @@ static void prep_reply_header_from_request(rtMessageHeader *reply, const rtMessa
   reply->header_length = request->header_length;
   reply->sequence_number = request->sequence_number;
   reply->flags = rtMessageFlags_Response;
-#if 0
-  strncpy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
-  reply->topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';
-  strncpy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH - 1);
-  reply->reply_topic[RTMSG_HEADER_MAX_TOPIC_LENGTH - 1] = '\0';;
-#else
   rtString_Copy(reply->topic,request->reply_topic,RTMSG_HEADER_MAX_TOPIC_LENGTH);
   rtString_Copy(reply->reply_topic,request->topic,RTMSG_HEADER_MAX_TOPIC_LENGTH);
-#endif
   reply->topic_length = request->reply_topic_length;
   reply->reply_topic_length = request->topic_length;
 #ifdef MSG_ROUNDTRIP_TIME
@@ -790,7 +781,6 @@ rtRouted_OnMessageSubscribe(rtConnectedClient* sender, rtMessageHeader* hdr, uin
 
           if(strstr(expression, ".INBOX.") && sender->inbox[0] == '\0')
           {
-            //strncpy(sender->inbox, expression, (RTMSG_HEADER_MAX_TOPIC_LENGTH-1));
 	    rtString_Copy(sender->inbox,expression,RTMSG_HEADER_MAX_TOPIC_LENGTH);
             rtLog_Debug("init client inbox to %s", sender->inbox);
             rtRouted_SendAdvisoryMessage(sender, rtAdviseClientConnect);
@@ -1252,7 +1242,6 @@ rtRouted_SendAdvisoryMessage(rtConnectedClient* clnt, rtAdviseEvent event)
 
   rtMessageHeader_Init(&hdr);
   hdr.topic_length = strlen(RTMSG_ADVISORY_TOPIC);
-  //strncpy(hdr.topic, RTMSG_ADVISORY_TOPIC, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
   rtString_Copy(hdr.topic,RTMSG_ADVISORY_TOPIC,RTMSG_HEADER_MAX_TOPIC_LENGTH);
   rtLog_Debug("Sending advisory message");
   if (RT_OK != rtRouted_SendMessage(&hdr, msg, clnt))
@@ -1474,8 +1463,7 @@ dispatch:
     {
       /*Turn this message around without the payload. Set the right error flag.*/
       
-      strcpy(clnt->header.topic, clnt->header.reply_topic);
-
+      rtString_Copy(clnt->header.topic,clnt->header.reply_topic,RTMSG_HEADER_MAX_TOPIC_LENGTH);
       clnt->header.flags &= ~rtMessageFlags_Request; 
       clnt->header.flags |= (rtMessageFlags_Response | rtMessageFlags_Undeliverable);
       clnt->header.payload_length = 0;
@@ -1791,7 +1779,6 @@ int main(int argc, char* argv[])
   {
     route = (rtRouteEntry *)rt_malloc(sizeof(rtRouteEntry));
     route->subscription = NULL;
-    //strncpy(route->expression, "_RTROUTED.>", RTMSG_MAX_EXPRESSION_LEN-1);
     rtString_Copy(route->expression,"_RTROUTED.>",RTMSG_MAX_EXPRESSION_LEN);
     route->message_handler = rtRouted_OnMessage;
     rtVector_PushBack(gRoutes, route);
@@ -1853,7 +1840,6 @@ int main(int argc, char* argv[])
         route = (rtRouteEntry *)rt_malloc(sizeof(rtRouteEntry));
         route->subscription = NULL;
         route->message_handler = &rtRouted_TrafficMonitorLog;
-        //strncpy(route->expression, ">", RTMSG_MAX_EXPRESSION_LEN-1);
 	rtString_Copy(route->expression,">",RTMSG_MAX_EXPRESSION_LEN);
         rtVector_PushBack(gRoutes, route);
       }
