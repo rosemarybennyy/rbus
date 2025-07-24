@@ -1,4 +1,5 @@
 #include "rtString.h"
+#include <stdio.h>
 #include <string.h>
 
 uint32_t rtString_Copy(char* dest, const char* src, uint32_t size)
