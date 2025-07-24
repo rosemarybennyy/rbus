@@ -268,7 +268,11 @@ static void noAutoPubHandler(rbusHandle_t handle,
     noAutoPubResults[idx][count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     noAutoPubResults[idx][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
+    {
         strncpy(noAutoPubResults[idx][count].byAct, byComponent, 64);
+        noAutoPubResults[idx][count].byAct[63] = '\0';
+
+    }
 }
 static void noAutoPub1Handler(
     rbusHandle_t handle,
