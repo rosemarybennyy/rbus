@@ -2,7 +2,7 @@
 #define RT_STRING_H
 
 #include <stddef.h>
-
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
