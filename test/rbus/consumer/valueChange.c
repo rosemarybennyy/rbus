@@ -174,7 +174,7 @@ static void intVCHandler(
     if(byComponent)
     {
         strncpy(intResults[index][count].byAct, byComponent, 64);
-	intResults[index][count].byAct[63] = '\0'
+	intResults[index][count].byAct[63] = '\0';
     }	
 }
 
