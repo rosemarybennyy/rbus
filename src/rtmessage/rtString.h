@@ -8,7 +8,6 @@ extern "C" {
 #endif
 
 // Safe string copy: copies up to (size-1) characters and null-terminates
-//uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t dstBufferSize)
 uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t dstBufferSize);
 
 #ifdef __cplusplus
