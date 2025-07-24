@@ -46,7 +46,7 @@ int getDurationValueAPI()
 void testValue_Type()
 {
     rbusValue_t val;
-    rbusDateTime_t tv;
+    rbusDateTime_t tv = {{0},{0}};
 
     printf("%s\n",__FUNCTION__);
 
