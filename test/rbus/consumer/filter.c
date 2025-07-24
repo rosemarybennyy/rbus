@@ -71,9 +71,12 @@ static void testSerialize(rbusFilter_t f1)
     fseek(file, 0, SEEK_SET);
     rbusBuffer_Reserve(buffIn, size);
     int re = fread(buffIn->data, 1, size, file); 
-    (void)re;
     fclose(file);
-    buffIn->posWrite += size;
+    if (re != size)
+    {
+       TEST(re == size);
+    }
+    buffIn->posWrite += re;
     
     printf("buffOut->posWrite=%d buffIn->posWrite=%d\n", buffOut->posWrite, buffIn->posWrite);
     TEST(buffOut->posWrite == buffIn->posWrite);
