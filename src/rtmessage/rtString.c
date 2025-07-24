@@ -8,7 +8,7 @@ uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t dstBuffe
    if ((0 == dstBufferSize) || (!srcBuffer) || (!dstBuffer))
         return 0;
 
-    int srcBufferSize = snprintf(dstBuffer, dstBufferSize, "%s", srcBuffer);
+    uint32_t srcBufferSize = snprintf(dstBuffer, dstBufferSize, "%s", srcBuffer);
 
     if (srcBufferSize >= dstBufferSize)
         printf("Output was truncated.\n");
