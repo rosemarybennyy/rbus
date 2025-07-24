@@ -82,7 +82,8 @@ add_library(
       rtHashMap.c
       rtMemory.c
       rtrouteBase.c
-      local_benchmarking.c)
+      local_benchmarking.c
+      rtString.c)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${RDKLOGGER_INCLUDE_DIRS})
@@ -149,4 +150,5 @@ install (
   rtHashMap.h
   rtMemory.h
   rtm_discovery_api.h
+  rtString.h
   DESTINATION "include/rtmessage")
