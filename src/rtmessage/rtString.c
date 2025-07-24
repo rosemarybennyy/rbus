@@ -11,5 +11,5 @@ uint32_t rtString_Copy(char* dest, const char* src, uint32_t size)
         return 0;
     }
 
-    return (uint32_t) snprintf(dest, size, "%s", src);
+    return snprintf (dest, size, "%s", src);
 }
