@@ -200,10 +200,15 @@ static void stringVCHandler(
 
     strResults[index][count].status = 1;
     strncpy(strResults[index][count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
+    strResults[index][count].newValAct[63] = '\0';
     strncpy(strResults[index][count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
     strResults[index][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
+
     if(byComponent)
+    {	    
         strncpy(strResults[index][count].byAct, byComponent, 64);
+	strResults[index][count].byAct[63] = '\0';
+    }	
 
 }
 
