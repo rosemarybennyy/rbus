@@ -132,10 +132,16 @@ static void simpleVCHandler(
 
     simpleResults[count].status = 1;
     strncpy(simpleResults[count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
+    simpleResults[count].newValAct[63] = '\0';
     strncpy(simpleResults[count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
+    simpleResults[count].oldValAct[63] = '\0'
     simpleResults[count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
+    
     if(byComponent)
+    {	    
         strncpy(simpleResults[count].byAct, byComponent, 64);
+	simpleResults[count].byAct[63] = '\0';
+    }	
 }
 
 static void intVCHandler(
