@@ -172,7 +172,10 @@ static void intVCHandler(
     intResults[index][count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     intResults[index][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
+    {
         strncpy(intResults[index][count].byAct, byComponent, 64);
+	intResults[index][count].byAct[63] = '\0'
+    }	
 }
 
 static void stringVCHandler(
