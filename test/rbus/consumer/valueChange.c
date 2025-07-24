@@ -242,7 +242,10 @@ static void byVCHandler(
     byResults[count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     byResults[count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
+    {
         strncpy(byResults[count].byAct, byComponent, 64);
+	byResults[count].byAct[63] = '\0';
+    }	
 }
 
 static void noAutoPubHandler(rbusHandle_t handle,
