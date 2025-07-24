@@ -11,12 +11,5 @@ uint32_t rtString_Copy(char* dest, const char* src, uint32_t size)
         return 0;
     }
 
-    int written = snprintf(dest, size, "%s", src);
-
-    if (written >= (int)size) {
-        dest[size - 1] = '\0'; 
-        return size - 1;       
-    }
-
-    return (uint32_t)written;
+    return (uint32_t)snprintf(dest, size, "%s", src);
 }
