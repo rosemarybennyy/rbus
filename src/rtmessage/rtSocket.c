@@ -78,7 +78,7 @@ rtSocket_InterfaceNameToAddress(char const* s, char* t, int n)
   close(soc);
 
   sin = (struct sockaddr_in *) &req.ifr_addr;
-  strncpy(t, inet_ntoa(sin->sin_addr), n);
+  rtString_Copy(t, n, inet_ntoa(sin->sin_addr));
   return RT_OK;
 }
 
