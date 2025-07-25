@@ -1,7 +1,7 @@
 #include "rtString.h"
 #include "rtLog.h"
 
-uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t dstBufferSize)
+uint32_t rtString_Copy(char* dstBuffer, uint32_t dstBufferSize, const char* srcBuffer)
 {
   uint32_t srcBufferSize = 0;
   if ((0 == dstBufferSize) || (!srcBuffer) || (!dstBuffer))

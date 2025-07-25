@@ -2813,7 +2813,7 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
         if (!obj)
         {
             rbusServerDirectHandler_t *pInstance = rt_malloc(sizeof(rbusServerDirectHandler_t));
-            rtString_Copy(pInstance->m_privConnAddress, pPrivateConnAddress, MAX_OBJECT_NAME_LENGTH);
+            rtString_Copy(pInstance->m_privConnAddress, MAX_OBJECT_NAME_LENGTH, pPrivateConnAddress);
             pInstance->m_fnRouteCallback = _onDirectMessage;
 
             if((err = pthread_create(&pid, NULL, rbuscore_PrivateThreadFunc, pInstance)) != 0)
@@ -2832,9 +2832,9 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
 
         // Update the DMLs
         rbusServerDMLList_t *pTemp = rt_calloc(1, sizeof(rbusServerDMLList_t));
-        rtString_Copy(pTemp->m_privConnAddress, pPrivateConnAddress, MAX_OBJECT_NAME_LENGTH);
-        rtString_Copy(pTemp->m_consumerName, pConsumerName, MAX_OBJECT_NAME_LENGTH);
-        rtString_Copy(pTemp->m_privateDML, pDMLName, MAX_OBJECT_NAME_LENGTH);
+        rtString_Copy(pTemp->m_privConnAddress, MAX_OBJECT_NAME_LENGTH, pPrivateConnAddress);
+        rtString_Copy(pTemp->m_consumerName, MAX_OBJECT_NAME_LENGTH,pConsumerName);
+        rtString_Copy(pTemp->m_privateDML, MAX_OBJECT_NAME_LENGTH, pDMLName);
         memcpy(&pTemp->m_consumerInfo, &privConsInfo, sizeof(rtPrivateClientInfo));
         pTemp->m_pid = pid;
         pTemp->m_fnCallbackHandler = handler;
