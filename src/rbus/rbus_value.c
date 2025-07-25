@@ -34,6 +34,7 @@
 #include <rtRetainable.h>
 #include <limits.h>
 #include <rtMemory.h>
+#include "rtString.h"
 #include "rbus_buffer.h"
 #include "rbus_log.h"
 
@@ -311,7 +312,7 @@ char* rbusValue_ToString(rbusValue_t v, char* buf, size_t buflen)
     switch(v->type)
     {
     case RBUS_STRING:
-        strncpy(p, (char const* ) v->d.bytes->data, n);
+        rtString_Copy(p, n, (char const* ) v->d.bytes->data);
         break;
     case RBUS_BYTES:
     {
