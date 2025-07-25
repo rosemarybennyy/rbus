@@ -312,7 +312,7 @@ char* rbusValue_ToString(rbusValue_t v, char* buf, size_t buflen)
     switch(v->type)
     {
     case RBUS_STRING:
-	rtString_Copy(p, (uint32_t) n , (char const* ) v->d.bytes->data);    
+	strncpy(p, (char const* ) v->d.bytes->data, n);    
         break;
     case RBUS_BYTES:
     {
