@@ -28,6 +28,7 @@
 #include "rtSocket.h"
 #include "rtList.h"
 #include "rtRetainable.h"
+#include "rtString.h"
 #include "rtTime.h"
 #include "rtSemaphore.h"
 #include "rtMemory.h"
@@ -1158,12 +1159,12 @@ rtConnection_SendInternal(rtConnection con, uint8_t const* buff, uint32_t n, cha
 
   if(topic)
   {
-    strncpy(header.topic, topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
+    rtString_Copy(header.topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, topic);
     header.topic_length = strlen(header.topic);
   }
   if (reply_topic)
   {
-    strncpy(header.reply_topic, reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
+    rtString_Copy(header.reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, reply_topic);
     header.reply_topic_length = strlen(reply_topic);
   }
   else
