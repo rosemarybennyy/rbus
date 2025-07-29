@@ -1,17 +1,17 @@
 #include "rtString.h"
 #include "rtLog.h"
 
-uint32_t rtString_Copy(char* dstBuffer, uint32_t dstBufferSize, const char* srcBuffer)
+uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t copySize)
 {
   uint32_t srcBufferSize = 0;
-  if ((0 == dstBufferSize) || (!srcBuffer) || (!dstBuffer))
+  if ((0 == copySize) || (!srcBuffer) || (!dstBuffer))
     return 0;
 
-  srcBufferSize = snprintf(dstBuffer, dstBufferSize, "%s", srcBuffer);
-  if (srcBufferSize > dstBufferSize)
+  srcBufferSize = snprintf(dstBuffer, copySize, "%s", srcBuffer);
+  if (srcBufferSize > copySize)
   {
-     rtLog_Info("Truncated the given string (%s) as (%s) with size %d", srcBuffer, dstBuffer, dstBufferSize);
-     return dstBufferSize;
+     rtLog_Info("Truncated the given string (%s) as (%s) with size %d", srcBuffer, dstBuffer, copySize);
+     return copySize;
   }
   else
     return srcBufferSize;

@@ -66,7 +66,7 @@ rtSocket_InterfaceNameToAddress(char const* s, char* t, int n)
 
   memset(&req, 0, sizeof(req));
   req.ifr_addr.sa_family = AF_INET;
-  rtString_Copy(req.ifr_name, IFNAMSIZ, s);
+  rtString_Copy(req.ifr_name, s, IFNAMSIZ);
 
   ret = ioctl(soc, SIOCGIFADDR, &req);
   if (ret)
@@ -78,7 +78,7 @@ rtSocket_InterfaceNameToAddress(char const* s, char* t, int n)
   close(soc);
 
   sin = (struct sockaddr_in *) &req.ifr_addr;
-  rtString_Copy(t, n, inet_ntoa(sin->sin_addr));
+  rtString_Copy(t, inet_ntoa(sin->sin_addr), n);
   return RT_OK;
 }
 
@@ -176,7 +176,7 @@ rtSocketStorage_FromString(struct sockaddr_storage* ss, char const* addr)
   {
     struct sockaddr_un* un = (struct sockaddr_un*) ss;
     un->sun_family = AF_UNIX;
-    rtString_Copy(un->sun_path, sizeof(un->sun_path), addr + 7);
+    rtString_Copy(un->sun_path, addr + 7, sizeof(un->sun_path));
     //chmod(un->sun_path, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 
     return RT_OK;
@@ -196,7 +196,7 @@ rtSocketStorage_FromString(struct sockaddr_storage* ss, char const* addr)
     return RT_ERROR_INVALID_ARG;
   }
 
-  rtString_Copy(ip, (uint32_t)(p - addr - 6 + 1), addr + 6);
+  rtString_Copy(ip, addr + 6, (uint32_t)(p - addr - 6 + 1));
   rtLog_Debug("parsing ip address:%s", ip);
   if (!rtSocket_IsNumeric(ip))
   {
@@ -213,7 +213,7 @@ rtSocketStorage_FromString(struct sockaddr_storage* ss, char const* addr)
 
     rtLog_Debug("'%s' has v4 address '%s'", ip, temp);
     memset(ip, 0, sizeof(ip));
-    rtString_Copy(ip, sizeof(ip), temp);
+    rtString_Copy(ip, temp, sizeof(ip));
   }
 
   v4 = (struct sockaddr_in *) ss;

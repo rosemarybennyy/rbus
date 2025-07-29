@@ -1159,12 +1159,12 @@ rtConnection_SendInternal(rtConnection con, uint8_t const* buff, uint32_t n, cha
 
   if(topic)
   {
-    rtString_Copy(header.topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, topic);
+    rtString_Copy(header.topic, topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
     header.topic_length = strlen(header.topic);
   }
   if (reply_topic)
   {
-    rtString_Copy(header.reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, reply_topic);
+    rtString_Copy(header.reply_topic, reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
     header.reply_topic_length = strlen(reply_topic);
   }
   else
