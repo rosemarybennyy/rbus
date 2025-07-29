@@ -1240,7 +1240,7 @@ TEST_F(TestServer, rtmsg_rtMessage_SetMessage_test1)
     EXPECT_EQ(err, RT_OK);
     err = rtMessage_GetSendTopic(req, getTopic);
     EXPECT_EQ(err, RT_OK);
- 
+    printf("########## rosemary function %s line %d getTopic : %s topic : %s\n",__func__,__LINE__,getTopic,topic); 
     EXPECT_EQ(strcmp(getTopic,topic), 0);
     rtMessage_Release(req);
     rtMessage_Release(item);
