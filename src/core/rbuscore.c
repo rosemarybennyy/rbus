@@ -2993,8 +2993,10 @@ rbusCoreError_t rbuscore_openPrivateConnectionToProvider(rtConnection *pPrivateC
             /* Update the Vector to avoid multiple connections */
             pNewObj = rt_malloc(sizeof(rbusClientDMLList_t));
 
-            strcpy(pNewObj->m_privateDML, pParameterName);
-            strcpy(pNewObj->m_providerName, pProviderName);
+            //strcpy(pNewObj->m_privateDML, pParameterName);
+	    rtString_Copy(pNewObj->m_privateDML, pParameterName, MAX_OBJECT_NAME_LENGTH);
+	    rtString_Copy(pNewObj->m_providerName, pProviderName, MAX_OBJECT_NAME_LENGTH);
+            //strcpy(pNewObj->m_providerName, pProviderName);
             pNewObj->m_privConn = connection;
 
             rtVector_PushBack(gListOfClientDirectDMLs, pNewObj);
