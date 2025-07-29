@@ -20,6 +20,7 @@
 */
 #define _GNU_SOURCE 1
 #include "rtError.h"
+#include "rtString.h"
 #include "rtMessage.h"
 #include "rtBase64.h"
 #include "rtAtomic.h"
