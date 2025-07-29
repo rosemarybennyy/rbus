@@ -2406,7 +2406,7 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
         if ((tpLen > 0) && (tpLen < (RBUS_OPEN_TELEMETRY_DATA_MAX - 1)))
         {
             memset(ot_ctx->otTraceParent, '\0', sizeof(ot_ctx->otTraceParent));
-            rtString_Copy(ot_ctx->otTraceParent, tpLen, traceParent);
+            rtString_Copy(ot_ctx->otTraceParent, traceParent, tpLen);
             ot_ctx->otTraceParent[tpLen + 1] = '\0';
         }
         else
@@ -2421,7 +2421,7 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
         if ((tsLen > 0) && (tsLen < (RBUS_OPEN_TELEMETRY_DATA_MAX - 1)))
         {
             memset(ot_ctx->otTraceState, '\0', sizeof(ot_ctx->otTraceState));
-            rtString_Copy(ot_ctx->otTraceState, tsLen, traceState);
+            rtString_Copy(ot_ctx->otTraceState, traceState, tsLen);
             ot_ctx->otTraceState[tsLen + 1] = '\0';
         }
         else
@@ -2813,7 +2813,7 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
         if (!obj)
         {
             rbusServerDirectHandler_t *pInstance = rt_malloc(sizeof(rbusServerDirectHandler_t));
-            rtString_Copy(pInstance->m_privConnAddress, MAX_OBJECT_NAME_LENGTH, pPrivateConnAddress);
+            rtString_Copy(pInstance->m_privConnAddress, pPrivateConnAddress, MAX_OBJECT_NAME_LENGTH);
             pInstance->m_fnRouteCallback = _onDirectMessage;
 
             if((err = pthread_create(&pid, NULL, rbuscore_PrivateThreadFunc, pInstance)) != 0)
@@ -2832,9 +2832,9 @@ rbusCoreError_t rbuscore_startPrivateListener(const char* pPrivateConnAddress, c
 
         // Update the DMLs
         rbusServerDMLList_t *pTemp = rt_calloc(1, sizeof(rbusServerDMLList_t));
-        rtString_Copy(pTemp->m_privConnAddress, MAX_OBJECT_NAME_LENGTH, pPrivateConnAddress);
-        rtString_Copy(pTemp->m_consumerName, MAX_OBJECT_NAME_LENGTH,pConsumerName);
-        rtString_Copy(pTemp->m_privateDML, MAX_OBJECT_NAME_LENGTH, pDMLName);
+        rtString_Copy(pTemp->m_privConnAddress, pPrivateConnAddress, MAX_OBJECT_NAME_LENGTH);
+        rtString_Copy(pTemp->m_consumerName, pConsumerName, MAX_OBJECT_NAME_LENGTH);
+        rtString_Copy(pTemp->m_privateDML, pDMLName, MAX_OBJECT_NAME_LENGTH);
         memcpy(&pTemp->m_consumerInfo, &privConsInfo, sizeof(rtPrivateClientInfo));
         pTemp->m_pid = pid;
         pTemp->m_fnCallbackHandler = handler;
