@@ -1085,7 +1085,8 @@ void testValue_ToString()
 
     /*test passing in a buff without sufficient length*/
     rbusValue_SetString(v, "0123456789");
-    rbusValue_ToString(v,buff,6);/*get 5 chars plus null terminator*/
+    rbusValue_ToString(v,buff,5);/*get 5 chars plus null terminator*/
+    printf("buff is : %s\n",buff);
     TEST(!strcmp(buff, "012345"));
 
     rbusValue_Release(v);
