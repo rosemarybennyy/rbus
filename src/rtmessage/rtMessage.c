@@ -430,10 +430,8 @@ rtMessage_GetSendTopic(rtMessage const m, char* topic)
 {
   rtError err = RT_OK;
   cJSON* obj = cJSON_GetObjectItem(m->json, "_topic");
-  int length = cJSON_GetArraySize(obj);
-  printf("############# rosemary ##### length : %d\n",length);
   if (obj)
-    rtString_Copy(topic, obj->valuestring, length);
+    rtString_Copy(topic, obj->valuestring, 50);
   else
     err = RT_FAIL;
   return err;
