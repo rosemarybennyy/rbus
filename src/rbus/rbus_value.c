@@ -313,7 +313,7 @@ char* rbusValue_ToString(rbusValue_t v, char* buf, size_t buflen)
     {
     case RBUS_STRING:
 	//strncpy(p, (char const* ) v->d.bytes->data, n);
-	rtString_Copy(p,n,(char const* ) v->d.bytes->data);
+	rtString_Copy(p,(char const* ) v->d.bytes->data, n);
         printf("############ rosemary  destination p =  %s ######  source v->d.bytes->data = %s ######## size n = %d\n",p,(char const* ) v->d.bytes->data,n); 	
 //	rtString_Copy(p,n,(char const* ) v->d.bytes->data);  
         break;
