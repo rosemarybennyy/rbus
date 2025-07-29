@@ -190,8 +190,8 @@ _rtdirect_prepare_reply_from_request(rtMessageHeader *reply, const rtMessageHead
   reply->flags = rtMessageFlags_Response;
   reply->control_data = 0;//subscription->id;
 
-  rtString_Copy(reply->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, request->reply_topic);
-  rtString_Copy(reply->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, request->topic);
+  rtString_Copy(reply->topic, request->reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+  rtString_Copy(reply->reply_topic, request->topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
   reply->topic_length = request->reply_topic_length;
   reply->reply_topic_length = request->topic_length;
 }
@@ -525,7 +525,7 @@ rtRouteDirect_SendMessage(const rtPrivateClientInfo* pClient, uint8_t const* pIn
         else
             new_header.control_data = pClient->clientID;
 
-        rtString_Copy(new_header.topic, RTMSG_HEADER_MAX_TOPIC_LENGTH, pClient->clientTopic);
+        rtString_Copy(new_header.topic, pClient->clientTopic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
         new_header.topic_length = strlen(new_header.topic);
         new_header.reply_topic[0] = '\0';
         new_header.reply_topic_length = 0;
@@ -591,7 +591,7 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
   if (!route)
       return rtErrorFromErrno(ENOMEM);
   route->subscription = NULL;
-  rtString_Copy(route->expression, RTMSG_MAX_EXPRESSION_LEN, "_RTDIRECT>");
+  rtString_Copy(route->expression, "_RTDIRECT>", RTMSG_MAX_EXPRESSION_LEN);
   route->message_handler = _rtdirect_OnMessage;
 
   int ltIsrunning = 1;
