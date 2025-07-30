@@ -1240,7 +1240,6 @@ TEST_F(TestServer, rtmsg_rtMessage_SetMessage_test1)
     EXPECT_EQ(err, RT_OK);
     err = rtMessage_GetSendTopic(req, getTopic);
     EXPECT_EQ(err, RT_OK);
- 
     EXPECT_EQ(strcmp(getTopic,topic), 0);
     rtMessage_Release(req);
     rtMessage_Release(item);

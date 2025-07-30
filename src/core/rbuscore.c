@@ -68,7 +68,7 @@ typedef struct _server_object* server_object_t;
 
 typedef struct _server_method
 {
-    char name[MAX_METHOD_NAME_LENGTH+1];
+    char name[MAX_METHOD_NAME_LENGTH];
     rbus_callback_t callback;
     void * data;
 } *server_method_t;
@@ -76,7 +76,7 @@ typedef struct _server_method
 
 typedef struct _server_event
 {
-    char name[MAX_EVENT_NAME_LENGTH+1];
+    char name[MAX_EVENT_NAME_LENGTH];
     server_object_t object;
     rtVector listeners /*list of strings*/;
     rbus_event_subscribe_callback_t sub_callback;
@@ -85,7 +85,7 @@ typedef struct _server_event
 
 typedef struct _server_object
 {
-    char name[MAX_OBJECT_NAME_LENGTH+1];
+    char name[MAX_OBJECT_NAME_LENGTH];
     void* data;
     rbus_callback_t callback;
     bool process_event_subscriptions;
@@ -105,8 +105,8 @@ const rtPrivateClientInfo* _rbuscore_find_server_privateconnection(const char *p
 
 void server_method_create(server_method_t* meth, char const* name, rbus_callback_t callback, void* data)
 {
-    (*meth) = rt_malloc(sizeof(struct _server_method));
-    strcpy((*meth)->name, name);
+    (*meth) = rt_calloc(1, sizeof(struct _server_method));
+    rtString_Copy((*meth)->name, name, MAX_METHOD_NAME_LENGTH);
     (*meth)->callback = callback;
     (*meth)->data = data;
 }
@@ -125,7 +125,7 @@ void server_event_create(server_event_t* event, const char * event_name, server_
 {
     (*event) = rt_malloc(sizeof(struct _server_event));
     rtVector_Create(&(*event)->listeners);
-    strcpy((*event)->name, event_name);
+    rtString_Copy((*event)->name, event_name, MAX_EVENT_NAME_LENGTH);
     (*event)->object = obj;
     (*event)->sub_callback = sub_callback;
     (*event)->sub_data = sub_data;
@@ -191,8 +191,8 @@ int server_object_compare(const void* left, const void* right)
 
 void server_object_create(server_object_t* obj, char const* name, rbus_callback_t callback, void* data)
 {
-    (*obj) = rt_malloc(sizeof(struct _server_object));
-    strcpy((*obj)->name, name);
+    (*obj) = rt_calloc(1,sizeof(struct _server_object));
+    rtString_Copy((*obj)->name, name, MAX_OBJECT_NAME_LENGTH);
     (*obj)->callback = callback;
     (*obj)->data = data;
     (*obj)->process_event_subscriptions = false;
@@ -270,23 +270,23 @@ void queued_request_create(queued_request_t* req, rtMessageHeader hdr, rbusMessa
 /* Begin rbus_client */
 typedef struct _client_event
 {
-    char name[MAX_EVENT_NAME_LENGTH+1];
+    char name[MAX_EVENT_NAME_LENGTH];
     rbus_event_callback_t callback;
     void* data;
 } *client_event_t;
 
 typedef struct _client_subscription
 {
-    char object[MAX_OBJECT_NAME_LENGTH+1];
+    char object[MAX_OBJECT_NAME_LENGTH];
     rtVector events; /*list of client_event_t*/
 } *client_subscription_t;
 
 void client_event_create(client_event_t* event, const char* name, rbus_event_callback_t callback, void* data)
 {
-    (*event) = rt_malloc(sizeof(struct _client_event));
+    (*event) = rt_calloc(1,sizeof(struct _client_event));
     (*event)->callback = callback;
     (*event)->data = data;
-    strcpy((*event)->name, name);
+    rtString_Copy((*event)->name, name, MAX_EVENT_NAME_LENGTH);
 }
 
 int client_event_compare(const void* left, const void* right)
@@ -301,8 +301,8 @@ int client_subscription_compare(const void* left, const void* right)
 
 void client_subscription_create(client_subscription_t* sub, const char * object_name)
 {
-    (*sub) = rt_malloc(sizeof(struct _client_subscription));
-    strcpy((*sub)->object, object_name);
+    (*sub) = rt_calloc(1,sizeof(struct _client_subscription));
+    rtString_Copy((*sub)->object, object_name, MAX_OBJECT_NAME_LENGTH);
     rtVector_Create(&(*sub)->events); 
 }
 
@@ -576,7 +576,7 @@ static void configure_router_address()
                     if(idx2-idx1 > 0)
                     {
                         buff[idx2] = 0;
-                        strcpy(g_daemon_address, &buff[idx1]);
+                        rtString_Copy(g_daemon_address, &buff[idx1], MAX_DAEMON_ADDRESS_LEN);
                         break;
                     }
                 }
@@ -2406,7 +2406,7 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
         if ((tpLen > 0) && (tpLen < (RBUS_OPEN_TELEMETRY_DATA_MAX - 1)))
         {
             memset(ot_ctx->otTraceParent, '\0', sizeof(ot_ctx->otTraceParent));
-            strncpy(ot_ctx->otTraceParent, traceParent, tpLen);
+            rtString_Copy(ot_ctx->otTraceParent, traceParent, tpLen);
             ot_ctx->otTraceParent[tpLen + 1] = '\0';
         }
         else
@@ -2421,7 +2421,7 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
         if ((tsLen > 0) && (tsLen < (RBUS_OPEN_TELEMETRY_DATA_MAX - 1)))
         {
             memset(ot_ctx->otTraceState, '\0', sizeof(ot_ctx->otTraceState));
-            strncpy(ot_ctx->otTraceState, traceState, tsLen);
+            rtString_Copy(ot_ctx->otTraceState, traceState, tsLen);
             ot_ctx->otTraceState[tsLen + 1] = '\0';
         }
         else
@@ -2993,8 +2993,8 @@ rbusCoreError_t rbuscore_openPrivateConnectionToProvider(rtConnection *pPrivateC
             /* Update the Vector to avoid multiple connections */
             pNewObj = rt_malloc(sizeof(rbusClientDMLList_t));
 
-            strcpy(pNewObj->m_privateDML, pParameterName);
-            strcpy(pNewObj->m_providerName, pProviderName);
+            rtString_Copy(pNewObj->m_privateDML, pParameterName, MAX_OBJECT_NAME_LENGTH);
+            rtString_Copy(pNewObj->m_providerName, pProviderName, MAX_OBJECT_NAME_LENGTH);
             pNewObj->m_privConn = connection;
 
             rtVector_PushBack(gListOfClientDirectDMLs, pNewObj);
