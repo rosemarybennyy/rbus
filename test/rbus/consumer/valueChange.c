@@ -29,6 +29,7 @@
 #include <rbus.h>
 #include "../common/test_macros.h"
 #include "rbus_handle.h"
+#include "rtString.h"
 
 static int gDuration = 67;
 
@@ -131,11 +132,16 @@ static void simpleVCHandler(
         byComponent = rbusValue_GetString(byVal, NULL);
 
     simpleResults[count].status = 1;
-    strncpy(simpleResults[count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
-    strncpy(simpleResults[count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
+    rtString_Copy(simpleResults[count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
+    printf("########### blessy ##### function %s line %d\n",__func__,__LINE__);
+    rtString_Copy(simpleResults[count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
+    printf("########### blessy ##### function %s line %d\n",__func__,__LINE__);
     simpleResults[count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
-        strncpy(simpleResults[count].byAct, byComponent, 64);
+    {	    
+        rtString_Copy(simpleResults[count].byAct, byComponent, 64);
+        printf("########### blessy ##### function %s line %d\n",__func__,__LINE__);
+    }	
 }
 
 static void intVCHandler(
@@ -166,7 +172,10 @@ static void intVCHandler(
     intResults[index][count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     intResults[index][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
-        strncpy(intResults[index][count].byAct, byComponent, 64);
+    {
+        rtString_Copy(intResults[index][count].byAct, byComponent, 64);
+	printf("############## blessy intResults[index][count].byAct:  %s byComponent : %s line : %d\n",intResults[index][count].byAct,byComponent,__LINE__); 
+    }
 }
 
 static void stringVCHandler(
@@ -193,11 +202,11 @@ static void stringVCHandler(
         byComponent = rbusValue_GetString(byVal, NULL);
 
     strResults[index][count].status = 1;
-    strncpy(strResults[index][count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
-    strncpy(strResults[index][count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
+    rtString_Copy(strResults[index][count].newValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "value"), NULL) : "null", 64);
+    rtString_Copy(strResults[index][count].oldValAct, rbusObject_GetValue(event->data, "value") ? rbusValue_GetString(rbusObject_GetValue(event->data, "oldValue"), NULL) : "null", 64);
     strResults[index][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
-        strncpy(strResults[index][count].byAct, byComponent, 64);
+        rtString_Copy(strResults[index][count].byAct, byComponent, 64);
 
 }
 
@@ -228,7 +237,7 @@ static void byVCHandler(
     byResults[count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     byResults[count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
-        strncpy(byResults[count].byAct, byComponent, 64);
+        rtString_Copy(byResults[count].byAct, byComponent, 64);
 }
 
 static void noAutoPubHandler(rbusHandle_t handle,
@@ -257,7 +266,7 @@ static void noAutoPubHandler(rbusHandle_t handle,
     noAutoPubResults[idx][count].oldValAct = rbusObject_GetValue(event->data, "oldValue") ? rbusValue_GetInt32(rbusObject_GetValue(event->data, "oldValue")) : -1;
     noAutoPubResults[idx][count].filterAct = rbusObject_GetValue(event->data, "filter") ? rbusValue_GetBoolean(rbusObject_GetValue(event->data, "filter")) : -1;
     if(byComponent)
-        strncpy(noAutoPubResults[idx][count].byAct, byComponent, 64);
+        rtString_Copy(noAutoPubResults[idx][count].byAct, byComponent, 64);
 }
 static void noAutoPub1Handler(
     rbusHandle_t handle,
