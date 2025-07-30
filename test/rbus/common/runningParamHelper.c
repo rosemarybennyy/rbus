@@ -27,7 +27,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <rbus.h>
-
+#include "rtString.h"
 #define MAXPATH 100
 static char gParamName[MAXPATH+1] = {0};
 static bool gIsRunning = false;
@@ -78,7 +78,8 @@ rbusError_t runningParamProvider_Init(rbusHandle_t handle, char* paramName)
 {
     int rc;
 
-    strncpy(gParamName, paramName, MAXPATH);
+    rtString_Copy(gParamName, paramName, MAXPATH);
+    printf("###################### blessy gParamName : %s paramName : %s \n", gParamName, paramName);
 
     rbusDataElement_t dataElement = { paramName, RBUS_ELEMENT_TYPE_PROPERTY, {getRunningParamHandler, setRunningParamHandler, NULL, NULL, NULL, NULL}};
 
