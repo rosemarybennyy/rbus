@@ -30,6 +30,7 @@
 #include <rtHashMap.h>
 #include <rtLog.h>
 #include "../common/test_macros.h"
+#include "rtString.h"
 
 #define REG_ELEMENTS 1
 #define PUB_EVENTS 1
@@ -76,7 +77,8 @@ int parseName(char const* name, char* hashName)
         return -1;
     }
     pend = strchr(name + strlen("Device.MultiProvider"), '.');
-    strncpy(hashName, name, pend-name);
+    rtString_Copy(hashName, name, pend-name);
+    printf("####### blessy function : %s line : %d hashName : %s name : %s\n",__func__,__LINE__,hashName, name);
     hashName[pend-name] = 0;
     printf("parseName %s=%s\n", name, hashName);
     return 0;

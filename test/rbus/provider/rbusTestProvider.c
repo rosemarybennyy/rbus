@@ -33,7 +33,7 @@
 #include <rtMemory.h>
 #include "../common/runningParamHelper.h"
 #include "../common/testValueHelper.h"
-
+#include "rtString.h"
 
 char componentName[RBUS_MAX_NAME_LENGTH] = "TestProvider";
 
@@ -267,7 +267,7 @@ Node* createNode(Node* parent, rbusElementType_t type, char const* name)
 
     if(name)
     {
-        strncpy(node->name, name, MAX_ALIAS_LEN-1);
+        rtString_Copy(node->name, name, MAX_ALIAS_LEN);
     }
 
     if(parent)
