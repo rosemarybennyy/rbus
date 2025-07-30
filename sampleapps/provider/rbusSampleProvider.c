@@ -28,6 +28,7 @@
 #include <getopt.h>
 #include <rbus.h>
 #include <rtLog.h>
+#include "rtString.h'
 
 #define UNUSED1(a)              (void)(a)
 #define UNUSED2(a,b)            UNUSED1(a),UNUSED1(b)
@@ -402,7 +403,7 @@ rbusError_t SampleProvider_allTypesSetHandler(rbusHandle_t handle, rbusProperty_
         int len = 0;
         char const* pTmp = NULL;
         pTmp = rbusValue_GetString(value, &len);
-        strncpy (gTestSampleVal.m_string, pTmp, 250);
+        rtString_Copy (gTestSampleVal.m_string, pTmp, 250);
     }
     else if ((strcmp(name, "Device.SampleProvider.AllTypes.DateTimeData") == 0) && (type == RBUS_DATETIME))
     {

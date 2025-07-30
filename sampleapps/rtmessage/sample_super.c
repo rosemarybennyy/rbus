@@ -18,6 +18,7 @@
 # limitations under the License.
 ##########################################################################
 */
+#include "rtString.h"
 #include "rtConnection.h"
 #include "rtLog.h"
 #include "rtMessage.h"
@@ -365,7 +366,7 @@ int main(int argc, char* argv[])
       case 't':
         if(numTopics < MAX_TOPICS)
         {
-            strncpy(topics[numTopics], optarg, MAX_TOPIC_LEN-1);
+            rtString_Copy(topics[numTopics], optarg, MAX_TOPIC_LEN-1);
             topics[numTopics][255] = 0;
             printf("Argument: Topic=%s\n", topics[numTopics]);
             numTopics++;
@@ -378,7 +379,7 @@ int main(int argc, char* argv[])
       case 'a':
         if(numAlias < MAX_ALIAS)
         {
-            strncpy(alias[numAlias], optarg, MAX_TOPIC_LEN-1);
+            rtString_Copy(alias[numAlias], optarg, MAX_TOPIC_LEN-1);
             alias[numAlias][255] = 0;
             printf("Argument: Alias=%s\n", alias[numAlias]);
             numAlias++;

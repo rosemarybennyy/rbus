@@ -28,6 +28,7 @@
 #include <getopt.h>
 #include <rbus.h>
 #include "utilities.h"
+#include "rtString.h"
 
 //TODO handle filter matching
 
@@ -160,7 +161,7 @@ rbusError_t tableAddRowHandler1(rbusHandle_t handle, char const* tableName, char
             t1->instNum = ++gDM.t1InstNum;
             ++g_count;
             if(aliasName)
-                strncpy(t1->alias, aliasName, MAX_LENGTH);
+                rtString_Copy(t1->alias, aliasName, MAX_LENGTH);
 
             *instNum = t1->instNum;
             printDataModel();
@@ -220,7 +221,7 @@ rbusError_t tableAddRowHandler2(rbusHandle_t handle, char const* tableName, char
                 t2->inUse = true;
                 t2->instNum = ++t1->t2InstNum;
                 if(aliasName)
-                    strncpy(t2->alias, aliasName, MAX_LENGTH);
+                    rtString_Copy(t2->alias, aliasName, MAX_LENGTH);
 
                 *instNum = t2->instNum;
                 printDataModel();
@@ -314,7 +315,7 @@ rbusError_t setHandler1(rbusHandle_t handle, rbusProperty_t property, rbusSetHan
 
     if(propertyNameEquals(name, "Alias"))
     {
-        strncpy(t1->alias, rbusValue_GetString(value, NULL), MAX_LENGTH-1);
+        rtString_Copy(t1->alias, rbusValue_GetString(value, NULL), MAX_LENGTH-1);
         printDataModel();
         return RBUS_ERROR_SUCCESS;
     }
@@ -327,7 +328,7 @@ rbusError_t setHandler1(rbusHandle_t handle, rbusProperty_t property, rbusSetHan
         }
         else
         {
-            strncpy(t1->data, rbusValue_GetString(value, NULL), MAX_LENGTH-1);
+            rtString_Copy(t1->data, rbusValue_GetString(value, NULL), MAX_LENGTH-1);
             printDataModel();
             return RBUS_ERROR_SUCCESS;
         }
@@ -396,7 +397,7 @@ rbusError_t setHandler2(rbusHandle_t handle, rbusProperty_t property, rbusSetHan
 
     if(propertyNameEquals(name, "Data"))
     {
-        strncpy(t2->data, rbusValue_GetString(value, NULL), MAX_LENGTH);
+        rtString_Copy(t2->data, rbusValue_GetString(value, NULL), MAX_LENGTH);
         printDataModel();
         return RBUS_ERROR_SUCCESS;
     }

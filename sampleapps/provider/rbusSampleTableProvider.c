@@ -24,6 +24,7 @@
 #include <pthread.h>
 #include <rbus.h>
 #include <libgen.h>
+#include "rtString.h"
 
 static char g_elementString[64];
 static int param_index = 0;
@@ -112,7 +113,7 @@ rbusError_t setHandler(rbusHandle_t handle, rbusProperty_t property, rbusSetHand
         rc = RBUS_ERROR_SUCCESS;
         pthread_cond_signal(&cond);
         memset(g_elementString,0,sizeof(g_elementString));
-        strncpy(g_elementString,pTmp, len);
+        rtString_Copy(g_elementString,pTmp, len);
     } else {
         printf("%s Called Set handler with invalid value : %s\n", name, pTmp);
     }
