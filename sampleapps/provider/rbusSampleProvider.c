@@ -28,7 +28,7 @@
 #include <getopt.h>
 #include <rbus.h>
 #include <rtLog.h>
-#include "rtString.h'
+#include "rtString.h"
 
 #define UNUSED1(a)              (void)(a)
 #define UNUSED2(a,b)            UNUSED1(a),UNUSED1(b)
