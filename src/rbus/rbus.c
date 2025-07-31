@@ -681,7 +681,7 @@ void rbusObject_appendToMessage(rbusObject_t obj, rbusMessage msg)
 {
     if (obj == NULL)
     {
-        return;     
+        return;
     }
     int numChild = 0;
     rbusObject_t child;
@@ -894,7 +894,7 @@ void rbusEventData_updateFromMessage(rbusEvent_t* event, rbusFilter_t* filter,
     rbusObject_t data = NULL;
     int hasFilter = false;
     int hasEventData =  false;
-    
+
     rbusMessage_GetString(msg, (char const**) &name);
     rbusMessage_GetInt32(msg, (int*) &type);
 #if DEBUG_SERIALIZER
@@ -1021,7 +1021,7 @@ char const* getLastTokenInName(char const* name)
 
     while(len != 0 && name[len] != '.')
         len--;
-        
+
     if(name[len] == '.')
         return &name[len+1];
     else
@@ -1182,7 +1182,7 @@ int subscribeHandlerImpl(
         return RBUS_ERROR_INVALID_INPUT;
     }
     else
-    { 
+    {
         if(el->type == RBUS_ELEMENT_TYPE_PROPERTY && subscription->autoPublish)
         {
             rtListItem item;
@@ -1401,7 +1401,7 @@ int _event_callback_handler (char const* objectName, char const* eventName, rbus
     uint32_t interval = 0;
     uint32_t duration = 0;
 
-    RBUSLOG_DEBUG("Received event callback: objectName=%s eventName=%s", 
+    RBUSLOG_DEBUG("Received event callback: objectName=%s eventName=%s",
         objectName, eventName);
 
     subscription = (rbusEventSubscription_t*)userData;
@@ -1414,7 +1414,7 @@ int _event_callback_handler (char const* objectName, char const* eventName, rbus
     handler = (rbusEventHandler_t)subscription->handler;
 
     rbusEventData_updateFromMessage(&event, &filter, &interval, &duration, &componentId, message);
-    
+
     (*handler)(subscription->handle, &event, subscription);
 
     rbusObject_Release(event.data);
@@ -1446,8 +1446,10 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
     if(!handleInfo)
     {
         RBUSLOG_ERROR("Received master event callback with invalid componentId: sender=%s eventName=%s componentId=%d", sender, eventName, componentId);
-        rbusObject_Release(event.data);
-        rbusFilter_Release(filter);
+        if(event.data)
+            rbusObject_Release(event.data);
+        if (filter)
+            rbusFilter_Release(filter);
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 
@@ -1482,8 +1484,10 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
     {
         RBUSLOG_DEBUG("Received master event callback: sender=%s eventName=%s, but no subscription found", sender, event.name);
         HANDLE_EVENTSUBS_MUTEX_UNLOCK(handleInfo);
-        rbusObject_Release(event.data);
-        rbusFilter_Release(filter);
+        if(event.data)
+            rbusObject_Release(event.data);
+        if (filter)
+            rbusFilter_Release(filter);
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 exit_1:
@@ -1673,7 +1677,7 @@ exit:
 }
 
 /*
-    convert a registration element name to a instance name based on the instance numbers in the original 
+    convert a registration element name to a instance name based on the instance numbers in the original
     partial path query
     example:
     registration name like: Device.Services.VoiceService.{i}.X_BROADCOM_COM_Announcement.ServerAddress
@@ -1694,7 +1698,7 @@ static char const* _convert_reg_name_to_instance_name(char const* registrationNa
             preg++;
             pinst++;
         }
-        
+
         if(*preg == '{')
         {
             while(*pinst && *pinst != '.')
@@ -1772,7 +1776,7 @@ static void _get_recursive_partialpath_handler(elementNode* node, char const* qu
                 char instanceName[RBUS_MAX_NAME_LENGTH];
                 char partialPath[RBUS_MAX_NAME_LENGTH];
 
-                snprintf(partialPath, RBUS_MAX_NAME_LENGTH-1, "%s.", 
+                snprintf(partialPath, RBUS_MAX_NAME_LENGTH-1, "%s.",
                     query ? _convert_reg_name_to_instance_name(node->fullName, query, instanceName) : node->fullName);
 
                 RBUSLOG_DEBUG("%*s_get_recursive_partialpath_handler calling table getHandler partialPath=%s", level*4, " ", partialPath);
@@ -2040,7 +2044,7 @@ static void _get_callback_handler (rbusHandle_t handle, rbusMessage request, rbu
                     rbusProperty_t xproperties, first;
                     rbusValue_t xtmp;
                     int count = 0;
-                            
+
                     rbusValue_Init(&xtmp);
                     rbusValue_SetString(xtmp, "tmpValue");
                     rbusProperty_Init(&xproperties, "tmpProp", xtmp);
@@ -2097,7 +2101,7 @@ static void _get_callback_handler (rbusHandle_t handle, rbusMessage request, rbu
                     rbusValue_appendToMessage(rbusProperty_GetName(properties[i]), rbusProperty_GetValue(properties[i]), *response);
                 }
             }
-        
+
             /* Free the memory, regardless of success or not.. */
             for (i = 0; i < paramSize; i++)
             {
@@ -2198,7 +2202,7 @@ static void _get_parameter_names_handler (rbusHandle_t handle, rbusMessage reque
     int32_t getRowNamesOnly = 0;
     //int32_t isCcsp = 0;
     elementNode* el = NULL;
-    
+
     rbusMessage_GetString(request, &objName);
     rbusMessage_GetInt32(request, &requestedDepth);
     if(rbusMessage_GetInt32(request, &getRowNamesOnly) != RT_OK)/*set to 1 by rbusTable_GetRowNames and 0 by rbus_getNames, but unset by ccsp*/
@@ -2313,11 +2317,11 @@ static void _get_parameter_names_handler (rbusHandle_t handle, rbusMessage reque
                     strncpy(propertyName, name, len);
                     propertyName[len] = 0;
                 }
-                if(recurse 
+                if(recurse
                 || !rtList_HasItem(namesList, propertyName, rtList_Compare_String))
                     /*If recurse then we have to check that we only add the rows and not anything inside the rows.
                       Since there might be several properties in each row retured from the getHandler, we have to check
-                      that we only add a single row item per row*/                   
+                      that we only add a single row item per row*/
                 {
                     RBUSLOG_DEBUG("adding property %s", propertyName);
                     rtList_PushBack(namesList, strdup(propertyName), NULL);
@@ -2346,7 +2350,7 @@ static void _table_add_row_callback_handler (rbusHandle_t handle, rbusMessage re
 
     rbusMessage_GetInt32(request, &sessionId);
     rbusMessage_GetString(request, &tableName);
-    err = rbusMessage_GetString(request, &aliasName); /*this presumes rbus_updateTable sent the alias.  
+    err = rbusMessage_GetString(request, &aliasName); /*this presumes rbus_updateTable sent the alias.
                                                  if CCSP/dmcli is calling us, then this will be NULL*/
     if(err != RT_OK || (aliasName && strlen(aliasName)==0))
         aliasName = NULL;
@@ -2500,7 +2504,7 @@ static int _method_callback_handler(rbusHandle_t handle, rbusMessage request, rb
             ELM_PRIVATE_LOCK(methRegElem);
             result = methRegElem->cbTable.methodHandler(handle, methodName, inParams, outParams, asyncHandle);
             ELM_PRIVATE_UNLOCK(methRegElem);
-            
+
             if (result == RBUS_ERROR_ASYNC_RESPONSE)
             {
                 /*outParams will be sent async*/
@@ -2559,7 +2563,7 @@ static int _method_callback_handler(rbusHandle_t handle, rbusMessage request, rb
         rbusMessage_SetInt32(*response, result);
         rbusObject_appendToMessage(outParams, *response);
         rbusObject_Release(outParams);
-        return RBUSCORE_SUCCESS; 
+        return RBUSCORE_SUCCESS;
     }
 }
 
@@ -2627,7 +2631,7 @@ static void _subscribe_callback_handler (rbusHandle_t handle, rbusMessage reques
             }
 
             int added = strncmp(method, METHOD_SUBSCRIBE, MAX_METHOD_NAME_LENGTH) == 0 ? 1 : 0;
-                
+
             rbusMessage_GetInt32(request, &publishOnSubscribe);
             rbusMessage_GetInt32(request, &rawData);
             if(ret == RBUS_ERROR_SUCCESS)
@@ -2780,7 +2784,7 @@ static void _create_direct_connection_callback_handler (rbusHandle_t handle, rbu
             {
                 rtString_Copy(ip, consumerToBrokerConf, (p - consumerToBrokerConf));
                 RBUSLOG_DEBUG ("parsing ip address:%s", ip);
-            
+
                 //FIXME :: The port must be within 65535 and unique to the consumer.
                 // PID is something unique  but the same client can have direct connection to two different providers and that could lead to failure.
 
@@ -2919,7 +2923,7 @@ static void _rbus_open_pre_initialize(bool retain)
 {
     RBUSLOG_DEBUG("%s", __FUNCTION__);
     static bool sRetained = false;
-    
+
     if(retain && !sRetained)
     {
         rbus_registerMasterEventHandler(_master_event_callback_handler, NULL);
@@ -2964,7 +2968,7 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
     LockMutex();
 
     /*
-        Per spec: If a component calls this API more than once, any previous busHandle 
+        Per spec: If a component calls this API more than once, any previous busHandle
         and all previous data element registrations will be canceled.
     */
     tmpHandle = rbusHandleList_GetByName(componentName);
@@ -3352,8 +3356,8 @@ rbusError_t rbus_regDataElements(
       To avoid a provider having a half registered data model, and to avoid
       the complexity of returning a list of error codes for each element in the list,
       we treat rbus_regDataElements as a transaction.  If any element from the elements list
-      fails to register, we abort the whole thing.  We do this as follows: As soon 
-      as 1 fail occurs above, we break out of loop and we unregister all the 
+      fails to register, we abort the whole thing.  We do this as follows: As soon
+      as 1 fail occurs above, we break out of loop and we unregister all the
       successfully registered elements that happened during this call, before we failed.
       Thus we unregisters elements 0 to i (i was when we broke from loop above).*/
     if(rc != RBUS_ERROR_SUCCESS && i > 0)
@@ -3436,7 +3440,7 @@ rbusError_t rbus_discoverComponentName (rbusHandle_t handle,
     {
          RBUSLOG_WARN("return from discoverElementsObjects is not success");
     }
-  
+
     return errorcode;
 }
 
@@ -3501,7 +3505,7 @@ rbusError_t rbus_get(rbusHandle_t handle, char const* name, rbusValue_t* value)
 
     /* Find direct connection status */
     rtConnection myConn = rbuscore_FindClientPrivateConnection(name);
-        
+
     if (NULL == myConn)
         myConn = handleInfo->m_connection;
 
@@ -3758,7 +3762,7 @@ rbusError_t rbus_getExt(rbusHandle_t handle, int paramCount, char const** pParam
                         RBUSLOG_WARN("Query for expression %s was partially successful", pParamNames[0]);
                         return RBUS_ERROR_SUCCESS;
                     }
-                    else 
+                    else
                     {
                         return errorcode;
                     }
@@ -3850,7 +3854,7 @@ rbusError_t rbus_getExt(rbusHandle_t handle, int paramCount, char const** pParam
                             free(componentNames[i]);
                             componentNames[i] = NULL;
                         }
-                    }                  
+                    }
 
                     RBUSLOG_DEBUG("sending batch request with %d params to component %s", batchCount, componentName);
                     free(componentName);
@@ -3909,7 +3913,7 @@ static rbusError_t rbus_getByType(rbusHandle_t handle, char const* paramName, vo
     if (paramVal && paramName)
     {
         rbusValue_t value;
-        
+
         errorcode = rbus_get(handle, paramName, &value);
 
         if (errorcode == RBUS_ERROR_SUCCESS)
@@ -4012,7 +4016,7 @@ rbusError_t _setInternal(rbusHandle_t handle, char const* name, rbusValue_t valu
     rbusMessage_SetString(setRequest, (!opts || opts->commit) ? "TRUE" : "FALSE");
     /* Find direct connection status */
     rtConnection myConn = rbuscore_FindClientPrivateConnection(name);
-        
+
     if (NULL == myConn)
         myConn = handleInfo->m_connection;
 
@@ -4087,7 +4091,7 @@ rbusError_t rbus_setCommit(rbusHandle_t handle, char const* name, rbusSetOptions
 
     /* Set the Commit value */
     rbusMessage_SetString(setRequest, (!opts || opts->commit) ? "TRUE" : "FALSE");
-    
+
     /* Find direct connection status */
     rtConnection myConn = rbuscore_FindClientPrivateConnection(name);
     if (NULL == myConn)
@@ -4498,8 +4502,8 @@ rbusError_t rbusTable_addRow(
     if((err = rbus_invokeRemoteMethod2(myConn,
         tableName, /*as taken from ccsp_base_api.c, this was the destination component ID, but to locate the route, the table name can be used
                      because the broker simlpy looks at the top level nodes that are owned by a component route.  maybe this breaks if the broker changes*/
-        METHOD_ADDTBLROW, 
-        request, 
+        METHOD_ADDTBLROW,
+        request,
         rbusHandle_FetchSetTimeout(handle),
         &response)) != RBUSCORE_SUCCESS)
     {
@@ -4558,14 +4562,14 @@ rbusError_t rbusTable_removeRow(
     rbusMessage_SetString(request, rowName);/*TODO: do we need to append the name as well as pass the name as the 1st arg to rbus_invokeRemoteMethod2 ?*/
     /* Find direct connection status */
     rtConnection myConn = rbuscore_FindClientPrivateConnection(rowName);
-        
+
     if (NULL == myConn)
         myConn = handleInfo->m_connection;
 
     if((err = rbus_invokeRemoteMethod2(myConn,
         rowName,
-        METHOD_DELETETBLROW, 
-        request, 
+        METHOD_DELETETBLROW,
+        request,
         rbusHandle_FetchSetTimeout(handle),
         &response)) != RBUSCORE_SUCCESS)
     {
@@ -4900,7 +4904,7 @@ rbusError_t rbusElementInfo_get(
 }
 
 rbusError_t rbusElementInfo_free(
-    rbusHandle_t handle, 
+    rbusHandle_t handle,
     rbusElementInfo_t* elemInfo)
 {
     VERIFY_NULL(handle);
@@ -5026,7 +5030,7 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
     void*                           userData,
     rbusFilter_t                    filter,
     uint32_t                        interval,
-    uint32_t                        duration,    
+    uint32_t                        duration,
     int                             timeout,
     rbusSubscribeAsyncRespHandler_t async,
     bool                            publishOnSubscribe,
@@ -5102,7 +5106,7 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
         RBUSLOG_DEBUG("%s subscribing", eventName);
 
         coreerr = rbus_subscribeToEventTimeout(NULL, sub->eventName, _event_callback_handler, payload, sub, &providerError, destNotFoundTimeout, publishOnSubscribe, &response, rawData);
-        
+
         if(coreerr == RBUSCORE_ERROR_ENTRY_NOT_FOUND && destNotFoundTimeout > 0)
         {
             int sleepTime = destNotFoundSleep;
@@ -5184,7 +5188,7 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
             return RBUS_ERROR_TIMEOUT;
         }
         else if(providerError != RBUS_ERROR_SUCCESS)
-        {   
+        {
             RBUSLOG_DEBUG("%s subscribe retries failed due provider error %d", eventName, providerError);
             if (providerError == RBUS_ERROR_SUBSCRIPTION_ALREADY_EXIST)
             {
@@ -5400,7 +5404,7 @@ rbusError_t rbusEvent_Unsubscribe(
 
     RBUSLOG_DEBUG("Unsubscribe for event %s", eventName);
 
-    /*the use of rtVector is inefficient here.  I have to loop through the vector to find the sub by name, 
+    /*the use of rtVector is inefficient here.  I have to loop through the vector to find the sub by name,
         then call RemoveItem, which loops through again to find the item by address to destroy */
     HANDLE_EVENTSUBS_MUTEX_LOCK(handle);
     subInternal = rbusEventSubscription_find(handleInfo->eventSubs, eventName, NULL, 0, 0, false);
@@ -5425,7 +5429,6 @@ rbusError_t rbusEvent_Unsubscribe(
         }
         else
         {
-            
             if(coreerr == RBUSCORE_ERROR_ENTRY_NOT_FOUND)
             {
                 subInternal->dirty = true;
@@ -5506,7 +5509,7 @@ rbusError_t rbusEvent_SubscribeEx(
 
     VERIFY_NULL(handle);
     VERIFY_NULL(subscription);
-    VERIFY_ZERO(numSubscriptions); 
+    VERIFY_ZERO(numSubscriptions);
 
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
@@ -5520,7 +5523,7 @@ rbusError_t rbusEvent_SubscribeEx(
         //where we can have multiple, we need to actually run all these in parallel.  So we might need to leverage
         //the asyncsubscribe api to handle this.
         errorcode = rbusEvent_SubscribeWithRetries(
-            handle, subscription[i].eventName, subscription[i].handler, subscription[i].userData, 
+            handle, subscription[i].eventName, subscription[i].handler, subscription[i].userData,
             subscription[i].filter, subscription[i].interval, subscription[i].duration, timeout, NULL, subscription[i].publishOnSubscribe, false);
         if(errorcode != RBUS_ERROR_SUCCESS)
         {
@@ -5648,7 +5651,7 @@ rbusError_t rbusEvent_SubscribeExAsync(
         RBUSLOG_DEBUG("Asynchronous subscription for %s", subscription[i].eventName);
 
         errorcode = rbusEvent_SubscribeWithRetries(
-            handle, subscription[i].eventName, subscription[i].handler, subscription[i].userData, 
+            handle, subscription[i].eventName, subscription[i].handler, subscription[i].userData,
             subscription[i].filter, subscription[i].interval, subscription[i].duration, timeout, subscribeHandler, false, false);
 
         if(errorcode != RBUS_ERROR_SUCCESS)
@@ -5665,7 +5668,7 @@ rbusError_t rbusEvent_SubscribeExAsync(
         }
     }
 
-    return errorcode;    
+    return errorcode;
 }
 
 rbusError_t rbusEvent_UnsubscribeExRawData(
@@ -5770,7 +5773,7 @@ rbusError_t rbusEvent_UnsubscribeEx(
     //if any unsubscribe fails below we use RBUS_ERROR_BUS_ERROR for return error
     //The caller will have no idea which ones failed to unsub and which succeeded (if any)
     //and unlike SubscribeEx, I don't think we can treat this like a transactions because
-    //its assumed that caller has successfully subscribed before so we need to attempt all 
+    //its assumed that caller has successfully subscribed before so we need to attempt all
     //to get as many as possible unsubscribed and off the bus
 
     for(i = 0; i < numSubscriptions; ++i)
@@ -5924,7 +5927,7 @@ rbusError_t  rbusEvent_Publish(
 
     RBUSLOG_DEBUG("Publish for %s", eventData->name);
 
-    /*get the node and walk its subscriber list, 
+    /*get the node and walk its subscriber list,
       publishing event to each subscriber*/
     elementNode* el = retrieveInstanceElement(handleInfo->elementRoot, eventData->name);
 
@@ -5993,7 +5996,7 @@ rbusError_t  rbusEvent_Publish(
                     rbusValue_Init(&filterResult);
                     rbusValue_SetBoolean(filterResult, newResult != 0);
                     rbusObject_SetValue(eventData->data, "filter", filterResult);
-                    rbusValue_Release(filterResult);                    
+                    rbusValue_Release(filterResult);
                 }
                 else
                 {
@@ -6035,9 +6038,9 @@ rbusError_t  rbusEvent_Publish(
 }
 
 rbusError_t rbusMethod_InvokeInternal(
-    rbusHandle_t handle, 
-    char const* methodName, 
-    rbusObject_t inParams, 
+    rbusHandle_t handle,
+    char const* methodName,
+    rbusObject_t inParams,
     rbusObject_t* outParams,
     int timeout)
 {
@@ -6077,9 +6080,9 @@ rbusError_t rbusMethod_InvokeInternal(
 
     if((err = rbus_invokeRemoteMethod2(myConn,
         methodName,
-        METHOD_RPC, 
-        request, 
-        timeout, 
+        METHOD_RPC,
+        request,
+        timeout,
         &response)) != RBUSCORE_SUCCESS)
     {
         RBUSLOG_ERROR("rbusMethod Invoke for %s failed with error:%s", methodName, rbusCoreErrorToString(err));
@@ -6114,15 +6117,15 @@ rbusError_t rbusMethod_InvokeInternal(
 }
 
 rbusError_t rbusMethod_Invoke(
-    rbusHandle_t handle, 
-    char const* methodName, 
-    rbusObject_t inParams, 
+    rbusHandle_t handle,
+    char const* methodName,
+    rbusObject_t inParams,
     rbusObject_t* outParams)
 {
     VERIFY_HANDLE(handle);
     VERIFY_NULL(methodName);
     VERIFY_NULL(outParams);
-    
+
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
 
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
@@ -6134,8 +6137,8 @@ rbusError_t rbusMethod_Invoke(
 typedef struct _rbusMethodInvokeAsyncData_t
 {
     rbusHandle_t handle;
-    char* methodName; 
-    rbusObject_t inParams; 
+    char* methodName;
+    rbusObject_t inParams;
     rbusMethodAsyncRespHandler_t callback;
     int timeout;
 } rbusMethodInvokeAsyncData_t;
@@ -6149,8 +6152,8 @@ static void* rbusMethod_InvokeAsyncThreadFunc(void *p)
         return NULL;
     err = rbusMethod_InvokeInternal(
         data->handle,
-        data->methodName, 
-        data->inParams, 
+        data->methodName,
+        data->inParams,
         &outParams,
         data->timeout);
 
@@ -6166,16 +6169,16 @@ static void* rbusMethod_InvokeAsyncThreadFunc(void *p)
 }
 
 rbusError_t rbusMethod_InvokeAsync(
-    rbusHandle_t handle, 
-    char const* methodName, 
-    rbusObject_t inParams, 
-    rbusMethodAsyncRespHandler_t callback, 
+    rbusHandle_t handle,
+    char const* methodName,
+    rbusObject_t inParams,
+    rbusMethodAsyncRespHandler_t callback,
     int timeout)
 {
     VERIFY_HANDLE(handle);
     VERIFY_NULL(methodName);
     VERIFY_NULL(callback);
- 
+
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
     pthread_t pid;
     rbusMethodInvokeAsyncData_t* data;

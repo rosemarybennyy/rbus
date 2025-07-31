@@ -215,13 +215,13 @@ rbusCoreError_t server_object_subscription_handler(server_object_t obj, const ch
     rbusCoreError_t ret;
 
     if((NULL == event) || (NULL == subscriber) ||
-       (MAX_SUBSCRIBER_NAME_LENGTH <= strlen(subscriber)) || 
+       (MAX_SUBSCRIBER_NAME_LENGTH <= strlen(subscriber)) ||
        (MAX_EVENT_NAME_LENGTH <= strlen(event)))
     {
         RBUSCORELOG_ERROR("Cannot %s subscriber %s to event %s. Length exceeds limits.", added ? "add":"remove", subscriber, event);
         return RBUSCORE_ERROR_INVALID_PARAM;
     }
-    
+
     if(obj->subscribe_handler_override)
     {
         ret = (rbusCoreError_t)obj->subscribe_handler_override(obj->name, event, subscriber, added, payload, obj->subscribe_handler_data);
@@ -303,7 +303,7 @@ void client_subscription_create(client_subscription_t* sub, const char * object_
 {
     (*sub) = rt_calloc(1,sizeof(struct _client_subscription));
     rtString_Copy((*sub)->object, object_name, MAX_OBJECT_NAME_LENGTH);
-    rtVector_Create(&(*sub)->events); 
+    rtVector_Create(&(*sub)->events);
 }
 
 void client_subscription_destroy(void* p)
@@ -408,7 +408,7 @@ static void perform_cleanup()
 
             sz2 = rtVector_Size(sub->events);
             for(i2 = 0; i2 < sz2; i2++)
-            {   
+            {
                 client_event_t event = rtVector_At(sub->events, i2);
                 send_subscription_request(sub->object, event->name, false, NULL, NULL, 0, false, NULL, false);
             }
@@ -701,9 +701,9 @@ rtConnection rbus_getConnection()
 
 static rbusCoreError_t send_subscription_request(const char * object_name, const char * event_name, bool activate, const rbusMessage payload, int* providerError, int timeout_ms, bool publishOnSubscribe, rbusMessage *response, bool rawData)
 {
-    /* Method definition to add new event subscription: 
+    /* Method definition to add new event subscription:
      * method name: METHOD_ADD_EVENT_SUBSCRIPTION / METHOD_REMOVE_EVENT_SUBSCRIPTION.
-     * argument 1: event_name, mapped to key MESSAGE_FIELD_PAYLOAD 
+     * argument 1: event_name, mapped to key MESSAGE_FIELD_PAYLOAD
      * Expected resut:
      * integer, mapped to key MESSAGE_FIELD_RESULT. 0 is success. Anything else is a failure. */
     rbusCoreError_t ret;
@@ -1212,7 +1212,7 @@ rbusCoreError_t rbus_pullObj(const char * object_name, int timeout_millisecs, rb
             RBUSCORELOG_ERROR("%s.", stringify(RBUSCORE_ERROR_MALFORMED_RESPONSE));
             ret = RBUSCORE_ERROR_MALFORMED_RESPONSE;
         }
-        if(RBUSCORE_SUCCESS != ret) 
+        if(RBUSCORE_SUCCESS != ret)
         {
             rbusMessage_Release(*response);
             *response = NULL;
@@ -1266,7 +1266,7 @@ static int subscription_handler(const char *not_used, const char * method_name, 
     rbusMessage_Init(out);
 
     if((RT_OK == rbusMessage_GetString(in, &event_name)) &&
-        (RT_OK == rbusMessage_GetString(in, &sender))) 
+        (RT_OK == rbusMessage_GetString(in, &sender)))
     {
         /*Extract arguments*/
         if((NULL == sender) || (NULL == event_name))
@@ -1286,7 +1286,7 @@ static int subscription_handler(const char *not_used, const char * method_name, 
             rbusMessage_SetInt32(*out, ret);
         }
     }
-    
+
     return 0;
 }
 
@@ -1329,7 +1329,7 @@ static void rtrouted_advisory_callback(rtMessageHeader const* hdr, uint8_t const
 
 static rbusCoreError_t install_subscription_handlers(server_object_t object)
 {
-    rbusCoreError_t ret = RBUSCORE_SUCCESS; 
+    rbusCoreError_t ret = RBUSCORE_SUCCESS;
 
     server_method_t method = rtVector_Find(object->methods, METHOD_SUBSCRIBE, server_method_compare);
 
@@ -1441,7 +1441,6 @@ rbusCoreError_t rbus_unregisterEvent(const char* object_name, const char * event
     }
     else
     {
-    
         RBUSCORELOG_ERROR("Could not find object %s", object_name);
         ret = RBUSCORE_ERROR_INVALID_PARAM;
     }
@@ -1568,7 +1567,7 @@ static rbusCoreError_t rbus_subscribeToEventInternal(const char * object_name,  
     client_event_t evt;
 
     /* support rbus events being elements : use the event_name as the object_name because event_name is alias to object */
-    if(object_name == NULL && event_name != NULL) 
+    if(object_name == NULL && event_name != NULL)
         object_name = event_name;
 
     if(NULL == g_connection)
@@ -1594,7 +1593,7 @@ static rbusCoreError_t rbus_subscribeToEventInternal(const char * object_name,  
     }
 
     lock();
-   
+
     if(NULL == event_name)
         event_name = DEFAULT_EVENT;
 
@@ -1661,7 +1660,7 @@ rbusCoreError_t rbus_unsubscribeFromEvent(const char * object_name,  const char 
     rbusCoreError_t ret = RBUSCORE_ERROR_INVALID_PARAM;
 
     /* support rbus events being elements */
-    if(object_name == NULL && event_name != NULL) 
+    if(object_name == NULL && event_name != NULL)
         object_name = event_name;
 
     if(NULL == object_name)
@@ -1703,7 +1702,7 @@ rbusCoreError_t rbus_publishEvent(const char* object_name,  const char * event_n
     }
     rbusMessage_BeginMetaSectionWrite(out);
     rbusMessage_SetString(out, event_name);
-    rbusMessage_SetString(out, object_name); 
+    rbusMessage_SetString(out, object_name);
     rbusMessage_SetInt32(out, 0); /*is ccsp and not rbus 2.0*/
     rbusMessage_EndMetaSectionWrite(out);
 
@@ -1734,7 +1733,7 @@ rbusCoreError_t rbus_publishEvent(const char* object_name,  const char * event_n
             ret = RBUSCORE_ERROR_INVALID_PARAM;
         }
     }
-    else 
+    else
     {
         /*Object not present yet. Register it now.*/
         RBUSCORELOG_ERROR("Could not find object %s", object_name);
@@ -1843,8 +1842,8 @@ rbusCoreError_t rbus_publishSubscriberEvent(const char* object_name,  const char
     }
     rbusMessage_BeginMetaSectionWrite(out);
     rbusMessage_SetString(out, event_name);
-    rbusMessage_SetString(out, object_name); 
-    rbusMessage_SetInt32(out, 1);/*is rbus 2.0*/ 
+    rbusMessage_SetString(out, object_name);
+    rbusMessage_SetInt32(out, 1);/*is rbus 2.0*/
     rbusMessage_EndMetaSectionWrite(out);
 
     directServerLock();
@@ -2034,9 +2033,7 @@ rbusCoreError_t rbus_discoverObjectElements(const char * object, int * count, ch
                 ret = RBUSCORE_ERROR_INSUFFICIENT_MEMORY;
             }
         }
-
         rtMessage_Release(msg);
-
     }
     else
     {
@@ -2118,8 +2115,8 @@ rbusCoreError_t rbus_discoverElementObjects(const char* element, int * count, ch
     {
         ret = RBUSCORE_ERROR_MALFORMED_RESPONSE;
     }
-    
-    return ret;    
+
+    return ret;
 }
 
 rbusCoreError_t rbus_discoverElementsObjects(int numElements, const char** elements, int * count, char *** objects)
@@ -2234,7 +2231,7 @@ rbusCoreError_t rbus_discoverElementsObjects(int numElements, const char** eleme
             free(array_ptr);
         }
     }
-    return ret;    
+    return ret;
 }
 
 rbusCoreError_t rbus_discoverRegisteredComponents(int * count, char *** components)
@@ -2245,7 +2242,7 @@ rbusCoreError_t rbus_discoverRegisteredComponents(int * count, char *** componen
     rtMessage out;
     rtMessage_Create(&out);
     rtMessage_SetInt32(out, "dummy", 0);
-    
+
     if(NULL == g_connection)
     {
         RBUSCORELOG_ERROR("Not connected.");
@@ -2292,7 +2289,6 @@ rbusCoreError_t rbus_discoverRegisteredComponents(int * count, char *** componen
             RBUSCORELOG_ERROR("Memory allocation failure");
             ret = RBUSCORE_ERROR_INSUFFICIENT_MEMORY;
         }
-
         rtMessage_Release(msg);
     }
     else
@@ -2431,7 +2427,7 @@ void rbus_setOpenTelemetryContext(const char *traceParent, const char *traceStat
         ot_ctx->otTraceState[0] = '\0';
 }
 
-typedef struct _rbusServerDMLList 
+typedef struct _rbusServerDMLList
 {
     char                    m_privConnAddress[MAX_OBJECT_NAME_LENGTH];
     char                    m_consumerName[MAX_OBJECT_NAME_LENGTH];
@@ -2540,7 +2536,7 @@ static void _rbuscore_directconnection_load_from_cache()
     uint8_t* pBuff = NULL;
     char cacheFileName[256] = "";
 
-    snprintf(cacheFileName, 256, RBUS_DIRECT_FILE_CACHE, __progname); 
+    snprintf(cacheFileName, 256, RBUS_DIRECT_FILE_CACHE, __progname);
 
     RBUSCORELOG_DEBUG("Entry of %s", __FUNCTION__);
 
@@ -2648,7 +2644,7 @@ rbusServerDMLList_t* rbuscore_FindServerPrivateClient (const char *pParameterNam
             for(i = 0; i < sz; ++i)
             {
                 pDmlObj = rtVector_At(gListOfServerDirectDMLs, i);
-            
+
                 if ((0 == strncmp(pDmlObj->m_privateDML, pParameterName, MAX_OBJECT_NAME_LENGTH)) &&
                     (0 == strncmp(pDmlObj->m_consumerName, pConsumerName, MAX_OBJECT_NAME_LENGTH)))
                 {
@@ -2998,7 +2994,6 @@ rbusCoreError_t rbuscore_openPrivateConnectionToProvider(rtConnection *pPrivateC
             pNewObj->m_privConn = connection;
 
             rtVector_PushBack(gListOfClientDirectDMLs, pNewObj);
-    
         }
         directClientUnlock();
     }
