@@ -704,21 +704,18 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
 
     if(rbusValue_Init(value) == NULL)
         return -1;
+
     current = *value;
 
     // read value
-    rc = rbusBuffer_ReadUInt16(buff, &type);
-    if (rc != 0)
+    if(rbusBuffer_ReadUInt16(buff, &type) != 0)
     {
-        RBUSLOG_WARN("rbusValue_Decode failed get type");
         rbusValue_Release(*value);
         return -1;
     }
 
-    rc = rbusBuffer_ReadUInt16(buff, &length);
-    if (rc != 0)
+    if(rbusBuffer_ReadUInt16(buff, &length) != 0)
     {
-        RBUSLOG_WARN("rbusValue_Decode failed get length");
         rbusValue_Release(*value);
         return -1;
     }

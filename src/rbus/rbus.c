@@ -1446,6 +1446,8 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
     if(!handleInfo)
     {
         RBUSLOG_ERROR("Received master event callback with invalid componentId: sender=%s eventName=%s componentId=%d", sender, eventName, componentId);
+        rbusObject_Release(event.data);
+        rbusFilter_Release(filter);
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 
@@ -1480,8 +1482,8 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
     {
         RBUSLOG_DEBUG("Received master event callback: sender=%s eventName=%s, but no subscription found", sender, event.name);
         HANDLE_EVENTSUBS_MUTEX_UNLOCK(handleInfo);
-        if(event.data)
-            rbusObject_Release(event.data);
+        rbusObject_Release(event.data);
+        rbusFilter_Release(filter);
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 exit_1:
@@ -3177,10 +3179,10 @@ rbusError_t rbus_close(rbusHandle_t handle)
     snprintf(filename, RTMSG_HEADER_MAX_TOPIC_LENGTH-1, "%s%d_%d", "/tmp/.rbus/", getpid(), handleInfo->componentId);
     remove(filename);
 
+    HANDLE_EVENTSUBS_MUTEX_LOCK(handle);
     if(handleInfo->eventSubs)
     {
         int i;
-        HANDLE_EVENTSUBS_MUTEX_LOCK(handle);
         int count = (int)rtVector_Size(handleInfo->eventSubs);
         RBUSLOG_DEBUG("Cleaning up all (%d) subscriptions", count);
         for(i = 0; i < count; ++i)
@@ -3200,8 +3202,8 @@ rbusError_t rbus_close(rbusHandle_t handle)
         }
         rtVector_Destroy(handleInfo->eventSubs, NULL);
         handleInfo->eventSubs = NULL;
-        HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
     }
+    HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
 
     if (handleInfo->messageCallbacks)
     {
