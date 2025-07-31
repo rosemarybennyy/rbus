@@ -292,15 +292,13 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
   int first_to_handle = false;
   int is_first_connect = true;
   int reconnect_in_progress = 0;
-  rtTime_t last_reconnect_time;
+  rtTime_t last_reconnect_time = con->reconnect_time;
   char tbuff1[100];
   char tbuff2[100];
   char tbuff3[100];
 
   if (!con)
     return rtErrorFromErrno(EINVAL);
-
-  last_reconnect_time = con->reconnect_time;
 
   if(con->fd != -1)
     is_first_connect = false;
@@ -369,8 +367,7 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
   if (fdManip < 0)
     return rtErrorFromErrno(errno);
 
-  if (setsockopt(con->fd, SOL_TCP, TCP_NODELAY, &i, sizeof(i)) < 0)
-    rtLog_Debug("Error setting TCP_NODELAY: %s", strerror(errno));
+  setsockopt(con->fd, SOL_TCP, TCP_NODELAY, &i, sizeof(i));
 
   rtSocketStorage_ToString(&con->remote_endpoint, remote_addr, sizeof(remote_addr), &remote_port);
 

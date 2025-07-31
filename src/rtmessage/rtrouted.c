@@ -1048,8 +1048,8 @@ rtRouted_OnMessageDiscoverObjectElements(rtConnectedClient* sender, rtMessageHea
       prep_reply_header_from_request(&new_header, hdr);
       if (RT_OK != rtRouted_SendMessage(&new_header, response, NULL))
         rtLog_Info("%s() Response couldn't be sent.", __func__);
+      rtMessage_Release(response);
     }
-    rtMessage_Release(response);
   }
   else
     rtLog_Error("Cannot create response message to registered components.");
@@ -1493,15 +1493,13 @@ static char*
 rtRouted_GetClientName(rtConnectedClient* clnt)
 {
   size_t i;
-  size_t routes_size = rtVector_Size(gRoutes);
-
+  i = rtVector_Size(gRoutes);
   char *clnt_name = NULL;
-
-  for (i = routes_size; i > 0; i--)
+  while(i--)
   {
-    rtRouteEntry* route = (rtRouteEntry *) rtVector_At(gRoutes, i - 1);
+    rtRouteEntry* route = (rtRouteEntry *) rtVector_At(gRoutes, i);
     if(route && (route->subscription) && (route->subscription->client)) {
-      if(strcmp(route->subscription->client->ident, clnt->ident ) == 0) {
+      if(strcmp( route->subscription->client->ident, clnt->ident ) == 0) {
         clnt_name = route->expression;
         break;
       }
