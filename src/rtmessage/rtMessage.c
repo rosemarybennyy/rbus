@@ -20,6 +20,7 @@
 */
 #define _GNU_SOURCE 1
 #include "rtError.h"
+#include "rtString.h"
 #include "rtMessage.h"
 #include "rtBase64.h"
 #include "rtAtomic.h"
@@ -430,7 +431,7 @@ rtMessage_GetSendTopic(rtMessage const m, char* topic)
   rtError err = RT_OK;
   cJSON* obj = cJSON_GetObjectItem(m->json, "_topic");
   if (obj)
-    strcpy(topic, obj->valuestring);
+    rtString_Copy(topic, obj->valuestring, 50);
   else
     err = RT_FAIL;
   return err;
