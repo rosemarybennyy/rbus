@@ -704,7 +704,6 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
 
     if(rbusValue_Init(value) == NULL)
         return -1;
-
     current = *value;
 
     // read value
@@ -723,6 +722,7 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
         rbusValue_Release(*value);
         return -1;
     }
+
     current->type = type;
     switch(type)
     {
