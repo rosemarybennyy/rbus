@@ -338,7 +338,7 @@ rtRouted_ParseConfig(char const* fname)
       }
       else
       {
-        rtLog_Warn("cannot enable spake2plus due to missing config param(s): %s", 
+        rtLog_Warn("cannot enable spake2plus due to missing config param(s): %s",
           (!g_spake2_L && !g_spake2_w0) ? "L and w0" :
           (!g_spake2_L) ? "L" : "w0");
         if(g_spake2_L)
@@ -565,12 +565,12 @@ rtError rtRouted_TrafficMonitorLog(rtConnectedClient* sender, rtMessageHeader* h
     }
   }
 
-  fprintf(file, "%d %s %s %s %s %d [", 
-    counter++, 
-    sender->inbox, 
-    subscription->client->inbox, 
-    hdr->topic, 
-    hdr->reply_topic, 
+  fprintf(file, "%d %s %s %s %s %d [",
+    counter++,
+    sender->inbox,
+    subscription->client->inbox,
+    hdr->topic,
+    hdr->reply_topic,
     n);
 
   if(buff && n)
@@ -653,13 +653,13 @@ rtRouted_ForwardMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
       return RT_FAIL;
     }
 
-    if(rtCipher_DecryptWithKey( sender->encryption_key, 
-                                buff, 
-                                n, 
-                                sender->encryption_buffer, 
-                                RTMSG_CLIENT_READ_BUFFER_SIZE, 
+    if(rtCipher_DecryptWithKey( sender->encryption_key,
+                                buff,
+                                n,
+                                sender->encryption_buffer,
+                                RTMSG_CLIENT_READ_BUFFER_SIZE,
                                 &decryptedLength ) != RT_OK)
-    { 
+    {
       rtLog_Error("failed to decrypt message");
       return RT_FAIL;
     }
@@ -677,13 +677,13 @@ rtRouted_ForwardMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
 
     rtLog_Debug("sending encrypted message");
 
-    if(rtCipher_EncryptWithKey( subscription->client->encryption_key, 
-                                buff, 
-                                n, 
-                                subscription->client->encryption_buffer, 
-                                RTMSG_CLIENT_READ_BUFFER_SIZE, 
+    if(rtCipher_EncryptWithKey( subscription->client->encryption_key,
+                                buff,
+                                n,
+                                subscription->client->encryption_buffer,
+                                RTMSG_CLIENT_READ_BUFFER_SIZE,
                                 &encryptedLength ) != RT_OK)
-    { 
+    {
       rtLog_Error("failed to encrypt message");
       return RT_FAIL;
     }
@@ -850,7 +850,7 @@ rtRouted_OnMessageHello(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t
   rtRouted_AddRoute(rtRouted_ForwardMessage, inbox, subscription);
 
   rtMessage_Release(m);
-  
+
   (void)hdr;
 }
 
@@ -970,7 +970,7 @@ rtRouted_OnMessageDiscoverWildcardDestinations(rtConnectedClient* sender, rtMess
       rtMessage_SetInt32(response, RTM_DISCOVERY_RESULT, RT_ERROR);
       rtLog_Error("Bad discovery message.");
     }
-    /* Send this message back to the requestor.*/ 
+    /* Send this message back to the requestor.*/
     rtMessageHeader new_header;
     prep_reply_header_from_request(&new_header, hdr);
     if(RT_OK != rtRouted_SendMessage(&new_header, response, NULL))
@@ -1048,8 +1048,8 @@ rtRouted_OnMessageDiscoverObjectElements(rtConnectedClient* sender, rtMessageHea
       prep_reply_header_from_request(&new_header, hdr);
       if (RT_OK != rtRouted_SendMessage(&new_header, response, NULL))
         rtLog_Info("%s() Response couldn't be sent.", __func__);
-      rtMessage_Release(response);   
     }
+    rtMessage_Release(response);
   }
   else
     rtLog_Error("Cannot create response message to registered components.");
@@ -1137,7 +1137,7 @@ rtRouted_OnMessageDiscoverElementObjects(rtConnectedClient* sender, rtMessageHea
       rtLog_Warn("Bad trace request. Could not get length / bad length.");
       rtMessage_SetInt32(response, RTM_DISCOVERY_RESULT, RT_ERROR);
     }
-    
+
     rtMessageHeader new_header;
     prep_reply_header_from_request(&new_header, hdr);
     if (RT_OK != rtRouted_SendMessage(&new_header, response, NULL))
@@ -1369,8 +1369,8 @@ rtRouted_OnMessage(rtConnectedClient* sender, rtMessageHeader* hdr, uint8_t cons
   {
     rtRouted_OnMessageKeyExchange(sender, hdr, buff, n);
   }
-#endif 
-#ifdef MSG_ROUNDTRIP_TIME 
+#endif
+#ifdef MSG_ROUNDTRIP_TIME
   else if (strcmp(hdr->topic, RTROUTED_TRANSACTION_TIME_INFO) == 0)
   {
     rtRouted_OnMessageTimeOut(sender, hdr, buff, n);
@@ -1462,8 +1462,8 @@ dispatch:
     if(clnt->header.flags & rtMessageFlags_Request)
     {
       /*Turn this message around without the payload. Set the right error flag.*/
-      rtString_Copy(clnt->header.topic, clnt->header.reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH); 
-      clnt->header.flags &= ~rtMessageFlags_Request; 
+      rtString_Copy(clnt->header.topic, clnt->header.reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
+      clnt->header.flags &= ~rtMessageFlags_Request;
       clnt->header.flags |= (rtMessageFlags_Response | rtMessageFlags_Undeliverable);
       clnt->header.payload_length = 0;
       loop_safeguard = 1;
@@ -1492,11 +1492,17 @@ rtConnectedClient_Reset(rtConnectedClient *clnt)
 static char*
 rtRouted_GetClientName(rtConnectedClient* clnt)
 {
-  size_t i;
-  i = rtVector_Size(gRoutes);
+  size_t i = 0;
   char *clnt_name = NULL;
-  while(i--)
+
+  if (!clnt)
+    return NULL;
+
+  i = rtVector_Size(gRoutes);
+
+  while(i > 0)
   {
+    i--;
     rtRouteEntry* route = (rtRouteEntry *) rtVector_At(gRoutes, i);
     if(route && (route->subscription) && (route->subscription->client)) {
       if(strcmp( route->subscription->client->ident, clnt->ident ) == 0) {
@@ -1622,7 +1628,7 @@ rtConnectedClient_Read(rtConnectedClient* clnt)
         }
 #endif
         rtConnectedClient_Reset(clnt);
-        
+
         /* If the read buffer was expanded to deal with an unusually large message, shrink it to normal size to free that memory.*/
         if(RTMSG_CLIENT_READ_BUFFER_SIZE != clnt->read_buffer_capacity)
         {
@@ -1688,7 +1694,7 @@ rtRouted_AcceptClientConnection(rtListener* listener)
     rtLog_Warn("accept:%s", rtStrError(errno));
     return;
   }
-  
+
   uint32_t one = 1;
   setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
 
@@ -1756,7 +1762,7 @@ int main(int argc, char* argv[])
     printf("failed to open pid file. %s\n", strerror(errno));
     return 0;
   }
-  
+
   int fd = fileno(pid_file);
   int retval = flock(fd, LOCK_EX | LOCK_NB);
   if (retval != 0 && errno == EWOULDBLOCK)
@@ -1796,7 +1802,7 @@ int main(int argc, char* argv[])
   while (1)
   {
     int option_index = 0;
-    static struct option long_options[] = 
+    static struct option long_options[] =
     {
       {"foreground",  no_argument,        0, 'f'},
       {"no-delay",    no_argument,        0, 'd' },

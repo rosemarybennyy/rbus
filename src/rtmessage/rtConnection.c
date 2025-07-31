@@ -139,7 +139,7 @@ struct _rtConnection
 typedef struct _rtMessageInfo
 {
   rtRetainable            retainable;
-  rtMessageHeader         header; 
+  rtMessageHeader         header;
   void*                   userData;
   uint32_t                dataLength;
   uint32_t                dataCapacity;
@@ -147,7 +147,7 @@ typedef struct _rtMessageInfo
   uint8_t                 block1[RTMSG_SEND_BUFFER_SIZE];
 } rtMessageInfo;
 
-typedef struct 
+typedef struct
 {
   uint32_t sequence_number;
   rtSemaphore sem;
@@ -160,7 +160,7 @@ typedef struct _rtCallbackMessage
   rtMessage msg;
 } rtCallbackMessage;
 
-static int g_taint_packets = 0; 
+static int g_taint_packets = 0;
 static int rtConnection_StartThreads(rtConnection con);
 static int rtConnection_StopThreads(rtConnection con);
 static rtError rtConnection_Read(rtConnection con, int32_t timeout);
@@ -225,24 +225,24 @@ static void onDefaultMessage(rtMessageHeader const* hdr, uint8_t const* buff, ui
 }
 
 static rtError rtConnection_SendInternal(
-  rtConnection con,  
+  rtConnection con,
   uint8_t const* buff,
-  uint32_t bullLen, 
+  uint32_t bullLen,
   char const* topic,
-  char const* reply_topic, 
-  int flags, 
+  char const* reply_topic,
+  int flags,
   uint32_t sequence_number,
   uint32_t T1,
   uint32_t T2,
   uint32_t T3);
-  
+
 rtError
 rtConnection_SendRequestInternal(
-  rtConnection con, 
-  uint8_t const* pReq, 
-  uint32_t nReq, 
+  rtConnection con,
+  uint8_t const* pReq,
+  uint32_t nReq,
   char const* topic,
-  rtMessageInfo** resMsg, 
+  rtMessageInfo** resMsg,
   uint32_t timeout,
   int flags);
 
@@ -291,7 +291,7 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
   int first_to_handle = false;
   int is_first_connect = true;
   int reconnect_in_progress = 0;
-  rtTime_t last_reconnect_time = con->reconnect_time;
+  rtTime_t last_reconnect_time;
   char tbuff1[100];
   char tbuff2[100];
   char tbuff3[100];
@@ -309,6 +309,9 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
   }
   else
   {
+    // Get the last connected time.!
+    last_reconnect_time = con->reconnect_time;
+
     pthread_mutex_lock(&con->reconnect_mutex);
 
     reconnect_in_progress = con->reconnect_in_progress;
@@ -322,11 +325,11 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
         rtTime_Now(&con->reconnect_time);
       }
     }
-    pthread_mutex_unlock(&con->reconnect_mutex);  
+    pthread_mutex_unlock(&con->reconnect_mutex);
 
-    rtLog_Debug("ConnectAndRegister reconnect state first_to_handle=%d reconnect_in_progress=%d threads_time=[%s] last_reconnect_time=[%s] new_reconnect_time=[%s]", 
-      first_to_handle, reconnect_in_progress, 
-      rtTime_ToString(&con->start_time, tbuff1), 
+    rtLog_Debug("ConnectAndRegister reconnect state first_to_handle=%d reconnect_in_progress=%d threads_time=[%s] last_reconnect_time=[%s] new_reconnect_time=[%s]",
+      first_to_handle, reconnect_in_progress,
+      rtTime_ToString(&con->start_time, tbuff1),
       rtTime_ToString(&last_reconnect_time, tbuff2),
       rtTime_ToString(&con->reconnect_time, tbuff3));
 
@@ -698,12 +701,12 @@ rtConnection_Destroy(rtConnection con)
   {
     unsigned int i;
     SetRunThreadsSync(con, 0);
-    
+
     if (con->fd != -1)
       shutdown(con->fd, SHUT_RDWR);
-    
+
     rtConnection_StopThreads(con);
-    
+
     if (con->fd != -1)
       close(con->fd);
     if (con->send_buffer)
@@ -730,9 +733,9 @@ rtConnection_Destroy(rtConnection con)
     int found_pending_requests = 0;
 
     rtListItem listItem;
-    for(rtList_GetFront(con->pending_requests_list, &listItem); 
-        listItem != NULL; 
-        rtListItem_GetNext(listItem, &listItem))
+    for(rtList_GetFront(con->pending_requests_list, &listItem);
+          listItem != NULL;
+            rtListItem_GetNext(listItem, &listItem))
     {
       pending_request *entry;
       rtListItem_GetData(listItem, (void**)&entry);
@@ -746,7 +749,7 @@ rtConnection_Destroy(rtConnection con)
     if(0 != found_pending_requests)
     {
       rtLog_Error("Warning! Found pending requests while destroying connection.");
-      sleep(1); /* ugly hack to allow all sendRequest() calls to return and stop using con->* data members. Hopefully, this will never be 
+      sleep(1); /* ugly hack to allow all sendRequest() calls to return and stop using con->* data members. Hopefully, this will never be
       executed in practice. Revisit if necessary. */
     }
 
@@ -1074,7 +1077,7 @@ rtConnection_SendRequestInternal(rtConnection con, uint8_t const* pReq, uint32_t
         {
           /*caller must call rtMessageInfo_Release on the response*/
 
-          *res = queue_entry.response; 
+          *res = queue_entry.response;
         }
       }
       else
@@ -1128,7 +1131,7 @@ rtConnection_SendInternal(rtConnection con, uint8_t const* buff, uint32_t n, cha
 #ifdef WITH_SPAKE2
   /*encrypte all non-internal messages*/
   if (rtConnection_IsSecure(con) && topic[0] != '_')
-  { 
+  {
     rtLog_Debug("encrypting message");
 
     if ((err = rtCipher_Encrypt(con->cipher, buff, n, con->encryption_buffer, RTMSG_SEND_BUFFER_SIZE, &message_length)) != RT_OK)
@@ -1168,7 +1171,7 @@ rtConnection_SendInternal(rtConnection con, uint8_t const* buff, uint32_t n, cha
     header.reply_topic[0] = '\0';
     header.reply_topic_length = 0;
   }
-  header.sequence_number = sequence_number; 
+  header.sequence_number = sequence_number;
   header.flags = flags;
 #ifdef MSG_ROUNDTRIP_TIME
   if(header.flags & rtMessageFlags_Request)
@@ -1264,12 +1267,12 @@ rtConnection_AddListenerWithId(rtConnection con, char const* expression, uint32_
   con->listeners[i].callback = callback;
   con->listeners[i].expression = strdup(expression);
   pthread_mutex_unlock(&con->mutex);
-  
+
   rtMessage m;
   rtMessage_Create(&m);
   rtMessage_SetInt32(m, "add", 1);
   rtMessage_SetString(m, "topic", expression);
-  rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id); 
+  rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id);
   rtConnection_SendMessage(con, m, "_RTROUTED.INBOX.SUBSCRIBE");
   rtMessage_Release(m);
 
@@ -1374,7 +1377,7 @@ rtConnection_AddAlias(rtConnection con, char const* existing, const char *alias)
         rtMessage_Create(&m);
         rtMessage_SetInt32(m, "add", 1);
         rtMessage_SetString(m, "topic", alias);
-        rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id); 
+        rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id);
         ret = rtConnection_SendRequest(con, m, "_RTROUTED.INBOX.SUBSCRIBE", &res, 6000);
         if(RT_OK == ret)
         {
@@ -1416,7 +1419,7 @@ rtConnection_RemoveAlias(rtConnection con, char const* existing, const char *ali
         rtMessage_Create(&m);
         rtMessage_SetInt32(m, "add", 0);
         rtMessage_SetString(m, "topic", alias);
-        rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id); 
+        rtMessage_SetInt32(m, "route_id", con->listeners[i].subscription_id);
         rtConnection_SendMessage(con, m, "_RTROUTED.INBOX.SUBSCRIBE");
         rtMessage_Release(m);
         break;
@@ -1451,7 +1454,7 @@ _rtConnection_ReadAndDropBytes(int fd, unsigned int bytes_to_read)
     fd_set read_fds;
     FD_ZERO(&read_fds);
     FD_SET(fd, &read_fds);
-    
+
     ssize_t n = recv(fd, buff, (sizeof(buff) > bytes_to_read ? bytes_to_read : sizeof(buff)), MSG_NOSIGNAL);
     if (n == 0)
     {
@@ -1508,7 +1511,7 @@ rtConnection_Read(rtConnection con, int32_t timeout)
     if (err == RT_ERROR_TIMEOUT)
     {
         rtLog_Error("rtConnection_Read timed out\n");
-        rtMessageInfo_Release(msginfo); 
+        rtMessageInfo_Release(msginfo);
         return err;
     }
 
@@ -1608,9 +1611,9 @@ rtConnection_Read(rtConnection con, int32_t timeout)
       */
       pthread_mutex_lock(&con->mutex);
       rtListItem listItem;
-      for(rtList_GetFront(con->pending_requests_list, &listItem); 
-          listItem != NULL; 
-          rtListItem_GetNext(listItem, &listItem))
+      for(rtList_GetFront(con->pending_requests_list, &listItem);
+            listItem != NULL;
+              rtListItem_GetNext(listItem, &listItem))
       {
         pending_request *entry;
         rtListItem_GetData(listItem, (void**)&entry);
@@ -1658,7 +1661,7 @@ rtConnection_Read(rtConnection con, int32_t timeout)
       char* pBlockingTopic = "";
       if(blockingData)
           pBlockingTopic = blockingData->header.topic;
-        
+
       /*log something if the callback thread isn't processing fast enough*/
       if(size > MAX_ALLOWED_MESSAGES)
       {
@@ -1719,14 +1722,14 @@ void check_router(rtConnection con)
   if(remote_addr != NULL)
   {
     handle = dlopen ("/usr/lib/libsecure_wrapper.so", RTLD_LAZY);
-    if (!handle) 
+    if (!handle)
     {
       fputs (dlerror(), stderr);
       exit(1);
     }
     fptr = dlsym(handle, "v_secure_system");
     error = dlerror();
-    if (error != NULL) 
+    if (error != NULL)
     {
       printf( "!!! %s\n", error );
       return;
@@ -1746,15 +1749,15 @@ void check_router(rtConnection con)
   RDKB-26837: added rtConnection_CallbackThread to decouple
   reading message from the socket (what rtConnection_ReaderThread does)
   from executing the listener callbacks which can block.
-  This prevents rtConnection_ReaderThread from getting blocked by callbacks 
+  This prevents rtConnection_ReaderThread from getting blocked by callbacks
   so that it can continue to read incoming message.
-  Importantly, it allows rtConnection_ReaderThread to handle Response messages  
+  Importantly, it allows rtConnection_ReaderThread to handle Response messages
   for threads which have called rtConnection_SendRequest.  In RDKB-26837,
   rtConnection_ReaderThread was executing a callback directly which
   blocked on an application mutex being help by another thread
   attempting to call rtConnection_SendRequest.   Since the reader thread
-  was blocked, it could not read the response message the SendRequest 
-  was waiting on.  
+  was blocked, it could not read the response message the SendRequest
+  was waiting on.
 */
 static void * rtConnection_CallbackThread(void *data)
 {

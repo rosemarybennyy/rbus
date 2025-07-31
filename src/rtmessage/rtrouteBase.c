@@ -89,10 +89,18 @@ rtRouteBase_BindListener(char const* socket_name, int no_delay, int indefinite_r
   if (listener->local_endpoint.ss_family != AF_UNIX)
   {
     uint32_t one = 1;
+    int socRet = 0;
     if (no_delay)
-      setsockopt(listener->fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
-
-    setsockopt(listener->fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
+    {
+      socRet = setsockopt(listener->fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
+      if (socRet < 0)
+        rtLog_Warn("Failed to set TCP_NODELAY: %s", rtStrError(errno));
+    }
+      
+    socRet = setsockopt(listener->fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
+    if (socRet < 0)
+      rtLog_Warn("Failed to set SO_REUSEADDR: %s", rtStrError(errno));
+      
     if(indefinite_retry == 1)
     {
       /* assigning maximum value of unsigned integer(0xFFFFFFFF - 4294967295) to num_retries */
@@ -439,7 +447,7 @@ rtConnectedClient_Read(rtConnectedClient* clnt, rtRouteEntry* myDirectRoute)
         }
 #endif
         rtConnectedClient_Reset(clnt);
-        
+
         /* If the read buffer was expanded to deal with an unusually large message, shrink it to normal size to free that memory.*/
         if(RTMSG_CLIENT_READ_BUFFER_SIZE != clnt->read_buffer_capacity)
         {
@@ -495,7 +503,7 @@ rtRouteDirect_AcceptClientConnection(rtListener* listener)
     rtLog_Warn("accept:%s", rtStrError(errno));
     return NULL;
   }
-  
+
   uint32_t one = 1;
   setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
 
@@ -524,14 +532,14 @@ rtRouteDirect_SendMessage(const rtPrivateClientInfo* pClient, uint8_t const* pIn
         new_header.topic_length = strlen(pClient->clientTopic);
         new_header.reply_topic[0] = '\0';
         new_header.reply_topic_length = 0;
-      
+
         new_header.payload_length = inLength;
 
 
         rtLog_Debug("SendMessage topic=%s expression...", new_header.topic);
         static uint8_t buffer[RTMSG_CLIENT_READ_BUFFER_SIZE];
 
-        memset(buffer, 0,RTMSG_CLIENT_READ_BUFFER_SIZE); 
+        memset(buffer, 0, RTMSG_CLIENT_READ_BUFFER_SIZE);
         rtMessageHeader_Encode(&new_header, buffer);
         struct iovec send_vec[] = {{buffer, new_header.header_length}, {(void *)pInBuff, inLength}};
         struct msghdr send_hdr = {NULL, 0, send_vec, 2, NULL, 0, 0};

@@ -24,7 +24,7 @@
 #include <string.h>
 #include <assert.h>
 #include <sys/stat.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -136,7 +136,10 @@ rbusSubscription_t* rbusSubscriptions_addSubscription(rbusSubscriptions_t subscr
         return NULL;
     }
     if(!subscriptions)
+    {
+        TokenChain_destroy(tokens);
         return NULL;
+    }
 
     sub = rt_malloc(sizeof(rbusSubscription_t));
 
@@ -219,14 +222,14 @@ void rbusSubscriptions_removeSubscription(rbusSubscriptions_t subscriptions, rbu
             break;
         }
         rtListItem_GetNext(item, &item);
-    }    
+    }
     rbusSubscriptions_saveCache(subscriptions);
 }
 
-/*  called after a new subscription is created 
- *  we go through the element tree and check to see if the 
+/*  called after a new subscription is created
+ *  we go through the element tree and check to see if the
  *  new subscription matches any existing instance nodes
- *  e.g. if subscribing to Foo.*.Prop, this will find all instances of Prop 
+ *  e.g. if subscribing to Foo.*.Prop, this will find all instances of Prop
  */
 static void rbusSubscriptions_onSubscriptionCreated(rbusSubscription_t* sub, elementNode* node)
 {
@@ -248,7 +251,6 @@ static void rbusSubscriptions_onSubscriptionCreated(rbusSubscription_t* sub, ele
             /*recurse into children except for row templates {i}*/
             if( child->child && !(child->parent->type == RBUS_ELEMENT_TYPE_TABLE && strcmp(child->name, "{i}") == 0) )
             {
-                
                 rbusSubscriptions_onSubscriptionCreated(sub, child);
             }
 
@@ -257,8 +259,8 @@ static void rbusSubscriptions_onSubscriptionCreated(rbusSubscription_t* sub, ele
     }
 }
 
-/*  called after a new node instance is created 
- *  we go through the list of subscriptions and check to see if the 
+/*  called after a new node instance is created
+ *  we go through the list of subscriptions and check to see if the
  *  new node is picked up by any subscription eventName
  */
 static void rbusSubscriptions_onElementCreated(rbusSubscriptions_t subscriptions, elementNode* node)
@@ -284,7 +286,7 @@ static void rbusSubscriptions_onElementCreated(rbusSubscriptions_t subscriptions
                 {
                     rtListItem_GetData(item, (void**)&sub);
 
-                    if(sub->tokens/*tokens can NULL when loaded from cache*/ && 
+                    if(sub->tokens/*tokens can NULL when loaded from cache*/ &&
                        TokenChain_match(sub->tokens, child))
                     {
                         rtList_PushBack(sub->instances, child, NULL);
@@ -531,7 +533,7 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         if(type != RBUS_INT32 && length != sizeof(int32_t)) goto remove_bad_file;
         if(rbusBuffer_ReadInt32(buff, &sub->interval) < 0) goto remove_bad_file;
 
-        //read duration        
+        //read duration
         if(rbusBuffer_ReadUInt16(buff, &type) < 0) goto remove_bad_file;
         if(rbusBuffer_ReadUInt16(buff, &length) < 0) goto remove_bad_file;
         if(type != RBUS_INT32 && length != sizeof(int32_t)) goto remove_bad_file;
@@ -574,7 +576,7 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
             It's possible that we can load a sub from the cache for a listener whose process is no longer running.
             Example, this provider exited with active subscribers and thus still had those subs in its cache.
             Later those listener processes exit/crash.
-            Then after that, this provider restarts and reads those now obsolete listeners. 
+            Then after that, this provider restarts and reads those now obsolete listeners.
          */
         if(!rbusSubscriptions_isListenerRunning(sub->listener))
         {
@@ -908,10 +910,10 @@ rbusSubscription_t* rbusSubscriptions_updateExisting(rbusSubscriptions_t subscri
 #if 1 //IGNORE_PID_WHEN_CHECKING_DUPLICATES
         if(strcmp(sub->eventName, eventName) == 0)
         {
-            /* This tries to handle the case where a subscriber crashes and 
+            /* This tries to handle the case where a subscriber crashes and
                restarts with a new pid appended to its inbox name.
-               The rtMessage inbox name is what we call listener here.  
-               If subscriber Foo with inbox=Foo.1234 subscribes but then crashes, 
+               The rtMessage inbox name is what we call listener here.
+               If subscriber Foo with inbox=Foo.1234 subscribes but then crashes,
                we don't know about the crash and continue to keep Foo.1234 in our list.
                If Foo restarts with a new inbox=Foo.4567 and subscribes
                we want to reuse the pre-existing subscription, updating only the name.
@@ -933,12 +935,12 @@ rbusSubscription_t* rbusSubscriptions_updateExisting(rbusSubscriptions_t subscri
                 int l1 = (int)(p1 - sub->listener);
                 int l2 = (int)(p2 - listener);
 
-                if( strncmp(sub->listener, listener, l1 >= l2 ? l1 : l2) == 0 && 
+                if( strncmp(sub->listener, listener, l1 >= l2 ? l1 : l2) == 0 &&
                     rbusFilter_Compare(sub->filter, filter) == 0)
-                {   
+                {
                     /*don't allow the the same component from the same process with the same filter
                       to subscribe to the same event more then once*/
-                    if(pid1 == pid2) 
+                    if(pid1 == pid2)
                     {
                         return sub;
                     }
