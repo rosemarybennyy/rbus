@@ -723,7 +723,6 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
         rbusValue_Release(*value);
         return -1;
     }
-
     current->type = type;
     switch(type)
     {
