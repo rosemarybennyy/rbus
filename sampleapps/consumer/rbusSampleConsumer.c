@@ -27,7 +27,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <rbus.h>
-#include <inittypes.h>
+#include <inttypes.h>
 
 #define     TotalParams   6
 
