@@ -27,6 +27,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <rbus.h>
+#include <inittypes.h>
 
 #define     TotalParams   6
 
@@ -147,10 +148,12 @@ int main(int argc, char *argv[])
             rbusValue_Release(value);
 
             strftime(tmpBuff, 25, "%T", localtime(&tv1.tv_sec));
-            printf ("StartTime : %s.%06ld\t", tmpBuff, tv1.tv_usec);
+            printf ("StartTime : %s.%06" PRIu64 "\t", tmpBuff, tv1.tv_usec);
 
             strftime(tmpBuff, 25, "%T", localtime(&tv2.tv_sec));
-            printf ("EndTime: %s.%06ld\t", tmpBuff, tv2.tv_usec);
+
+
+            printf ("EndTime: %s.%06" PRIu64 "\t", tmpBuff, tv2.tv_usec);
 
             /* As we expecting only millisecond latency, */
             if(tv1.tv_usec > tv2.tv_usec)
