@@ -28,6 +28,7 @@
 #include "rtSocket.h"
 #include "rtList.h"
 #include "rtRetainable.h"
+#include "rtString.h"
 #include "rtTime.h"
 #include "rtSemaphore.h"
 #include "rtMemory.h"
@@ -63,11 +64,7 @@ typedef volatile int atomic_uint_least32_t;
 #define RTMSG_LISTENERS_MAX 128
 #define MAX_ALLOWED_MESSAGES 25
 #define RTCONNECTION_CREATE_EXPRESSION_ID 1
-#ifdef  RDKC_BUILD
 #define RTMSG_SEND_BUFFER_SIZE (1024 * 8)
-#else
-#define RTMSG_SEND_BUFFER_SIZE (1024 * 64)
-#endif /* RDKC_BUILD */
 #ifndef SOL_TCP
 #define SOL_TCP 6
 #endif
@@ -1158,13 +1155,11 @@ rtConnection_SendInternal(rtConnection con, uint8_t const* buff, uint32_t n, cha
 
   if(topic)
   {
-    strncpy(header.topic, topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
-    header.topic_length = strlen(header.topic);
+    header.topic_length = rtString_Copy(header.topic, topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
   }
   if (reply_topic)
   {
-    strncpy(header.reply_topic, reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH-1);
-    header.reply_topic_length = strlen(reply_topic);
+    header.reply_topic_length = rtString_Copy(header.reply_topic, reply_topic, RTMSG_HEADER_MAX_TOPIC_LENGTH);
   }
   else
   {

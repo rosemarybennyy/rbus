@@ -30,6 +30,7 @@
 #include <rbus.h>
 #include "rbus_buffer.h"
 #include "rbus_element.h"
+#include "rtString.h"
 #include "rbus_valuechange.h"
 #include "rbus_subscriptions.h"
 #include "rbus_asyncsubscribe.h"
@@ -2781,7 +2782,7 @@ static void _create_direct_connection_callback_handler (rbusHandle_t handle, rbu
             }
             else
             {
-                strncpy(ip, consumerToBrokerConf, (p - consumerToBrokerConf));
+                rtString_Copy(ip, consumerToBrokerConf, (p - consumerToBrokerConf));
                 RBUSLOG_DEBUG ("parsing ip address:%s", ip);
 
                 //FIXME :: The port must be within 65535 and unique to the consumer.
@@ -6504,7 +6505,7 @@ rbusError_t rbusHandle_GetTraceContextAsString(
         if (s)
         {
             n = RBUS_MIN( (int) strlen(s), traceParentLength - 1 );
-            strncpy(traceParent, s, n);
+            rtString_Copy(traceParent, s, n);
             traceParent[n] ='\0';
         }
         else
@@ -6516,7 +6517,7 @@ rbusError_t rbusHandle_GetTraceContextAsString(
         if (t)
         {
             n = RBUS_MIN( (int) strlen(t), traceStateLength - 1);
-            strncpy(traceState, t, n);
+            rtString_Copy(traceState, t, n);
             traceState[n] = '\0';
         }
         else

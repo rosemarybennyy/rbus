@@ -261,6 +261,7 @@ rtMessage_GetMessage(rtMessage const m, char const* name, rtMessage* item);
 rtError
 rtMessage_ToString(rtMessage m, char** s, uint32_t* n);
 
+#if 0
 /**
  * Get topic of message to be sent
  * @param message to get topic
@@ -278,6 +279,7 @@ rtMessage_GetSendTopic(rtMessage const m, char* topic);
  **/
 rtError
 rtMessage_SetSendTopic(rtMessage m, char const* topic);
+#endif
 
 rtError
 rtMessage_SetBool(rtMessage const m, char const* name, bool b);
