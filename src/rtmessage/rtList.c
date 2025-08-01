@@ -19,6 +19,7 @@
 ##########################################################################
 */
 #include "rtList.h"
+#include "rtString.h"
 #include "rtLog.h"
 #include "rtMemory.h"
 #include <errno.h>
@@ -589,11 +590,11 @@ int main(int argc, char* argv[])
   /*exercise reusability*/
   printf("testing reusability\n"); 
   rtList_Create(&list);
-  sdata = rt_malloc(10); strncpy(sdata, "one", 10);
+  sdata = rt_calloc(1, 10); rtString_Copy(sdata, "one", 10);
   rtList_PushBack(list, sdata, &items[0]);
-  sdata = rt_malloc(10); strncpy(sdata, "two", 10);
+  sdata = rt_calloc(1, 10); rtString_Copy(sdata, "two", 10)
   rtList_PushBack(list, sdata, &items[1]);
-  sdata = rt_malloc(10); strncpy(sdata, "three", 10);
+  sdata = rt_calloc(1, 10); rtString_Copy(sdata, "three", 10)
   rtList_PushBack(list, sdata, &items[2]);
   printf("list should contain one, two, three. free list empty\n");
   printListString(list);
@@ -631,7 +632,7 @@ int main(int argc, char* argv[])
       rtListItem_SetData(items[i], data);
     }
     snprintf(buff, 10, "item %d", i);
-    strncpy((char*)data, buff, 10);
+    rtString_Copy((char*)data, buff, 10);
   }
   printListString(list);
   rtList_Destroy(list, freeString);
