@@ -10,7 +10,7 @@ uint32_t rtString_Copy(char* dstBuffer, const char* srcBuffer, uint32_t copySize
   srcBufferSize = snprintf(dstBuffer, copySize, "%s", srcBuffer);
   if (srcBufferSize > copySize)
   {
-     rtLog_Info("Truncated the given string (%s) as (%s) with size %d", srcBuffer, dstBuffer, copySize);
+     rtLog_Debug("Truncated the given string (%s) as (%s) with size %d", srcBuffer, dstBuffer, copySize);
      return copySize;
   }
   else

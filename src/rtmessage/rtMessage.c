@@ -419,6 +419,7 @@ rtMessage_GetMessage(rtMessage const message, char const* name, rtMessage* clone
   return RT_OK;
 }
 
+#if 0
 /**
  * Get topic of message to be sent
  * @param message to get topic
@@ -455,6 +456,7 @@ rtMessage_SetSendTopic(rtMessage const m, char const* topic)
     cJSON_Delete(obj);
   return RT_OK;
 }
+#endif
 
 /**
  * Add string field to array in message
