@@ -31,6 +31,7 @@
 #include <rtList.h>
 #include <rtLog.h>
 #include <rtMemory.h>
+#include "rtString.h"
 #include "../common/runningParamHelper.h"
 #include "../common/testValueHelper.h"
 
@@ -267,7 +268,7 @@ Node* createNode(Node* parent, rbusElementType_t type, char const* name)
 
     if(name)
     {
-        strncpy(node->name, name, MAX_ALIAS_LEN-1);
+        rtString_Copy(node->name, name, MAX_ALIAS_LEN);
     }
 
     if(parent)

@@ -240,6 +240,7 @@
 #include <rtLog.h>
 #include "../common/runningParamHelper.h"
 #include "../common/test_macros.h"
+#include "rtString.h"
 
 char componentName[RBUS_MAX_NAME_LENGTH] = {0};
 
@@ -268,7 +269,7 @@ int main(int argc, char *argv[])
 
     rtList_Create(&eventList);
 
-    strncpy(componentName, "rbusRecoveryConsumer", RBUS_MAX_NAME_LENGTH);
+    rtString_Copy(componentName, "rbusRecoveryConsumer", RBUS_MAX_NAME_LENGTH);
 
     while (1)
     {
