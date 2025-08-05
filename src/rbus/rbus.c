@@ -5036,6 +5036,10 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
     bool                            publishOnSubscribe,
     bool                            rawData)
 {
+    VERIFY_NULL(handle);
+    VERIFY_NULL(eventName);
+    VERIFY_NULL(handler);	
+
     rbusCoreError_t coreerr;
     int providerError = RBUS_ERROR_SUCCESS;
     rbusEventSubscription_t* sub;
@@ -5280,14 +5284,15 @@ rbusError_t  rbusEvent_SubscribeRawData(
     void*               userData,
     int                 timeout)
 {
+    VERIFY_NULL(handle);
+    VERIFY_NULL(eventName);
+    VERIFY_NULL(handler);
+
     rbusError_t errorcode = RBUS_ERROR_SUCCESS;
     char rawDataTopic[RBUS_MAX_NAME_LENGTH] = {0};
     rbusEventSubscriptionInternal_t* subInternal = NULL;
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
 
-    VERIFY_NULL(handle);
-    VERIFY_NULL(eventName);
-    VERIFY_NULL(handler);
 
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
@@ -5546,15 +5551,15 @@ rbusError_t rbusEvent_SubscribeExRawData(
     int                         numSubscriptions,
     int                         timeout)
 {
+    VERIFY_NULL(handle);
+    VERIFY_NULL(subscription);
+    VERIFY_ZERO(numSubscriptions);
+
     rbusError_t errorcode = RBUS_ERROR_SUCCESS;
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
     char rawDataTopic[RBUS_MAX_NAME_LENGTH] = {0};
     rbusEventSubscriptionInternal_t* subInternal;
     int i;
-
-    VERIFY_NULL(handle);
-    VERIFY_NULL(subscription);
-    VERIFY_ZERO(numSubscriptions);
 
     if (handleInfo->m_handleType != RBUS_HWDL_TYPE_REGULAR)
         return RBUS_ERROR_INVALID_HANDLE;
