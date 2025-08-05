@@ -27,6 +27,7 @@ Test server for unit test client testing
 #include <stdbool.h>
 #include "rbus_core.h"
 
+#include "rtString.h"
 #include "rbus_test_util.h"
 
 static char data[100] = "init init init";
@@ -41,7 +42,7 @@ int count = 0;
 void reset_stored_data()
 {
     memset(data, 0, sizeof(data));
-    strncpy(data, "init init init", sizeof(data));
+    rtString_Copy(data, "init init init", sizeof(data));
 
     memset(&test_struct1, 0, sizeof(test_struct_t));
     memset(&test_struct2, 0, sizeof(test_struct_t));
@@ -75,7 +76,7 @@ int handle_set1(const char * destination, const char * method, rbusMessage reque
     const char * payload = NULL;
     if((err = rbusMessage_GetString(request, &payload) == RT_OK)) //TODO: Should payload be freed?
     {
-        strncpy(data, payload, sizeof(data));
+        rtString_Copy(data, payload, sizeof(data));
     }
     rbusMessage_Init(response);
     rbusMessage_SetInt32(*response, RBUSCORE_SUCCESS);
@@ -105,7 +106,7 @@ int handle_set2(const char * destination, const char * method, rbusMessage reque
     const char * payload = NULL;
     if((err = rbusMessage_GetString(request, &payload) == RT_OK))
     {
-        strncpy(data, payload, sizeof(data));
+        rtString_Copy(data, payload, sizeof(data));
     }
     rbusMessage_Init(response);
     rbusMessage_SetInt32(*response, RBUSCORE_SUCCESS);
@@ -143,11 +144,11 @@ int handle_setStudentInfo(const char * destination, const char * method, rbusMes
 
     if(NULL != user_data)
     {
-        strncpy(student_data[count].object_name, (char *)user_data,sizeof(student_data[count].object_name));
+        rtString_Copy(student_data[count].object_name, (char *)user_data,sizeof(student_data[count].object_name));
     }
     if((err = rbusMessage_GetString(request, &payload) == RT_OK))
     {
-        strncpy(student_data[count].student_name, payload, 50);
+        rtString_Copy(student_data[count].student_name, payload, 50);
     }
     count++;
     rbusMessage_Init(response);
@@ -213,7 +214,7 @@ int handle_setAttributes1(const char * destination, const char * method, rbusMes
     const char * name = NULL;
     if((err = rbusMessage_GetString(request, &name) == RT_OK)) //TODO: Should payload be freed?
     {
-        strncpy(test_struct1.name, name, sizeof(test_struct1.name));
+        rtString_Copy(test_struct1.name, name, sizeof(test_struct1.name));
         //printf("Value set to name: %s \n", name);
     }
     rbusMessage_GetInt32(request, &test_struct1.age);
@@ -247,7 +248,7 @@ int handle_setAttributes2(const char * destination, const char * method, rbusMes
     const char * name = NULL;
     if((err = rbusMessage_GetString(request, &name) == RT_OK)) //TODO: Should payload be freed?
     {
-        strncpy(test_struct2.name, name, sizeof(test_struct2.name));
+        rtString_Copy(test_struct2.name, name, sizeof(test_struct2.name));
         //printf("Value set to name: %s \n", name);
     }
     rbusMessage_GetInt32(request, &test_struct2.age);

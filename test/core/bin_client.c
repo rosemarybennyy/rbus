@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include "rbus_core.h"
 
+#include "rtString.h"
 #include "bin_header.h"
 #include "rtLog.h"
 
@@ -34,7 +35,7 @@ static void fill_mystruct()
     mystruct.a = 3;
     mystruct.b = 4;
     mystruct.c = true;
-    strncpy(mystruct.name, "client string", (sizeof(mystruct.name)-1));
+    rtString_Copy(mystruct.name, "client string", (sizeof(mystruct.name)));
     mystruct.d = 0xF0;
 }
 
