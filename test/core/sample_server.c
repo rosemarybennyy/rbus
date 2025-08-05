@@ -22,6 +22,7 @@
 #include <string.h>
 #include "rbus_core.h"
 
+#include "rtString.h"
 #include "rtLog.h"
 
 static char buffer[100];
@@ -51,7 +52,7 @@ static int handle_set(const char * destination, const char * method, rbusMessage
     const char * payload = NULL;
     if((err = rbusMessage_GetString(request, &payload) == RT_OK)) 
     {
-        strncpy(data, payload, sizeof(data));
+        rtString_Copy(data, payload, sizeof(data));
     }
     rbusMessage_Init(response);
     rbusMessage_SetInt32(*response, RBUSCORE_SUCCESS);

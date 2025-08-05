@@ -23,6 +23,7 @@
 #include "rbus_core.h"
 #include "bin_header.h"
 
+#include "rtString.h"
 #include "rtLog.h"
 
 static char buffer[100];
@@ -33,7 +34,7 @@ static void fill_mystruct()
     mystruct.a = 20;
     mystruct.b = 21;
     mystruct.c = false;
-    strncpy(mystruct.name, "server string", (sizeof(mystruct.name)-1));
+    rtString_Copy(mystruct.name, "server string", (sizeof(mystruct.name)));
     mystruct.d = 0xFF;
 }
 
