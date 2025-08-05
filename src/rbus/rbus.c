@@ -3182,7 +3182,7 @@ rbusError_t rbus_close(rbusHandle_t handle)
     char filename[RTMSG_HEADER_MAX_TOPIC_LENGTH];
     snprintf(filename, RTMSG_HEADER_MAX_TOPIC_LENGTH-1, "%s%d_%d", "/tmp/.rbus/", getpid(), handleInfo->componentId);
     int remove_ret = remove(filename);
-    if(remove_ret !- 0)
+    if(remove_ret != 0)
     {
         RBUSLOG_WARN("Failed to remove file %s, error: %s", filename, strerror(errno));	    
     }	    
