@@ -268,7 +268,7 @@ uint32_t rbusHandle_FetchSetTimeout(rbusHandle_t handle)
     {
         fp = fopen(fileName, "r");
         if(fp != NULL) {
-            if (fread(buf, 1, sizeof(buf), fp) > 0)
+            if (fgets(buf, sizeof(buf), fp) != NULL)
                 timeout = atoi(buf);
             fclose(fp);
         }
