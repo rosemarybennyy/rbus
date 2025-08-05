@@ -22,6 +22,7 @@
 #include <string.h>
 #include "rbus_core.h"
 
+#include "rtString.h"
 #include "rtLog.h"
 
 static char data1[100] = "wifi init init init";
@@ -50,7 +51,7 @@ static int handle_set(const char * destination, const char * method, rbusMessage
     printf("calling set %s\n", (const char *)user_data);
     if((err = rbusMessage_GetString(request,  &payload) == RT_OK)) //TODO: Should payload be freed?
     {
-        strncpy((char *)user_data, payload, sizeof(data1));
+        rtString_Copy((char *)user_data, payload, sizeof(data1));
     }
     rbusMessage_Init(response);
     rbusMessage_SetInt32(*response,  RBUSCORE_SUCCESS);

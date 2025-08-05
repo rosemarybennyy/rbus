@@ -28,6 +28,7 @@
 #include <getopt.h>
 #include <rbus.h>
 #include "../common/test_macros.h"
+#include "rtString.h"
 #include <rtMemory.h>
 
 int getDurationTables()
@@ -286,7 +287,7 @@ int testAddMissingRows(rbusHandle_t handle, bool firstTime)
                     if(rc >= RBUS_MAX_NAME_LENGTH)
                         printf("Format Truncation error at name - %d %s %s:%d", rc,  __FILE__, __FUNCTION__, __LINE__);
                     printf("updating name from: %s to: %s\n", tests[j].table, newName);
-                    strncpy(tests[j].table, newName, RBUS_MAX_NAME_LENGTH);
+                    rtString_Copy(tests[j].table, newName, RBUS_MAX_NAME_LENGTH);
                 }    
             }
         }
