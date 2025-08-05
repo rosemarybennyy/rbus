@@ -366,7 +366,7 @@ rtConnection_ConnectAndRegister(rtConnection con, rtTime_t* reconnect_time)
   if (fdManip < 0)
     return rtErrorFromErrno(errno);
 
-  setsockopt(con->fd, SOL_TCP, TCP_NODELAY, &i, sizeof(i))
+  setsockopt(con->fd, SOL_TCP, TCP_NODELAY, &i, sizeof(i));
 
   rtSocketStorage_ToString(&con->remote_endpoint, remote_addr, sizeof(remote_addr), &remote_port);
 
