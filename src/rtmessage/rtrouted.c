@@ -1696,7 +1696,11 @@ rtRouted_AcceptClientConnection(rtListener* listener)
   }
 
   uint32_t one = 1;
-  setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
+  if (setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one)) < 0) 
+  {
+    rtLog_Warn("setsockopt(TCP_NODELAY) failed on fd %d: %s", fd, strerror(errno));
+    // Optionally: close(fd); return;
+  }
 
   rtRouted_RegisterNewClient(fd, &remote_endpoint);
 }
