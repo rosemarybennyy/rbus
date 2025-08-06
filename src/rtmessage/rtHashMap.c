@@ -233,11 +233,18 @@ void rtHashMap_Set(rtHashMap hashmap, const void* key, const void* value)
         hashmap->val_destroyer((void*)node->value);
     }
     if(!node)
-    {
-        if((hashmap->size+1) / (float)rtVector_Size(hashmap->buckets) > hashmap->load_factor)
-        {
+    {   
+	size_t numBuckets = rtVector_Size(hashmap->buckets);
+        if(numBuckets == 0 || ((hashmap->size+1) / (float)numBuckets > hashmap->load_factor))
+	{
             rtHashMap_Resize(hashmap, 1);
             bucket = rtHashMap_GetBucket(hashmap, key);
+	    numBuckets = rtVector_Size(hashmap->buckets); // update after resize
+            if(numBuckets == 0)
+            {
+                rtLog_Error("rtHashMap_Set: bucket vector has zero size after resize, aborting insert");
+                return; 		
+	    }		    
         }
         node = rt_try_malloc(sizeof(struct rtHashMapNode));
         node->hashmap = hashmap;
