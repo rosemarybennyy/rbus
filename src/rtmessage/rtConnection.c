@@ -1007,16 +1007,17 @@ rtConnection_SendRequestInternal(rtConnection con, uint8_t const* pReq, uint32_t
       ret = err;
       goto dequeue_and_continue;
     }
-    pthread_mutex_unlock(&con->mutex);
 
     if(tid != con->read_tid)
     {
+      pthread_mutex_unlock(&con->mutex);	    
       rtTime_t timeout_time;
       rtTime_Later(NULL, timeout, &timeout_time);
       ret = rtSemaphore_TimedWait(queue_entry.sem, &timeout_time); //TODO: handle wake triggered by signals
     }
     else
     {
+      pthread_mutex_unlock(&con->mutex);	    
       //Handle nested dispatching.
       rtTime_t start_time;
       rtTime_Now(&start_time);
@@ -1060,10 +1061,10 @@ rtConnection_SendRequestInternal(rtConnection con, uint8_t const* pReq, uint32_t
         }
       } while(RT_OK == err);
     }
+    // Re-lock the mutex here for the critical section below
+    pthread_mutex_lock(&con->mutex);
     if(RT_OK == ret)
     {
-      /*Sem posted*/
-      pthread_mutex_lock(&con->mutex);
 
       if(queue_entry.response)
       {
