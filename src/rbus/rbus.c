@@ -5306,31 +5306,47 @@ rbusError_t  rbusEvent_SubscribeRawData(
     {
         snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
         subInternal = rbusEventSubscription_find(handleInfo->eventSubs, eventName, NULL, 0, 0, true);
-        if(subInternal && rbusMessage_HasListener(handle,rawDataTopic))
+	if(subInternal)
         {
-            errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
-            if (errorcode != RT_OK)
+            if(rbusMessage_HasListener(handle,rawDataTopic))
             {
-                RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
+                if (errorcode != RT_OK)
+                {
+                    RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                }
+            }
+            memset(rawDataTopic, '\0', strlen(rawDataTopic));
+            snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", eventName);
+            errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
+            if(errorcode != RBUS_ERROR_SUCCESS)
+            {
+                RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
             }
         }
-        memset(rawDataTopic, '\0', strlen(rawDataTopic));
-        snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", eventName);
-        errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-        if(errorcode != RBUS_ERROR_SUCCESS)
-        {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
-        }
+	else
+	{
+	    RBUSLOG_ERROR("Failed to find subscription for event %s", eventName);
+	    return RBUS_ERROR_INVALID_OPERATION;
+	}
     }
     else
     {
         subInternal = rbusEventSubscription_find(handleInfo->eventSubs, eventName, NULL, 0, 0, true);
-        snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
-        errorcode = rbusMessage_AddListener(handle, rawDataTopic,
-                _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-        if(errorcode != RBUS_ERROR_SUCCESS)
+	if(subInternal)
         {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
+            errorcode = rbusMessage_AddListener(handle, rawDataTopic,
+                    _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
+            if(errorcode != RBUS_ERROR_SUCCESS)
+            {
+                RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            }
+        }
+        else
+        {
+            RBUSLOG_ERROR("Failed to find subscription for event %s", eventName);
+            return RBUS_ERROR_INVALID_OPERATION;
         }
     }
     return errorcode;
