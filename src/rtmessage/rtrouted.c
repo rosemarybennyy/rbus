@@ -214,6 +214,13 @@ rtRouted_ReadTextFile(char const* fname, char** content)
   if (pf)
   {
     fseek(pf, 0L, SEEK_END);
+    long tell = ftell(pf);
+    if (tell < 0) 
+    {
+      fclose(pf);
+      rtLog_Error("ftell failed for file %s. %s", fname, strerror(errno));
+      return RT_FAIL;
+    }
     sz = (size_t)ftell(pf);
     rewind(pf);
     *content = rt_malloc(sz+1);
