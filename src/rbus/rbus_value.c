@@ -1145,11 +1145,8 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else if ((tmpL <= INT16_MAX) && (tmpL >= INT16_MIN))
-        {
-            int16_t tmpI16 = (int16_t) tmpL;
-            rbusValue_SetInt16(value, tmpI16);
-        }
+        int16_t tmpI16 = (int16_t) tmpL;
+        rbusValue_SetInt16(value, tmpI16);
         break;
     case RBUS_INT32:
         tmpL = strtol (pStringInput, &endptr, 10);
@@ -1158,11 +1155,8 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else if ((tmpL <= INT32_MAX) && (tmpL >= INT32_MIN))
-        {
-            int32_t tmpI32 = (int32_t) tmpL;
-            rbusValue_SetInt32(value, tmpI32);
-        }
+        int32_t tmpI32 = (int32_t) tmpL;
+        rbusValue_SetInt32(value, tmpI32);
         break;
     case RBUS_INT64:
         tmpLL = strtoll (pStringInput, &endptr, 10);
@@ -1171,11 +1165,8 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else if ((tmpLL <= INT64_MAX) && (tmpLL >= INT64_MIN))
-        {
-            int64_t tmpI64 = (int64_t) tmpLL;
-            rbusValue_SetInt64(value, tmpI64);
-        }
+        int64_t tmpI64 = (int64_t) tmpLL;
+        rbusValue_SetInt64(value, tmpI64);
         break;
     case RBUS_UINT16:
         tmpUL = strtoul (pStringInput, &endptr, 10);
@@ -1184,12 +1175,9 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else
-        {
-            uint16_t tmpU16 = (uint16_t) tmpUL;
-            rbusValue_SetUInt16(value, tmpU16);
-            break;
-        }
+        uint16_t tmpU16 = (uint16_t) tmpUL;
+        rbusValue_SetUInt16(value, tmpU16);
+        break;
     case RBUS_UINT32:
         tmpUL = strtoul (pStringInput, &endptr, 10);
         if ((pStringInput == endptr) || (*endptr != 0) || (sign == '-' && tmpUL != 0) || (errno == ERANGE && (tmpUL == ULONG_MAX || tmpUL == 0)) || (tmpUL > UINT32_MAX))
@@ -1197,12 +1185,9 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else
-        {
-            uint32_t tmpU32 = (uint32_t) tmpUL;
-            rbusValue_SetUInt32(value, tmpU32);
-            break;
-        }
+        uint32_t tmpU32 = (uint32_t) tmpUL;
+        rbusValue_SetUInt32(value, tmpU32);
+        break;
     case RBUS_UINT64:
         tmpULL = strtoull (pStringInput, &endptr, 10);
         if ((pStringInput == endptr) || (*endptr != 0) || (sign == '-' && tmpULL != 0) || (errno == ERANGE && (tmpULL == ULLONG_MAX || tmpULL == 0)) || (tmpULL > UINT64_MAX))
@@ -1210,12 +1195,9 @@ bool rbusValue_SetFromString(rbusValue_t value, rbusValueType_t type, const char
             RBUSLOG_INFO ("Invalid input string");
             return false;
         }
-        else
-        {
-            uint64_t tmpU64 = (uint64_t) tmpULL;
-            rbusValue_SetUInt64(value, tmpU64);
-            break;
-        }
+        uint64_t tmpU64 = (uint64_t) tmpULL;
+        rbusValue_SetUInt64(value, tmpU64);
+        break;
     case RBUS_SINGLE:
         tmpF = strtof(pStringInput, &endptr);
         if ((pStringInput == endptr) || (*endptr != 0) || (errno == ERANGE))
