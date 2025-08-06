@@ -5154,14 +5154,17 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
         subInternal->rawData = rawData;
         rtVector_PushBack(handleInfo->eventSubs, subInternal);
         HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
-        if(publishOnSubscribe)
-        {
-            rbusMessage_GetInt32(response, &initial_value);
-            if(initial_value)
+	if(response)
+	{
+            if(publishOnSubscribe)
             {
-                _master_event_callback_handler(NULL, eventName, response, userData);
+                rbusMessage_GetInt32(response, &initial_value);
+                if(initial_value)
+               {
+                    _master_event_callback_handler(NULL, eventName, response, userData);
+               }
             }
-        }
+	}
         rbusMessage_GetInt32(response, &subscriptionId);
         subInternal->subscriptionId = subscriptionId;
         if(response)
