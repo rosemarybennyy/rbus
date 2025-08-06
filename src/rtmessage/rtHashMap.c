@@ -302,7 +302,10 @@ uint32_t rtHashMap_Hash_Func_String(rtHashMap hashmap, const void* key)
         hash = hash * 31 + *skey;
         skey++;
     }
-    return abs(hash) % rtVector_Size(hashmap->buckets);
+    size_t nbuckets = rtVector_Size(hashmap->buckets);
+    if(nbuckets == 0)
+        return 0; // Prevent division by zero	    
+    return abs(hash) % nbuckets;
 }
 
 int rtHashMap_Compare_Func_String(const void* left, const void* right)
