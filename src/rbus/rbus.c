@@ -2952,6 +2952,7 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
     static int32_t sLastComponentId = 0;
     pthread_mutexattr_t attrib;
     char filename[RTMSG_HEADER_MAX_TOPIC_LENGTH];
+    FILE *fd = NULL;
 
     if(!handle || !componentName)
     {
@@ -3036,7 +3037,7 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
     UnlockMutex();
 
     snprintf(filename, RTMSG_HEADER_MAX_TOPIC_LENGTH-1, "%s%d_%d", "/tmp/.rbus/", getpid(), tmpHandle->componentId);
-    FILE *fd  =  fopen(filename, "w");
+    fd  =  fopen(filename, "w");
     if (fd)
     {
         RBUSLOG_DEBUG("(%s): %s File created successfully", componentName, filename);
