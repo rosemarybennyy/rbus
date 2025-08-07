@@ -735,7 +735,7 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
             return -1;
         }
         assert(strlen((char const*)buff->data + buff->posRead) + 1 == (size_t)length);/*length should captures null term*/
-        rbusValue_SetString(current, (char const*)buff->data + buff->posRead);
+        rc = rbusValue_SetString(current, (char const*)buff->data + buff->posRead);
         buff->posRead += length;
         return length;
     case RBUS_BYTES:
@@ -745,7 +745,7 @@ int rbusValue_Decode(rbusValue_t* value, rbusBuffer_t const buff)
             rbusValue_Release(*value);
             return -1;
         }
-        rbusValue_SetBytes(current, buff->data + buff->posRead, length);
+        rc = rbusValue_SetBytes(current, buff->data + buff->posRead, length);
         buff->posRead += length;
         return length;
     /* For the other types, its ok to read directly into them and set the type below */
