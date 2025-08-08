@@ -1782,7 +1782,10 @@ int main(int argc, char* argv[])
     rtLog_Warn("another instance of rtrouted is already running");
     exit(12);
   }
-  mkdir("/tmp/.rbus", 0755);
+  if (mkdir("/tmp/.rbus", 0755) != 0 && errno != EEXIST)
+  {
+    rtLog_Warn("Failed to create /tmp/.rbus directory: %s", strerror(errno));
+  }
 #ifdef ENABLE_RDKLOGGER
     rdk_logger_init("/etc/debug.ini");
 #endif
