@@ -3044,11 +3044,11 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
         fclose(fd);
     }
 
-    RBUSLOG_INFO(" rbus open (%s) success", componentName);
-    return RBUS_ERROR_SUCCESS;
-
     if((err = rbus_unregisterObj(componentName)) != RBUSCORE_SUCCESS)
         RBUSLOG_ERROR("(%s): unregisterObj error %d", componentName, err);
+    
+    RBUSLOG_INFO(" rbus open (%s) success", componentName);
+    return RBUS_ERROR_SUCCESS;
 
 exit_error2:
 
