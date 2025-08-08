@@ -3043,10 +3043,10 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
         RBUSLOG_DEBUG("(%s): %s File created successfully", componentName, filename);
         fclose(fd);
     }
-
+#if 0
     if((err = rbus_unregisterObj(componentName)) != RBUSCORE_SUCCESS)
         RBUSLOG_ERROR("(%s): unregisterObj error %d", componentName, err);
-    
+#endif
     RBUSLOG_INFO(" rbus open (%s) success", componentName);
     return RBUS_ERROR_SUCCESS;
 
