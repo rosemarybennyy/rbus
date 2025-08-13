@@ -640,7 +640,7 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
       myDirectClient = rtRouteDirect_AcceptClientConnection(myDirectListener);
     }
 
-    if (myDirectListener && FD_ISSET(myDirectClient->fd, &read_fds))
+    if (myDirectClient && FD_ISSET(myDirectClient->fd, &read_fds))
     {
       rtError err = rtConnectedClient_Read(myDirectClient, route);
       if (err != RT_OK)

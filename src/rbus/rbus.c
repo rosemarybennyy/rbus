@@ -5322,7 +5322,7 @@ rbusError_t  rbusEvent_SubscribeRawData(
                     RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
                 }
             }
-            memset(rawDataTopic, '\0', strlen(rawDataTopic));
+            memset(rawDataTopic, '\0', sizeof(rawDataTopic));
             snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", eventName);
             errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
             if(errorcode != RBUS_ERROR_SUCCESS)
@@ -5625,7 +5625,7 @@ rbusError_t rbusEvent_SubscribeExRawData(
                             RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
                         }
                     }
-                    memset(rawDataTopic, '\0', strlen(rawDataTopic));
+                    memset(rawDataTopic, '\0', sizeof(rawDataTopic));
                     snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", subscription[i].eventName);
                     errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
                     if(errorcode != RBUS_ERROR_SUCCESS)
