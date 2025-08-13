@@ -496,7 +496,7 @@ elementNode* retrieveInstanceElementEx(rbusHandle_t handle, elementNode* root, c
    
     if(currentNode == NULL)
     {
-	UNLOCK();    
+        UNLOCK();
         return NULL;
     }
     LOCK();	
