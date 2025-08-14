@@ -567,7 +567,8 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
         if(hasFilter)
         {
             size_t min_filter_len = 4; // Set this to the minimum valid filter encoding length
-            if ((buff->posWrite - buff->posRead) < min_filter_len)
+	    int available = buff->posWrite - buff->posRead;
+            if (available >= 0 && (size_t)available < min_filter_len)
             {
                 RBUSLOG_ERROR("Not enough data for filter in cache file %s", filePath);
                 goto remove_bad_file;
