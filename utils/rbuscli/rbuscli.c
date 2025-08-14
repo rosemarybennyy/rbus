@@ -3074,7 +3074,8 @@ int main( int argc, char *argv[] )
     }
     else
     {
-        if ((strcmp (argv[1], "-g") == 0) || (strcmp (argv[1], "-s") == 0))
+        
+        if (argv[1] && (strncmp(argv[1], "-g", 3) == 0 || strncmp(argv[1], "-s", 3) == 0))
         {
             g_isDebug = false;
         }
