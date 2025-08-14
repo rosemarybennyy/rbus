@@ -2592,7 +2592,16 @@ static int construct_input_into_cmds(char* buff, int* pargc, char** argv)
     int len = (int)strlen(buff);
     int i, j, quote;
     int argc = 0;
-    argv[argc++] = "rbuscli";
+
+    if (argv) 
+    {
+        argv[argc++] = "rbuscli";
+    }
+    else 
+    {
+        argc++; // still increment to keep count consistent
+    }
+
     runSteps = __LINE__;
     for(i = 0; i < len; ++i)
     {
