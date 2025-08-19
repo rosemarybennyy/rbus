@@ -213,7 +213,12 @@ rtRouted_ReadTextFile(char const* fname, char** content)
   pf = fopen(fname, "r");
   if (pf)
   {
-    fseek(pf, 0L, SEEK_END);
+    if (fseek(pf, 0L, SEEK_END) != 0) 
+    {
+      fclose(pf);
+      rtLog_Error("fseek failed for file %s. %s", fname, strerror(errno));
+      return RT_FAIL;
+    }	  
     long tell = ftell(pf);
     if (tell < 0) 
     {
