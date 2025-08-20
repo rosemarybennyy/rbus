@@ -506,8 +506,10 @@ rtRouteDirect_AcceptClientConnection(rtListener* listener)
   }
 
   uint32_t one = 1;
-  setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
-
+  if (setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one)) < 0)
+  {
+    rtLog_Warn("Failed to set TCP_NODELAY on accepted socket: %s", rtStrError(errno));
+  }
   return rtRouteDirect_RegisterNewClient(fd, &remote_endpoint);
 }
 
@@ -586,8 +588,10 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
   if (RT_OK != rtRouteBase_BindListener(socket_name, 1, 1, &myDirectListener))
   {
     if (strncmp(socket_name, "unix://", 7) == 0)
-      remove(&socket_name[7]);
-
+    {	    
+      if (remove(&socket_name[7]) != 0)
+	   rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
+    }   
     return RT_FAIL;
   }
 
@@ -634,13 +638,13 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
       continue;
     }
 
-    if (FD_ISSET(myDirectListener->fd, &read_fds))
+    if (myDirectListener && FD_ISSET(myDirectListener->fd, &read_fds))
     {
       rtLog_Debug("This should be called only once as there should be only one client");
       myDirectClient = rtRouteDirect_AcceptClientConnection(myDirectListener);
     }
 
-    if (FD_ISSET(myDirectClient->fd, &read_fds))
+    if (myDirectClient && FD_ISSET(myDirectClient->fd, &read_fds))
     {
       rtError err = rtConnectedClient_Read(myDirectClient, route);
       if (err != RT_OK)
@@ -656,11 +660,15 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
   free(myDirectClient);
 
   free(route);
-  rtRouteBase_CloseListener(myDirectListener);
-  free(myDirectListener);
-
+  if (myDirectListener)
+  {
+      rtRouteBase_CloseListener(myDirectListener);
+      free(myDirectListener);
+  }
   if (strncmp(socket_name, "unix://", 7) == 0)
-      remove(&socket_name[7]);
-
+  {
+       if (remove(&socket_name[7]) != 0)
+           rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
+  }
   return RT_OK;
 }

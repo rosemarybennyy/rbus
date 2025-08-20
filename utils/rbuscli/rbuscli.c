@@ -2592,7 +2592,16 @@ static int construct_input_into_cmds(char* buff, int* pargc, char** argv)
     int len = (int)strlen(buff);
     int i, j, quote;
     int argc = 0;
-    argv[argc++] = "rbuscli";
+
+    if (argv) 
+    {
+        argv[argc++] = "rbuscli";
+    }
+    else 
+    {
+        argc++; // still increment to keep count consistent
+    }
+
     runSteps = __LINE__;
     for(i = 0; i < len; ++i)
     {
@@ -2905,14 +2914,6 @@ char *hints(const char *buf, int *color, int *bold) {
             hint = " type(string,int,uint,boolean,...) value";
         }
     }
-    else if(num == 3)
-    {
-        runSteps = __LINE__;
-        if(strcmp(tokens[0], "method_va") == 0)
-        {
-            hint = " value";
-        }
-    }
     else
     {
         runSteps = __LINE__;
@@ -3065,7 +3066,7 @@ int main( int argc, char *argv[] )
     }
     else
     {
-        if ((strcmp (argv[1], "-g") == 0) || (strcmp (argv[1], "-s") == 0))
+        if ((strcmp (argv[1], "-g") == 0) || (strcmp (argv[1], "-s") == 0)) 
         {
             g_isDebug = false;
         }

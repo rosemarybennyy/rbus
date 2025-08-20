@@ -213,7 +213,19 @@ rtRouted_ReadTextFile(char const* fname, char** content)
   pf = fopen(fname, "r");
   if (pf)
   {
-    fseek(pf, 0L, SEEK_END);
+    if (fseek(pf, 0L, SEEK_END) != 0) 
+    {
+      fclose(pf);
+      rtLog_Error("fseek failed for file %s. %s", fname, strerror(errno));
+      return RT_FAIL;
+    }	  
+    long tell = ftell(pf);
+    if (tell < 0) 
+    {
+      fclose(pf);
+      rtLog_Error("ftell failed for file %s. %s", fname, strerror(errno));
+      return RT_FAIL;
+    }
     sz = (size_t)ftell(pf);
     rewind(pf);
     *content = rt_malloc(sz+1);
@@ -224,7 +236,8 @@ rtRouted_ReadTextFile(char const* fname, char** content)
       rtLog_Error("failed to read file %s. %s", fname, strerror(errno));
       err = RT_FAIL;
     }
-    (*content)[sz] = 0;
+    if (*content)
+      (*content)[sz] = 0;
     fclose(pf);
   }
   else
@@ -1696,7 +1709,10 @@ rtRouted_AcceptClientConnection(rtListener* listener)
   }
 
   uint32_t one = 1;
-  setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one));
+  if (setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one)) < 0) 
+  {
+    rtLog_Warn("setsockopt(TCP_NODELAY) failed on fd %d: %s", fd, strerror(errno));
+  }
 
   rtRouted_RegisterNewClient(fd, &remote_endpoint);
 }
@@ -1770,7 +1786,10 @@ int main(int argc, char* argv[])
     rtLog_Warn("another instance of rtrouted is already running");
     exit(12);
   }
-  mkdir("/tmp/.rbus", 0755);
+  if (mkdir("/tmp/.rbus", 0755) != 0 && errno != EEXIST)
+  {
+    rtLog_Warn("Failed to create /tmp/.rbus directory: %s", strerror(errno));
+  }
 #ifdef ENABLE_RDKLOGGER
     rdk_logger_init("/etc/debug.ini");
 #endif

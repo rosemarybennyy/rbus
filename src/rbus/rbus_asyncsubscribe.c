@@ -257,19 +257,18 @@ static void rbusAsyncSubscribeRetrier_SendSubscriptionRequests()
                 }
 
                 _subscribe_async_callback_handler(item->subscription->handle, item->subscription, responseErr, subscriptionId);
-                //store the next item, because we are removing this li item from list
                 LOCK();
                 item->subscription = NULL;
                 rtListItem_GetNext(li, &tmp); 
                 rtList_RemoveItem(gRetrier->items, li, rbusAsyncSubscribeRetrier_FreeSubscription);
                 UNLOCK();
                 li = tmp;
-                continue;//li is already the next item so avoid GetNext below
+		        continue;
             }
         }
         rtListItem_GetNext(li, &li);    
     }
-    RBUSLOG_DEBUG("%s exit", __FUNCTION__);
+    RBUSLOG_DEBUG("%s exi t", __FUNCTION__);               // store everything we need for callback
 }
 
 static void* AsyncSubscribeRetrier_threadFunc(void* data)

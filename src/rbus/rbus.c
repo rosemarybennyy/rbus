@@ -1363,13 +1363,14 @@ static void _client_disconnect_callback_handler(const char * listener)
 void _subscribe_async_callback_handler(rbusHandle_t handle, rbusEventSubscription_t* subscription, rbusError_t error, uint32_t subscriptionId)
 {
     struct _rbusHandle* handleInfo = (struct _rbusHandle*)handle;
-
-    subscription->asyncHandler(subscription->handle, subscription, error);
+    bool locked = false;
     if(subscription)
     {
+        subscription->asyncHandler(subscription->handle, subscription, error);
         if(error == RBUS_ERROR_SUCCESS)
         {
             HANDLE_EVENTSUBS_MUTEX_LOCK(handle);
+	        locked = true;
             rbusEventSubscriptionInternal_t* subInternal = NULL;
             if ((subInternal = rbusEventSubscription_find(handleInfo->eventSubs, subscription->eventName,
                             subscription->filter, subscription->interval, subscription->duration, false)) != NULL)
@@ -1382,12 +1383,13 @@ void _subscribe_async_callback_handler(rbusHandle_t handle, rbusEventSubscriptio
             subInternal->subscriptionId = subscriptionId;
             subInternal->rawData = false;
             rtVector_PushBack(handleInfo->eventSubs, subInternal);
-            HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
         }
         else
         {
             rbusEventSubscription_free(subscription);
         }
+	    if (locked)
+            HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);		
     }
 }
 
@@ -1491,8 +1493,10 @@ static int _master_event_callback_handler(char const* sender, char const* eventN
         return RBUSCORE_ERROR_EVENT_NOT_HANDLED;
     }
 exit_1:
-    rbusObject_Release(event.data);
-    rbusFilter_Release(filter);
+    if(event.data)
+       rbusObject_Release(event.data);
+    if(filter)
+       rbusFilter_Release(filter);
 
     HANDLE_EVENTSUBS_MUTEX_UNLOCK(handleInfo);
     return RBUSCORE_SUCCESS;
@@ -2952,6 +2956,7 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
     static int32_t sLastComponentId = 0;
     pthread_mutexattr_t attrib;
     char filename[RTMSG_HEADER_MAX_TOPIC_LENGTH];
+    FILE *fd = NULL;
 
     if(!handle || !componentName)
     {
@@ -3036,18 +3041,18 @@ rbusError_t rbus_open(rbusHandle_t* handle, char const* componentName)
     UnlockMutex();
 
     snprintf(filename, RTMSG_HEADER_MAX_TOPIC_LENGTH-1, "%s%d_%d", "/tmp/.rbus/", getpid(), tmpHandle->componentId);
-    FILE *fd  =  fopen(filename, "w");
+    fd  =  fopen(filename, "w");
     if (fd)
     {
         RBUSLOG_DEBUG("(%s): %s File created successfully", componentName, filename);
         fclose(fd);
     }
-
-    RBUSLOG_INFO(" rbus open (%s) success", componentName);
-    return RBUS_ERROR_SUCCESS;
-
+#if 0
     if((err = rbus_unregisterObj(componentName)) != RBUSCORE_SUCCESS)
         RBUSLOG_ERROR("(%s): unregisterObj error %d", componentName, err);
+#endif
+    RBUSLOG_INFO(" rbus open (%s) success", componentName);
+    return RBUS_ERROR_SUCCESS;
 
 exit_error2:
 
@@ -3181,8 +3186,10 @@ rbusError_t rbus_close(rbusHandle_t handle)
     LockMutex();
     char filename[RTMSG_HEADER_MAX_TOPIC_LENGTH];
     snprintf(filename, RTMSG_HEADER_MAX_TOPIC_LENGTH-1, "%s%d_%d", "/tmp/.rbus/", getpid(), handleInfo->componentId);
-    remove(filename);
-
+    if(remove(filename) != 0)
+    {
+        RBUSLOG_WARN("Failed to remove file %s: %s", filename, strerror(errno));
+    }
     HANDLE_EVENTSUBS_MUTEX_LOCK(handle);
     if(handleInfo->eventSubs)
     {
@@ -5154,15 +5161,18 @@ static rbusError_t rbusEvent_SubscribeWithRetries(
         subInternal->rawData = rawData;
         rtVector_PushBack(handleInfo->eventSubs, subInternal);
         HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
-        if(publishOnSubscribe)
-        {
-            rbusMessage_GetInt32(response, &initial_value);
-            if(initial_value)
+	    if(response)
+	    {
+            if(publishOnSubscribe)
             {
-                _master_event_callback_handler(NULL, eventName, response, userData);
+                rbusMessage_GetInt32(response, &initial_value);
+                if(initial_value)
+               {
+                    _master_event_callback_handler(NULL, eventName, response, userData);
+               }
             }
-        }
-        rbusMessage_GetInt32(response, &subscriptionId);
+	        rbusMessage_GetInt32(response, &subscriptionId);
+	    }
         subInternal->subscriptionId = subscriptionId;
         if(response)
             rbusMessage_Release(response);
@@ -5306,31 +5316,47 @@ rbusError_t  rbusEvent_SubscribeRawData(
     {
         snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
         subInternal = rbusEventSubscription_find(handleInfo->eventSubs, eventName, NULL, 0, 0, true);
-        if(subInternal && rbusMessage_HasListener(handle,rawDataTopic))
+	    if(subInternal)
         {
-            errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
-            if (errorcode != RT_OK)
+            if(rbusMessage_HasListener(handle,rawDataTopic))
             {
-                RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
+                if (errorcode != RT_OK)
+                {
+                    RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                }
+            }
+            memset(rawDataTopic, '\0', sizeof(rawDataTopic));
+            snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", eventName);
+            errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
+            if(errorcode != RBUS_ERROR_SUCCESS)
+            {
+                RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
             }
         }
-        memset(rawDataTopic, '\0', strlen(rawDataTopic));
-        snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", eventName);
-        errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-        if(errorcode != RBUS_ERROR_SUCCESS)
-        {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
-        }
+	    else
+	    {
+	        RBUSLOG_ERROR("Failed to find subscription for event %s", eventName);
+	        return RBUS_ERROR_INVALID_OPERATION;
+	    }
     }
     else
     {
         subInternal = rbusEventSubscription_find(handleInfo->eventSubs, eventName, NULL, 0, 0, true);
-        snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
-        errorcode = rbusMessage_AddListener(handle, rawDataTopic,
-                _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-        if(errorcode != RBUS_ERROR_SUCCESS)
+	    if(subInternal)
         {
-            RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", eventName);
+            errorcode = rbusMessage_AddListener(handle, rawDataTopic,
+                    _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
+            if(errorcode != RBUS_ERROR_SUCCESS)
+            {
+                RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+            }
+        }
+        else
+        {
+            RBUSLOG_ERROR("Failed to find subscription for event %s", eventName);
+            return RBUS_ERROR_INVALID_OPERATION;
         }
     }
     return errorcode;
@@ -5593,32 +5619,44 @@ rbusError_t rbusEvent_SubscribeExRawData(
             {
                 snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", subscription[i].eventName);
                 subInternal = rbusEventSubscription_find(handleInfo->eventSubs, subscription[i].eventName, subscription[i].filter, subscription[i].interval, subscription[i].duration, true);
-                if(subInternal && rbusMessage_HasListener(handle,rawDataTopic))
+		if(subInternal)
                 {
-                    errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
-                    if (errorcode != RT_OK)
+                    if(rbusMessage_HasListener(handle,rawDataTopic))
                     {
-                        RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                        errorcode = rbusMessage_RemoveListener(handle, rawDataTopic, subInternal->subscriptionId);
+                        if (errorcode != RT_OK)
+                        {
+                            RBUSLOG_WARN("rbusMessage_RemoveListener:%d", errorcode);
+                        }
                     }
-                }
-                memset(rawDataTopic, '\0', strlen(rawDataTopic));
-                snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", subscription[i].eventName);
-                errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-                if(errorcode != RBUS_ERROR_SUCCESS)
-                {
-                    RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+                    memset(rawDataTopic, '\0', sizeof(rawDataTopic));
+                    snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "%s", subscription[i].eventName);
+                    errorcode = rbusMessage_AddPrivateListener(handle, rawDataTopic, _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
+                    if(errorcode != RBUS_ERROR_SUCCESS)
+                    {
+                        RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+                    }
                 }
             }
             else
             {
                 subInternal = rbusEventSubscription_find(handleInfo->eventSubs, subscription[i].eventName, subscription[i].filter, subscription[i].interval, subscription[i].duration, true);
-                snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", subscription[i].eventName);
-                errorcode = rbusMessage_AddListener(handle, rawDataTopic,
+		if(subInternal)
+		{
+                    snprintf(rawDataTopic, RBUS_MAX_NAME_LENGTH, "rawdata.%s", subscription[i].eventName);
+                    errorcode = rbusMessage_AddListener(handle, rawDataTopic,
                         _subscribe_rawdata_handler, (void *)(subInternal->sub), subInternal->subscriptionId);
-                if(errorcode != RBUS_ERROR_SUCCESS)
-                {
-                    RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
-                }
+                    if(errorcode != RBUS_ERROR_SUCCESS)
+                    {
+                        RBUSLOG_ERROR("%s: Listener failed err: %d", __FUNCTION__, errorcode);
+                    }
+		}
+	        else
+		{
+		    RBUSLOG_ERROR("Failed to find subscription for event %s", subscription[i].eventName);
+		    HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
+		    return RBUS_ERROR_INVALID_OPERATION;
+		}	
             }
             HANDLE_EVENTSUBS_MUTEX_UNLOCK(handle);
         }

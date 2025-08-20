@@ -86,7 +86,20 @@ rtError rtSemaphore_Post(rtSemaphore sem)
 rtError rtSemaphore_GetValue(rtSemaphore sem, int* val)
 {
   int rc = RT_OK;
+  int err;
+  err = pthread_mutex_lock(&sem->m);
+  if (err != 0)
+  {
+    rtLog_Error("Error %d:%s running command pthread_mutex_lock", err, strerror(err));
+    return RT_ERROR;
+  }
   *val = sem->v;
+  err = pthread_mutex_unlock(&sem->m);
+  if (err != 0)
+  {
+    rtLog_Error("Error %d:%s running command pthread_mutex_unlock", err, strerror(err));
+    rc = RT_ERROR;
+  }
   return rc;
 }
 
