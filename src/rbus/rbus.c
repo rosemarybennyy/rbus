@@ -3770,6 +3770,12 @@ rbusError_t rbus_getExt(rbusHandle_t handle, int paramCount, char const** pParam
             }
             else
             {
+		if(destinations)
+		{
+		     for(i = 0; i < numDestinations; i++)
+                        free(destinations[i]);
+                     free(destinations);
+		}	
                 RBUSLOG_DEBUG("Query for expression %s was not successful.", pParamNames[0]);
                 return RBUS_ERROR_ELEMENT_DOES_NOT_EXIST;
             }
