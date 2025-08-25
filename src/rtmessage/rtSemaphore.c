@@ -86,7 +86,9 @@ rtError rtSemaphore_Post(rtSemaphore sem)
 rtError rtSemaphore_GetValue(rtSemaphore sem, int* val)
 {
   int rc = RT_OK;
+  ERROR_CHECK(pthread_mutex_lock(&sem->m));
   *val = sem->v;
+  ERROR_CHECK(pthread_mutex_unlock(&sem->m));
   return rc;
 }
 
