@@ -507,9 +507,8 @@ rtRouteDirect_AcceptClientConnection(rtListener* listener)
 
   uint32_t one = 1;
   if (setsockopt(fd, SOL_TCP, TCP_NODELAY, &one, sizeof(one)) < 0)
-  {
     rtLog_Warn("Failed to set TCP_NODELAY on accepted socket: %s", rtStrError(errno));
-  }
+
   return rtRouteDirect_RegisterNewClient(fd, &remote_endpoint);
 }
 
