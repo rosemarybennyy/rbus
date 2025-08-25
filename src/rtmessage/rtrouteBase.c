@@ -588,10 +588,10 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
   if (RT_OK != rtRouteBase_BindListener(socket_name, 1, 1, &myDirectListener))
   {
     if (strncmp(socket_name, "unix://", 7) == 0)
-    {	    
+    {
       if (remove(&socket_name[7]) != 0)
-	   rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
-    }   
+        rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
+    }
     return RT_FAIL;
   }
 
@@ -662,13 +662,13 @@ rtRouteDirect_StartInstance(const char* socket_name, rtDriectClientHandler messa
   free(route);
   if (myDirectListener)
   {
-      rtRouteBase_CloseListener(myDirectListener);
-      free(myDirectListener);
+    rtRouteBase_CloseListener(myDirectListener);
+    free(myDirectListener);
   }
   if (strncmp(socket_name, "unix://", 7) == 0)
   {
-       if (remove(&socket_name[7]) != 0)
-           rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
+    if (remove(&socket_name[7]) != 0)
+      rtLog_Warn("Failed to remove socket file %s", &socket_name[7]);
   }
   return RT_OK;
 }
