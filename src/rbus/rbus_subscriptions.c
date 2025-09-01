@@ -448,12 +448,6 @@ static void rbusSubscriptions_loadCache(rbusSubscriptions_t subscriptions)
 
     RBUSLOG_INFO("file %s", filePath);
 
-    if(stat(filePath, &st) != 0)
-    {
-        RBUSLOG_DEBUG("file doesn't exist %s", filePath);
-        return;
-    }
-
     file = fopen(filePath, "rb");
     if(!file)
     {

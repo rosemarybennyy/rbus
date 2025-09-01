@@ -2540,12 +2540,6 @@ static void _rbuscore_directconnection_load_from_cache()
 
     RBUSCORELOG_DEBUG("Entry of %s", __FUNCTION__);
 
-    if(stat(cacheFileName, &st) != 0)
-    {
-        RBUSCORELOG_DEBUG("file doesn't exist");
-        return;
-    }
-
     file = fopen(cacheFileName, "rb");
     if(!file)
     {
