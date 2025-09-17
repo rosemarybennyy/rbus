@@ -259,14 +259,18 @@ typedef struct _queued_request
 
 void queued_request_create(queued_request_t* req, const rtMessageHeader* hdr, rbusMessage msg, server_object_t obj)
 {
+    printf("############ Rose Mary Benny ###### function %s line %d\n",__func__,__LINE__);	
     if(!hdr)
         return;	    
+    printf("############ Rose Mary Benny ###### function %s line %d\n",__func__,__LINE__);	
     (*req) = rt_malloc(sizeof(struct _queued_request));
     if(!*req)
 	return;    
+    printf("############ Rose Mary Benny ###### function %s line %d\n",__func__,__LINE__);	
     (*req)->hdr = *hdr;
     (*req)->msg = msg;
     (*req)->obj = obj;
+    printf("############ Rose Mary Benny ###### function %s line %d\n",__func__,__LINE__);	
 }
 
 /* End rbus_server */
