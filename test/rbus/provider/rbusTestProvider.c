@@ -1648,12 +1648,13 @@ int main(int argc, char *argv[])
 
                 rc = rbusEvent_Publish(handle, &event);
 
+                if(rc != RBUS_ERROR_SUCCESS)
+                    printf("provider: rbusEvent_Publish Event%d failed: %d\n", j, rc);
+
                 rbusValue_Release(bufferVal);
                 rbusValue_Release(indexVal);
                 rbusObject_Release(data);
 
-                if(rc != RBUS_ERROR_SUCCESS)
-                    printf("provider: rbusEvent_Publish Event%d failed: %d\n", j, rc);
 
                 eventCounts[j]++;
             }
@@ -1667,6 +1668,8 @@ int main(int argc, char *argv[])
                     getName("Device.%s.ProviderNotFoundEvent1!"), RBUS_ELEMENT_TYPE_EVENT, {NULL,NULL,NULL,NULL, provideNotFoundSubHandler, NULL}
                 };
                 rc = rbus_regDataElements(handle, 1, &el);
+                if(rc != RBUS_ERROR_SUCCESS)
+                    printf("provider: rbus_regDataElements for ProviderNotFoundEvent1 failed %d\n", rc);
             }
 
             if(subscribedProviderNotFound)
@@ -1686,6 +1689,8 @@ int main(int argc, char *argv[])
                 event.type = RBUS_EVENT_GENERAL;
 
                 rc = rbusEvent_Publish(handle, &event);
+                if(rc != RBUS_ERROR_SUCCESS)
+                    printf("provider: rbusEvent_Publish Event ProviderNotFoundEvent1 failed: %d\n", rc);
 
                 rbusValue_Release(bufferVal);
                 rbusObject_Release(data);
@@ -1731,6 +1736,8 @@ int main(int argc, char *argv[])
                 event.type = RBUS_EVENT_GENERAL;
 
                 rc = rbusEvent_Publish(handle, &event);
+                if(rc != RBUS_ERROR_SUCCESS)
+                    printf("provider: rbusEvent_Publish Event %s failed: %d\n", event.name, rc);
 
                 rbusValue_Release(val);
                 rbusObject_Release(data);
@@ -1776,6 +1783,8 @@ int main(int argc, char *argv[])
             event.data = dataObj;
             event.type = RBUS_EVENT_VALUE_CHANGED;
             rc = rbusEvent_Publish(handle, &event);
+            if(rc != RBUS_ERROR_SUCCESS)
+                 printf("provider: rbusEvent_Publish NoAutoPubInt failed: %d\n", rc);
 
             rbusValue_Release(newVal);
             rbusValue_Release(oldVal);
@@ -1788,7 +1797,8 @@ int main(int argc, char *argv[])
     printf("provider: finishing\n");
 
     rc = rbus_unregDataElements(handle, numDataElems, dataElement);
-    printf("provider: rbus_unregDataElements=%d\n", rc);
+    if(rc != RBUS_ERROR_SUCCESS)
+       printf("provider: rbus_unregDataElements failed %d\n", rc);
 
 exit1:
     rc = rbus_close(handle);

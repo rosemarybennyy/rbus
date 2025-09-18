@@ -37,6 +37,7 @@
 #include "../common/test_macros.h"
 #include <rtMemory.h>
 #include "rbus_value.h"
+#include "rtString.h"
 
 int getDurationValueAPI()
 {
@@ -881,7 +882,6 @@ void testValue_Buffer()
             case RBUS_DATETIME:TEST(compareDateTime(rbusValue_GetTime(valOut), &rbus_time)==0); break;
             case RBUS_STRING: TEST(strcmp(rbusValue_GetString(valOut, &len), "This is a string")==0 && len==strlen("This is a string")); break;
             case RBUS_BYTES: TEST(memcmp(rbusValue_GetBytes(valOut, &len), bytes, 10000)==0 && len==10000); break;            
-            default: break;
         }
 
         rbusBuffer_Destroy(buff);
@@ -963,7 +963,6 @@ void testValue_TLV()
             case RBUS_DATETIME: TEST(memcmp(rbusValue_GetTime(valOut), &rbus_time, sizeof(rbus_time))==0); break;
             case RBUS_STRING: TEST(strcmp(rbusValue_GetString(valOut, &len), "This is a string")==0 && len==strlen("This is a string")); break;
             case RBUS_BYTES: TEST(memcmp(rbusValue_GetBytes(valOut, &len), bytes, 10000)==0 && len==10000); break;            
-            default: break;
         }
 
         rbusValue_Release(valOut);
@@ -1195,7 +1194,8 @@ void testValue_ToDebugString()
 
     rbusValue_SetBytes(v, bytes, 256);
     s = rbusValue_ToDebugString(v,0,0);
-    sprintf(buff, "rbusValue type:RBUS_BYTES value:%s", (char*)bytesHex);
+    rtString_Copy(buff, "rbusValue type:RBUS_BYTES value:", sizeof(buff)); // Copy prefix
+    rtString_Copy(buff + strlen("rbusValue type:RBUS_BYTES value:"), (char*)bytesHex, sizeof(buff) - strlen("rbusValue type:RBUS_BYTES value:")); // Copy hex bytes
     TEST(!strcmp(s, buff));
     free(s);
 
