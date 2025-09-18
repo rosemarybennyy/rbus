@@ -35,6 +35,8 @@
 #include <rbuscore.h>
 #include <signal.h>
 #include <fcntl.h>
+#include "rtString.h"
+
 #if (__linux__ && __GLIBC__ && !__UCLIBC__) || __APPLE__
   #include <execinfo.h>
 #endif
@@ -1985,13 +1987,13 @@ void validate_and_execute_subscribe_cmd (int argc, char *argv[], bool add, bool 
         if (matchCmd(argv[1], 4, "subinterval") || matchCmd(argv[1], 6, "unsubinterval"))
         {
             subinterval = true;
-            strcat(userData, "subint ");
+            strncat(userData, "subint ", 256 - strlen(userData) - 1);
         }
         else
         {
-            strcat(userData, "sub ");
+            strncat(userData, "sub ", 256 - strlen(userData) - 1);
         }
-        strcat(userData, argv[2]);
+        strncat(userData, argv[2], 256 - strlen(userData) - 1);
     }
     if(argc > 3) /*filter*/
     {
@@ -2003,15 +2005,15 @@ void validate_and_execute_subscribe_cmd (int argc, char *argv[], bool add, bool 
             }
 
             interval = atoi(argv[3]);
-            strcat(userData, " ");
-            strcat(userData, argv[3]);
+            strncat(userData, " ", 256 - strlen(userData) - 1);
+            strncat(userData, argv[3], 256 - strlen(userData) - 1);
             if(argv[4] != NULL)
             {
                 if( argc > 5 ) {
                     /*duration*/
                     duration = atoi(argv[4]);
-                    strcat(userData, " ");
-                    strcat(userData, argv[4]);
+                    strncat(userData, " ", 256 - strlen(userData) - 1);
+                    strncat(userData, argv[4], 256 - strlen(userData) - 1);
 
                     publishOnSubscribe = set_publishOnSubscribe(argc, argv);
                     if(publishOnSubscribe == -1)
@@ -2021,8 +2023,8 @@ void validate_and_execute_subscribe_cmd (int argc, char *argv[], bool add, bool 
                 {
                     if (atoi(argv[4])) {
                         duration = atoi(argv[4]);
-                        strcat(userData, " ");
-                        strcat(userData, argv[4]);
+                        strncat(userData, " ", 256 - strlen(userData) - 1);
+                        strncat(userData, argv[4], 256 - strlen(userData) - 1);
                     }
                     else
                     {
@@ -2035,10 +2037,10 @@ void validate_and_execute_subscribe_cmd (int argc, char *argv[], bool add, bool 
         }
         else if (((relOp = find_filter(argv)) >= 0) && (argc < 7))
         {
-            strcat(userData, " ");
-            strcat(userData, argv[3]);
-            strcat(userData, " ");
-            strcat(userData, argv[4]);
+            strncat(userData, " ", 256 - strlen(userData) - 1);
+            strncat(userData, argv[3], 256 - strlen(userData) - 1);
+            strncat(userData, " ", 256 - strlen(userData) - 1);
+            strncat(userData, argv[4], 256 - strlen(userData) - 1);
 
             rbusValue_Init(&filterValue);
 
@@ -2495,11 +2497,11 @@ int handle_cmds (int argc, char *argv[])
     }
     else if(matchCmd(command, 10, "create_session"))
     {
-        validate_and_execute_create_session_cmd (argc, argv);
+        validate_and_execute_create_session_cmd();
     }
     else if(matchCmd(command, 7, "get_session"))
     {
-        validate_and_execute_get_session_cmd (argc, argv);
+        validate_and_execute_get_session_cmd();
     }
     else if(matchCmd(command, 9, "close_session"))
     {
@@ -2669,8 +2671,8 @@ void completion(const char *buf, linenoiseCompletions *lc) {
 
     len = strlen(buf);
     line = rt_malloc(len + 32);/*32 or just enough room to append a word from below*/
-    strcpy(line, buf);
-  
+    rtString_Copy(line, buf, len + 32);
+
     tok = strtok_r(cpy, " ", &saveptr);
     while(tok && num < 3)
     {
@@ -2721,7 +2723,7 @@ void completion(const char *buf, linenoiseCompletions *lc) {
 
     if(completion)
     {
-        strcat(line, completion);
+        strncat(line, completion, (len + 32) - strlen(line) - 1);
         linenoiseAddCompletion(lc, line);
     }
 
@@ -2744,8 +2746,8 @@ char *hints(const char *buf, int *color, int *bold) {
 
     len = strlen(buf);
     line = rt_malloc(len + 32);/*32 or just enough room to append a word from below*/
-    strcpy(line, buf);
-  
+    rtString_Copy(line, buf, len + 32);
+    
     tok = strtok_r(cpy, " ", &saveptr);
     while(tok && num < 4)
     {
