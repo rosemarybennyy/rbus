@@ -523,7 +523,7 @@ static void onMessage(rtMessageHeader const* hdr, uint8_t const* data, uint32_t 
     rbusMessage_FromBytes(&msg, data, dataLen);
     if (msg == NULL)
     {
-        rtLog_Debug("rbusMessage return null");	    
+        RBUSCORELOG_DEBUG("rbusMessage return null");	    
     }	    
 
     /*using namespace rbus_server;*/
@@ -536,10 +536,14 @@ static void onMessage(rtMessageHeader const* hdr, uint8_t const* data, uint32_t 
         //We're in the midst of handling another request. Queue this one for later.
         queued_request_t req;
         int ret = queued_request_create(&req, hdr, msg, obj);
-	if(ret != -1)
-	{
-            rtVector_PushBack(g_queued_requests, req);
-	}    
+	if(ret == 0 && req != NULL)
+        {
+             rtVector_PushBack(g_queued_requests, req);
+        }
+        else
+        {
+             RBUSCORELOG_DEBUG("Failed to queue request due to memory allocation failure.");
+ 	}
     }
     else
         dispatch_method_call(msg, hdr, obj);
