@@ -257,12 +257,20 @@ typedef struct _queued_request
     server_object_t obj;
 } *queued_request_t;
 
-void queued_request_create(queued_request_t* req, rtMessageHeader hdr, rbusMessage msg, server_object_t obj)
+int queued_request_create(queued_request_t* req, const rtMessageHeader* hdr, rbusMessage msg, server_object_t obj)
 {
-    (*req) = rt_malloc(sizeof(struct _queued_request));
-    (*req)->hdr = hdr;
-    (*req)->msg = msg;
-    (*req)->obj = obj;
+    if (!req || !hdr)
+        return -1;
+
+    queued_request_t tmpReq = (queued_request_t)rt_malloc(sizeof(struct _queued_request));
+    if (!tmpReq)
+        return -1; 
+
+    memcpy(&tmpReq->hdr, hdr, sizeof(rtMessageHeader));
+    tmpReq->msg = msg;
+    tmpReq->obj = obj;
+    *req = tmpReq;
+    return 0; 	
 }
 
 /* End rbus_server */
@@ -511,8 +519,12 @@ static void dispatch_method_call(rbusMessage msg, const rtMessageHeader *hdr, se
 
 static void onMessage(rtMessageHeader const* hdr, uint8_t const* data, uint32_t dataLen, void* closure)
 {
-    rbusMessage msg;
+    rbusMessage msg = NULL;
     rbusMessage_FromBytes(&msg, data, dataLen);
+    if (msg == NULL)
+    {
+        return;	    
+    }	    
 
     /*using namespace rbus_server;*/
     static int stack_counter = 0;
@@ -523,8 +535,11 @@ static void onMessage(rtMessageHeader const* hdr, uint8_t const* data, uint32_t 
     {
         //We're in the midst of handling another request. Queue this one for later.
         queued_request_t req;
-        queued_request_create(&req, *hdr, msg, obj);
-        rtVector_PushBack(g_queued_requests, req);
+        int ret = queued_request_create(&req, hdr, msg, obj);
+	if(ret != -1)
+	{
+            rtVector_PushBack(g_queued_requests, req);
+	}    
     }
     else
         dispatch_method_call(msg, hdr, obj);
