@@ -33,6 +33,7 @@ void testReferenceCount()
 
     {
         rtRetainable* r = (rtRetainable *) val;
+	printf("############# ROSEMARY BENNY r->refCount : %d\n",r->refCount);
         assert( r->refCount == 1 );
     }
 
