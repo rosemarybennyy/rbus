@@ -158,7 +158,7 @@ install (TARGETS
  multiRbusOpenRbusGetProvider multiRbusOpenRbusGetConsumer multiRbusOpenRbusSetConsumer
  multiProviderThreadsForSingleEvent multiConsumerThreadsForSingleEvent
  rbusOpenRegRbusOpenProvider rbusOpenSubRbusOpenConsumer
- rbusTestProvider rbusTestConsumer
+ rbusTestProvider rbusTestConsumer rbusTestRefcount
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES rbus_test.sh
