@@ -143,7 +143,7 @@ jobs:
             rm -rf /tmp/rtrouted*
             lcov -c -o coverage.info -d build/rbus/src
             lcov --remove coverage.info '/usr/include/*' -o filtered-coverage.info
-            lcov --list coverage.info | grep 'Lines\|Total' > /tmp/coverage_summary.txt"
+            lcov --list filtered-coverage.info | grep 'Lines\|Total' > /tmp/coverage_summary.txt"
       - name: Update the coverage report to Pull request using actions
         uses: actions/github-script@v4
         with:
