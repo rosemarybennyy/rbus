@@ -146,6 +146,7 @@ jobs:
             lcov --list filtered-coverage.info | grep 'Lines\|Total' > /tmp/coverage_summary.txt
       - name: Update the coverage report to Pull request using actions
         uses: actions/github-script@v4
+          if: github.event.issue.number != null  
         with:
           script: |
             const fs = require('fs');
